@@ -8,6 +8,7 @@ import (
 
 	"github.com/hubidu/e2e-backend/report-lib/db"
 	"github.com/hubidu/e2e-backend/report-lib/model"
+	"github.com/jasonlvhit/gocron"
 )
 
 func init() {
@@ -45,5 +46,16 @@ func main() {
 		baseDir = "./fixtures"
 	}
 
-	importJob(baseDir, *removeReportFiles)
+	importJobTask := func() {
+		importJob(baseDir, *removeReportFiles)
+	}
+
+	var intervalInSeconds uint64
+	intervalInSeconds = 30
+	if len(os.Getenv("JOB_INTERVAL")) != 0 {
+		interval, _ := strconv.Atoi(os.Getenv("JOB_INTERVAL"))
+		intervalInSeconds = uint64(interval)
+	}
+
+	gocron.Every(intervalInSeconds).Seconds().Do(importJobTask)
 }
