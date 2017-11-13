@@ -58,4 +58,6 @@ func main() {
 	}
 
 	gocron.Every(intervalInSeconds).Seconds().Do(importJobTask)
+
+	<-gocron.Start()
 }

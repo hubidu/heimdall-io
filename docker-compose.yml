@@ -1,4 +1,5 @@
 version: '3'
+container_name: e2e-backend
 services:
   report-importer:
     image: hubidu27/report-importer
