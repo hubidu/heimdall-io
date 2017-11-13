@@ -1,0 +1,29 @@
+- DONE Show accumulated (serial) test duration
+- DONE Propagate test results in tree
+- DONE Split at - and capitalize prefix
+- DONE Show I.says as outline for the test
+- DONE Show console messages in tree view
+- DONE Show error message and error screenshot in tree view
+
+- Show recent deployments
+- Fix scrollbars
+- Show chart failed/successful tests
+- Show failed tests first in list
+- Show test status per device in tree view
+- Create a test detail view
+- Group tests by device
+- FEAT Change Success/Failure Bars to show length of test run using lighter or darker color
+- FEAT Filter tests by device
+- For responsive tests: Put results for all devices under same test
+- Take only successful tests into account when computing average duration
+- Improve clickability of bars
+- Show browser logs
+- Show when the test failed/succeeded the last time
+- Store screenshot time in reports and show relative time
+- FEAT Provide an overview of available screenshots in s source code view
+- Fade out "old" tests (where the last run is old and the test has been renamed or deleted)
+- Compare steps of failed run with previous successful run
+- IDEA Create a notification application which also works on the report data
+- Improve error messages by adding the failed step + args to the error message (e. g. element not visible [but which element?])
+- Add report file while running
+- Magnify screenshots

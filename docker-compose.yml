@@ -1,5 +1,14 @@
 version: '3'
 services:
+  report-app:
+    image: hubidu27/report-app:latest
+    ports:
+      - 8000:8000
+    links:
+      - report-service
+    volumes:
+      - /data/e2e-reports:/opt/app/reports
+
   report-importer:
     image: hubidu27/report-importer:latest
     links:
@@ -10,7 +19,7 @@ services:
   report-service:
     image: hubidu27/report-service:latest
     ports:
-      - 8000:8000
+      - 8000:8001
     links:
       - mongodb
       

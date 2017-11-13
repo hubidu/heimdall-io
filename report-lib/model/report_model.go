@@ -24,7 +24,8 @@ type ReportGroup struct {
 type Report struct {
 	Id             bson.ObjectId `json:"_id,omitempty" bson:"_id,omitempty"`
 	HashCategory   uint32
-	FileName       string
+	ReportFileName string
+	ReportDir      string
 	Started        time.Time
 	StartedAt      int64
 	Type           string
@@ -91,11 +92,12 @@ func hash(s string) uint32 {
 	return h.Sum32()
 }
 
+// GetReportFiles finds all report files in a given base directory and reads them in
 func GetReportFiles(baseDir string) []Report {
 	fileList := []Report{}
 
 	err := filepath.Walk(baseDir, func(path string, f os.FileInfo, err error) error {
-		if !strings.HasSuffix(path, "json") {
+		if !strings.HasSuffix(path, "report.json") {
 			return nil
 		}
 
@@ -109,7 +111,8 @@ func GetReportFiles(baseDir string) []Report {
 		r := Report{}
 		json.Unmarshal(raw, &r)
 
-		r.FileName = path
+		r.ReportFileName = path
+		r.ReportDir = filepath.Dir(path)
 		r.HashCategory = hash(r.FullTitle)
 		r.Started = time.Unix(r.StartedAt/1000, 0)
 

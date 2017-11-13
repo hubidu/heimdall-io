@@ -1,0 +1,35 @@
+{
+  "name": "ava-codeceptjs-reporter",
+  "version": "1.0.0",
+  "description": "Web based E2E Test reporter for ava-codeceptjs",
+  "main": "server.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "dev": "node server.js",
+    "build": "next build",
+    "start": "cross-env NODE_ENV=production node server.js",
+    "test": "ava --verbose"
+  },
+  "author": "Stefan Huber",
+  "license": "ISC",
+  "devDependencies": {
+    "ava": "^0.22.0"
+  },
+  "dependencies": {
+    "ansi-to-react": "^1.4.2",
+    "cross-env": "^5.0.4",
+    "express": "^4.15.4",
+    "isomorphic-fetch": "^2.2.1",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "next": "^3.0.1-beta.21",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-highlight": "^0.10.0",
+    "react-icons": "^2.2.5",
+    "recompose": "^0.24.0",
+    "styled-components": "^2.1.2"
+  }
+}

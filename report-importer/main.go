@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 
 	"github.com/hubidu/e2e-backend/report-lib/db"
@@ -20,14 +21,14 @@ func importJob(baseDir string, removeReportFiles bool) {
 
 	reports := model.GetReportFiles(baseDir)
 
+	// TODO Should not insert duplicate reports
 	insertReportsIntoDB(reports)
 	fmt.Println("Inserted " + strconv.Itoa(len(reports)) + " report files into database ...")
 
 	if removeReportFiles {
 		fmt.Println("Removing report files ...")
 		for _, report := range reports {
-			// fmt.Println("Removing file " + report.FileName)
-			os.Remove(report.FileName)
+			os.Rename(report.ReportFileName, filepath.Dir(report.ReportDir)+"report_imported.json")
 
 		}
 	}
