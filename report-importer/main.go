@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/hubidu/e2e-backend/report-lib/db"
+	"github.com/hubidu/e2e-backend/report-lib/model"
 )
 
 func init() {
@@ -16,7 +17,7 @@ func init() {
 func importJob(baseDir string, removeReportFiles bool) {
 	fmt.Println("Importing reports from directory " + baseDir + " ...")
 
-	reports := getReportFiles(baseDir)
+	reports := model.GetReportFiles(baseDir)
 
 	insertReportsIntoDB(reports)
 	fmt.Println("Inserted " + strconv.Itoa(len(reports)) + " report files into database ...")

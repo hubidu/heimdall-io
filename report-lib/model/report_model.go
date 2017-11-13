@@ -91,7 +91,7 @@ func hash(s string) uint32 {
 	return h.Sum32()
 }
 
-func getReportFiles(baseDir string) []Report {
+func GetReportFiles(baseDir string) []Report {
 	fileList := []Report{}
 
 	err := filepath.Walk(baseDir, func(path string, f os.FileInfo, err error) error {

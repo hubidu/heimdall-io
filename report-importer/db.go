@@ -4,10 +4,11 @@ import (
 	"log"
 
 	"github.com/hubidu/e2e-backend/report-lib/db"
+	"github.com/hubidu/e2e-backend/report-lib/model"
 	"gopkg.in/mgo.v2"
 )
 
-func insertReportsIntoDB(reports []Report) {
+func insertReportsIntoDB(reports []model.Report) {
 	s := db.Session.Clone()
 
 	defer s.Close()
