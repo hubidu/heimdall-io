@@ -17,7 +17,7 @@ services:
   mongodb:
     image: mongo:3.0
     # command: mongod --smallfiles --quiet --logpath=/dev/null
-    command: mongod --smallfiles --logpath=/dev/null
+    command: mongod --smallfiles
     volumes:
       - /data/db:/data/db
       - /data/configdb:/data/configdb
