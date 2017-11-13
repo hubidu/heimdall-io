@@ -4,7 +4,7 @@ const path = require('path');
 
 const walk = (dir, opts = { listDirs: true, listFiles: true, onlyNonEmptyDirs: false }, done) => {
   let results = []
-  
+
   fs.readdir(dir, (err, list) => {
     if (err) return done(err)
     let pending = list.length
@@ -21,7 +21,7 @@ const walk = (dir, opts = { listDirs: true, listFiles: true, onlyNonEmptyDirs: f
             if (res.length > 0) {
                 if (opts.onlyNonEmptyDirs) results.splice(results.indexOf(file), 1)
                 results = results.concat(res)
-            } 
+            }
             if (!--pending) done(null, results)
           });
         } else {
@@ -37,7 +37,7 @@ const listFiles = dir => new Promise((resolve, reject) => {
     walk(dir, { listDirs: false, listFiles: true }, (err, list) => {
         if (err) return reject(err)
         resolve(list)
-    })    
+    })
 })
 
 const listTestDirs = baseDir => new Promise((resolve, reject) => {
@@ -48,6 +48,8 @@ const listTestDirs = baseDir => new Promise((resolve, reject) => {
     })
 
 /**
+ * @deprecated Use report-service
+ *
  * Read json report files from the output directory and do some
  * basic aggregation like group them by test name and within
  * the group order by startDate
@@ -55,7 +57,7 @@ const listTestDirs = baseDir => new Promise((resolve, reject) => {
 module.exports = async baseDir => {
     const absPath = path.resolve(baseDir)
     const testDirs = await listTestDirs(absPath)
-    const reportFiles = testDirs.map(testDir => path.join(testDir, 'report.json'))
+    const reportFiles = testDirs.map(testDir => path.join(testDir, 'report_imported.json'))
     const reports = await Promise.all(reportFiles.map(f => {
         return new Promise((resolve, reject) => {
             fs.readFile(f, 'utf8', async (err, content) => {
@@ -79,7 +81,7 @@ module.exports = async baseDir => {
         const sortedTestruns = _.sortBy(reportsInGroup, 'startedAt').reverse()
         return {
             title: groupName,
-            runs: sortedTestruns 
+            runs: sortedTestruns
         }
     })
 

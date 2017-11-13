@@ -1,4 +1,4 @@
-FROM node:8.2
+FROM mhart/alpine-node:8
 
 # use changes to package.json to force Docker not to use the cache
 # when we change our application's nodejs dependencies:
@@ -13,6 +13,6 @@ ADD . /opt/app
 
 RUN npm run build
 
-EXPOSE 8000
+EXPOSE 4000
 
 CMD ["npm", "start", "/opt/app/reports"]
