@@ -19,7 +19,7 @@ services:
   report-service:
     image: hubidu27/report-service:latest
     ports:
-      - 8001:8001
+      - 8001:8000
     links:
       - mongodb
       
