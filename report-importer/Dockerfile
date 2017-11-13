@@ -8,5 +8,5 @@ EXPOSE 8080
 
 ENV GO_ENV=docker
 
-CMD ["/go/src/app/main", "/go/src/app/reports"]
+CMD ["/go/src/app/main", "--rm", "/go/src/app/reports"]
 
