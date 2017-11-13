@@ -1,14 +1,14 @@
 version: '3'
 services:
   report-importer:
-    build: hubidu27/report-importer
+    image: hubidu27/report-importer
     links:
       - mongodb
     volumes:
       - /data/e2e-reports:/go/src/app/reports
       
   report-service:
-    build: hubidu27/report-service
+    image: hubidu27/report-service
     ports:
       - 8000:8000
     links:
