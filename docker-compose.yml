@@ -3,7 +3,7 @@ services:
   report-app:
     image: hubidu27/report-app:latest
     ports:
-      - 8000:4000
+      - 4000:4000
     links:
       - report-service
     volumes:
