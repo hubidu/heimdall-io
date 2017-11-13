@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strconv"
 
 	"github.com/hubidu/e2e-backend/report-lib/db"
@@ -28,7 +27,7 @@ func importJob(baseDir string, removeReportFiles bool) {
 	if removeReportFiles {
 		fmt.Println("Removing report files ...")
 		for _, report := range reports {
-			os.Rename(report.ReportFileName, filepath.Dir(report.ReportDir)+"report_imported.json")
+			os.Rename(report.ReportFileName, report.ReportDir+"report_imported.json")
 
 		}
 	}
