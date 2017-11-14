@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/hubidu/e2e-backend/report-lib/db"
 	"github.com/hubidu/e2e-backend/report-service/middlewares"
@@ -22,6 +23,8 @@ func main() {
 	// Middlewares
 	r.Use(middlewares.Connect)
 	r.Use(middlewares.ErrorHandler)
+	// TODO Use production config
+	r.Use(cors.Default())
 
 	// Routes
 	r.GET("/", func(c *gin.Context) {
