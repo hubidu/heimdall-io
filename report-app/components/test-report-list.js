@@ -5,6 +5,13 @@ import TestBrowserlogPopover from '../components/test-browserlog-popover'
 import TestOutlinePopover from '../components/test-outline-popover'
 import TestResultDeviceIcon from '../components/test-result-device-icon'
 
+const getFailedStepName = steps => {
+  const failedStep = steps.find(step => step.Success === false)
+  if (failedStep) {
+    return failedStep.Name;
+  }
+}
+
 export default ({reports}) =>
   <div className="TestReportGroups">
   {
@@ -18,15 +25,19 @@ export default ({reports}) =>
             <h4 className="ma0 pa1">
               {reportGroup.Title}
             </h4>
-            <div>
               {
-                reportGroup.result === 'error' ?
-                <div className="ErrorMessage">
-                  {reportGroup.LastReport.Screenshots[0].Message}
+                reportGroup.LastReport.Result === 'error' ?
+                <div className="black-40">
+                  at step
+                  &nbsp;
+                  <span className="orange">
+                  "
+                    {getFailedStepName(reportGroup.LastReport.Outline.Steps)}
+                  "
+                  </span>
                 </div>
                 : null
               }
-            </div>
           </div>
           <div className="fl-ns w-20-ns ph2 f7">
             <div>
@@ -39,25 +50,21 @@ export default ({reports}) =>
           <div className="fl-ns w-10-ns ph2">
           {reportGroup.LastReport.DeviceSettings.Type}/{reportGroup.LastReport.DeviceSettings.Name}
           </div>
-          <div className="fl-ns w-90-ns ph2">
-            {reportGroup.LastReport.Duration}s
-            |
-            &nbsp;
-            {reportGroup.Items.length} more runs
-            &nbsp;
-            |
-            Screenshots {reportGroup.LastReport.Screenshots.length}
-            &nbsp;
-            |
-            <TestBrowserlogPopover browserLog={reportGroup.LastReport.Logs} />
-            &nbsp;
-            |
-            <TestOutlinePopover testTitle={reportGroup.LastReport.Title} outline={reportGroup.LastReport.Outline} />
+          <div className="fl-ns w-70-ns ph2">
+              &nbsp;
+          </div>
+          <div className="fl-ns w-20-ns ph2">
+          {reportGroup.LastReport.Duration}s
+          |
+          <TestBrowserlogPopover browserLog={reportGroup.LastReport.Logs} />
+          &nbsp;
+          |
+          <TestOutlinePopover testTitle={reportGroup.LastReport.Title} outline={reportGroup.LastReport.Outline} />
 
-            <TestDetailPopover
-            testPath={reportGroup.LastReport.ReportDir}
-            lastScreenshot={reportGroup.LastReport.Screenshots[0]}
-            ></TestDetailPopover>
+          <TestDetailPopover
+          testPath={reportGroup.LastReport.ReportDir}
+          lastScreenshot={reportGroup.LastReport.Screenshots[0]}
+          ></TestDetailPopover>
 
           </div>
         </div>

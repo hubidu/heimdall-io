@@ -12,6 +12,9 @@ export default ({ testPath, lastScreenshot }) =>
         {lastScreenshot.Message}
       </h4>
 
+      <div className={'black-50 mt1'}>
+        {lastScreenshot.Page.Url}
+      </div>
       <img className="db" src={getScreenshotUrl(testPath, lastScreenshot.Screenshot)} alt={lastScreenshot.Screenshot} />
 
       <SourceCodeSnippet code={lastScreenshot.CodeStack[0].Source} location={lastScreenshot.CodeStack[0].Location} />

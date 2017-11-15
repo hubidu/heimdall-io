@@ -29,7 +29,7 @@ export default class IndexPage extends React.Component {
         {
           this.props.tests.succeeded.length > 0 ?
           <h3>
-            Succeeded Tests
+            All Tests
             ({Object.keys(this.props.tests.succeeded).length})
           </h3>
           : null

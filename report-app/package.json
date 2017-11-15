@@ -15,17 +15,17 @@
   "author": "Stefan Huber",
   "license": "ISC",
   "devDependencies": {
+    "ansi-to-react": "^1.4.2",
     "ava": "^0.22.0",
     "base-64": "^0.1.0",
-    "ansi-to-react": "^1.4.2",
     "cross-env": "^5.0.4",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-highlight": "^0.10.0",
     "react-icons": "^2.2.5",
     "recompose": "^0.24.0",
-    "styled-components": "^2.1.2",
-    "semantic-ui-react": "^0.68.0"
+    "semantic-ui-react": "^0.68.0",
+    "styled-components": "^2.1.2"
   },
   "dependencies": {
     "express": "^4.15.4",
