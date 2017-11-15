@@ -12,19 +12,19 @@ const StepResultIcon = ({result}) => {
 }
 
 export default ({testTitle, outline}) => {
-  if (outline.steps.length === 0) return null
+  if (outline.Steps.length === 0) return null
 
   return (
     <Popover>
       <h4 className="ma0 mb1">{testTitle}</h4>
       <ul className="list black-80 f6 ml1 pl1">
         {
-          outline.steps.map(step =>
-            <li className="mb1" key={step.name}>
-              {step.success !== undefined &&
-                <StepResultIcon result={step.success} />}
+          outline.Steps.map((step, i) =>
+            <li className="mb1" key={i}>
+              {step.Success !== undefined && step.ReachedAt > 0 &&
+                <StepResultIcon result={step.Success} />}
 
-              {step.actualName || step.name}
+              {step.ActualName || step.Name}
             </li>
           )
         }

@@ -11,6 +11,7 @@ export default ({ children, title = 'This is the default title' }) => (
         <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/monokai-sublime.css" />
         <link rel="stylesheet" href="https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css"/>
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
+        <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css' />
     </Head>
     <nav className="pa3 shadow-1">
       <div className="nowrap overflow-x-auto">

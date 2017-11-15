@@ -1,6 +1,7 @@
 FROM scratch
 
 WORKDIR /go/src/app/
+VOLUME ["/data/e2e-reports", "/go/src/app/reports"]
 
 ADD ./bin/main /go/src/app/
 

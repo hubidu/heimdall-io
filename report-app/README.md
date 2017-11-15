@@ -5,7 +5,10 @@
 - DONE Show console messages in tree view
 - DONE Show error message and error screenshot in tree view
 
+- importer: Correct all file paths
+
 - Show recent deployments
+- Group tests by time (just now, recently, some time ago)
 - Fix scrollbars
 - Show chart failed/successful tests
 - Show failed tests first in list

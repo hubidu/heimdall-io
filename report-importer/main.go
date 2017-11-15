@@ -17,19 +17,22 @@ func init() {
 }
 
 func importJob(baseDir string, removeReportFiles bool) {
-	fmt.Println("Importing reports from directory " + baseDir + " ...")
-
 	reports := model.GetReportFiles(baseDir)
 
-	// TODO Should not insert duplicate reports
-	insertReportsIntoDB(reports)
-	fmt.Println("Inserted " + strconv.Itoa(len(reports)) + " report files into database ...")
+	if len(reports) > 0 {
+		fmt.Println("Importing reports from directory " + baseDir + " ...")
 
-	if removeReportFiles {
-		fmt.Println("Removing report files ...")
-		for _, report := range reports {
-			os.Rename(report.ReportFileName, path.Join(report.ReportDir, "report_imported.json"))
+		// TODO Should not insert duplicate reports
+		insertReportsIntoDB(reports)
 
+		fmt.Println("Inserted " + strconv.Itoa(len(reports)) + " report files into database ...")
+
+		if removeReportFiles {
+			fmt.Println("Removing report files ...")
+			for _, report := range reports {
+				reportFileName := path.Join(baseDir, report.ReportDir, report.ReportFileName)
+				os.Rename(reportFileName, path.Join(baseDir, report.ReportDir, "report_imported.json"))
+			}
 		}
 	}
 }

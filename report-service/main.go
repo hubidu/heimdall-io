@@ -8,6 +8,7 @@ import (
 	"github.com/hubidu/e2e-backend/report-lib/db"
 	"github.com/hubidu/e2e-backend/report-service/middlewares"
 	reports "github.com/hubidu/e2e-backend/report-service/routes"
+	screenshots "github.com/hubidu/e2e-backend/report-service/routes"
 )
 
 func init() {
@@ -34,8 +35,10 @@ func main() {
 	r.GET("/reports", reports.List)
 	r.GET("/reports/:_id", reports.Get)
 	// TODO Strip down the report model in a report group items
-	r.GET("/report-categories", reports.ReportCategories)
+	r.GET("/report-categories", reports.GetReportCategories)
 	r.GET("/report-categories/:hashcategory", reports.GetReportsByCategory)
+
+	r.GET("/screenshots/:path/:file", screenshots.GetScreenshotImg)
 
 	r.Run("0.0.0.0:8000")
 }

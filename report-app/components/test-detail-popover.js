@@ -2,22 +2,22 @@ import QuestionIcon from 'react-icons/lib/fa/question-circle'
 
 import Popover from './popover'
 import SourceCodeSnippet from './SourceCodeSnippet'
+import getScreenshotUrl from '../services/get-sceenshot-url'
 
-const screenshotUrl = (path, filename) => `/api/screenshots/${encodeURIComponent(path)}/${encodeURIComponent(filename)}`
 
 export default ({ testPath, lastScreenshot }) =>
-  lastScreenshot.failed ?
+  lastScreenshot.Success === false ?
     <Popover Icon={QuestionIcon}>
       <h4 className="mv0 mb2 light-red">
-        {lastScreenshot.message}
+        {lastScreenshot.Message}
       </h4>
 
-      <img className="db" src={screenshotUrl(testPath, lastScreenshot.screenshot)} alt={lastScreenshot.screenshot} />
+      <img className="db" src={getScreenshotUrl(testPath, lastScreenshot.Screenshot)} alt={lastScreenshot.Screenshot} />
 
-      <SourceCodeSnippet code={lastScreenshot.codeStack[0].source} location={lastScreenshot.codeStack[0].location} />
+      <SourceCodeSnippet code={lastScreenshot.CodeStack[0].Source} location={lastScreenshot.CodeStack[0].Location} />
 
       <code className="f7 mb3">
-        {lastScreenshot.orgStack}
+        {lastScreenshot.OrgStack}
       </code>
 
     </Popover>

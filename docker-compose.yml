@@ -29,6 +29,7 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone
       - /etc/localtime:/etc/localtime
+      - /data/e2e-reports:/go/src/app/reports
           
   mongodb:
     image: mongo:3.0

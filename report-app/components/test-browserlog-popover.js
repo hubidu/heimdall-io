@@ -11,8 +11,8 @@ export default ({ browserLog }) =>
 
       <code className="f7">
         {
-          browserLog.map(logEntry =>
-            <span>{logEntry.message}<br/><br/></span>
+          browserLog.map((logEntry, i) =>
+            <span key={i}>{logEntry.Message}<br/><br/></span>
           )
         }
       </code>

@@ -4,7 +4,7 @@ import Popover from './popover'
 import TestDetailPopover from './test-detail-popover'
 import TestBrowserlogPopover from './test-browserlog-popover'
 import TestOutlinePopover from './test-outline-popover'
-import TestResultIcon from './test-result-icon'
+import TestResultIcon from './test-result-device-icon'
 
 export default ({ node }) =>
   <div className="cf nl2 nr2 f6 mt1 shadow-3 pa2 h3">

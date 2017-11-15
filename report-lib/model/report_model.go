@@ -18,7 +18,14 @@ type ReportGroup struct {
 	Prefix       string
 	Title        string
 	Type         string
-	Items        []Report
+	LastReport   Report
+	Items        []ReportSlim
+}
+
+type ReportSlim struct {
+	Id             bson.ObjectId `json:"_id,omitempty" bson:"_id,omitempty"`
+	Result         string
+	DeviceSettings DeviceSettings
 }
 
 type Report struct {
@@ -52,14 +59,23 @@ type Step struct {
 }
 
 type Screenshot struct {
-	ShotAt    int32
-	Success   bool
-	CodeStack []CodeStack
+	ShotAt     int
+	Success    bool
+	Message    string
+	OrgStack   string
+	Screenshot string
+	Page       Page
+	CodeStack  []CodeStack
 }
 
 type CodeStack struct {
 	Location Location
 	Source   []SourceLine
+}
+
+type Page struct {
+	Url   string
+	Title string
 }
 
 type Location struct {
@@ -111,8 +127,8 @@ func GetReportFiles(baseDir string) []Report {
 		r := Report{}
 		json.Unmarshal(raw, &r)
 
-		r.ReportFileName = path
-		r.ReportDir = filepath.Dir(path)
+		r.ReportFileName = filepath.Base(path)
+		r.ReportDir = strings.Replace(filepath.Dir(path), baseDir, "", -1)
 		r.HashCategory = hash(r.FullTitle)
 		r.Started = time.Unix(r.StartedAt/1000, 0)
 

@@ -20,9 +20,11 @@ var ReportLimit = 200
 func listReports(c *gin.Context) []model.Report {
 	db := c.MustGet("db").(*mgo.Database)
 
+	reportLimit, _ := strconv.Atoi(c.DefaultQuery("limit", "200"))
+
 	// fields := bson.M{"hashcategory": 1, "filename": 1, "startedat": 1, "started": 1, "type": 1, "prefix": 1, "title": 1, "fulltitle": 1, "result": 1, "duration": 1}
 	var reports []model.Report
-	err := db.C(ReportsCollection).Find(nil).SetMaxScan(100).Limit(ReportLimit).All(&reports)
+	err := db.C(ReportsCollection).Find(nil).Sort("-startedat").Limit(reportLimit).All(&reports)
 	if err != nil {
 		c.Error(err)
 	}
@@ -48,12 +50,13 @@ func Get(c *gin.Context) {
 func GetReportsByCategory(c *gin.Context) {
 	db := c.MustGet("db").(*mgo.Database)
 
-	var reports []model.Report
 	hashcategory, _ := strconv.Atoi(c.Param("hashcategory"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "200"))
 
+	var reports []model.Report
 	query := bson.M{"hashcategory": hashcategory}
 
-	err := db.C(ReportsCollection).Find(query).All(&reports)
+	err := db.C(ReportsCollection).Find(query).Sort("-startedat").Limit(limit).All(&reports)
 	if err != nil {
 		c.Error(err)
 	}
@@ -68,8 +71,8 @@ func List(c *gin.Context) {
 	c.JSON(http.StatusOK, reports)
 }
 
-// ReportCategories group reports by same category
-func ReportCategories(c *gin.Context) {
+// GetReportCategories group reports by same category
+func GetReportCategories(c *gin.Context) {
 	reports := listReports(c)
 
 	reportsByCategory := make(map[uint32]*model.ReportGroup)
@@ -77,10 +80,10 @@ func ReportCategories(c *gin.Context) {
 	for _, report := range reports {
 		_, ok := reportsByCategory[report.HashCategory]
 		if !ok {
-			reportGroup := &model.ReportGroup{report.HashCategory, report.Prefix, report.Title, report.Type, nil}
+			reportGroup := &model.ReportGroup{HashCategory: report.HashCategory, Prefix: report.Prefix, Title: report.Title, Type: report.Type, LastReport: report, Items: nil}
 			reportsByCategory[report.HashCategory] = reportGroup
 		}
-		reportsByCategory[report.HashCategory].Items = append(reportsByCategory[report.HashCategory].Items, report)
+		reportsByCategory[report.HashCategory].Items = append(reportsByCategory[report.HashCategory].Items, model.ReportSlim{Id: report.Id, Result: report.Result, DeviceSettings: report.DeviceSettings})
 	}
 
 	c.JSON(http.StatusOK, reportsByCategory)
