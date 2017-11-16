@@ -1,39 +1,39 @@
 import React from 'react'
 
 import Layout from '../components/layout'
-import Test from '../components/Test'
+import TestReportList from '../components/test-report-list'
 
-import getTestRuns from '../services/get-test-runs'
-
-const twoDecimals = num => parseFloat(Math.round(num * 100) / 100).toFixed(2)
-const sumDuration = tests => tests.reduce((sum, t) => sum + t.runs[0].duration, 0)
+import getReportGroups from '../services/get-report-groups'
 
 export default class IndexPage extends React.Component {
   static async getInitialProps () {
-    return { tests: await getTestRuns() }
+    const tests = await getReportGroups()
+
+    return { tests }
   }
 
   render () {
     return (
-      <Layout title="Detailed Test Report">
-          <h3>Details</h3>
+      <Layout title="Test Report">
+        {
+          this.props.tests.failed.length > 0 ?
+          <h3>
+            Failed tests
+            ({Object.keys(this.props.tests.failed).length})
+          </h3>
+          : null
+        }
+        <TestReportList reports={this.props.tests.failed} />
 
-          <div className="black-70 mb3">
-            <strong>{this.props.tests.length}</strong> tests
-            |
-            &nbsp;
-            <strong>{twoDecimals(sumDuration(this.props.tests))}s</strong> overall duration
-          </div>
-
-          {
-              this.props.tests.map(test =>
-                <Test key={test.title} test={test}/>
-              )
-          }
-          <br/>
-          <br/>
-          <br/>
-          <br/>
+        {
+          this.props.tests.succeeded.length > 0 ?
+          <h3>
+            All Tests
+            ({Object.keys(this.props.tests.succeeded).length})
+          </h3>
+          : null
+        }
+        <TestReportList reports={this.props.tests.succeeded} />
       </Layout>
     )
   }

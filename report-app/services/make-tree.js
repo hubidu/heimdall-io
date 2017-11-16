@@ -62,7 +62,6 @@ export default (testRuns, deviceType = 'desktop') => {
 
   propagateTestResults(tree)
 
-  console.log(tree)
 
   return tree
 }

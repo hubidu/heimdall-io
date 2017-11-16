@@ -18,6 +18,8 @@ const Bar = styled.span`
     height: ${props => Math.ceil(props.height)}px;
 `
 
+const capValue = val => val >= 1.0 ? 1.0 : val
+
 const defaultLabelFormatFn = d => moment(d.t).fromNow() + ', ' + d.value + ' s'
 
 export default ({ data, selectedBar = 0, labelFormatFn = defaultLabelFormatFn, maxBars = 10, maxValue = 120, onBarClicked = () => {} }) => {
@@ -31,13 +33,13 @@ export default ({ data, selectedBar = 0, labelFormatFn = defaultLabelFormatFn, m
     return (
         <BarContainer height={Height} width={Width}>
             {
-                dataSlice.map((d, i) => 
-                    <Bar key={i} 
+                dataSlice.map((d, i) =>
+                    <Bar key={i}
                         selected={selectedBar === i}
-                        title={labelFormatFn(d)} 
-                        barGap={BarGap} 
-                        width={BarWidth} 
-                        height={d.value * Height / maxValue} 
+                        title={labelFormatFn(d)}
+                        barGap={BarGap}
+                        width={BarWidth}
+                        height={capValue(d.value / maxValue) * Height}
                         success={d.success}
                         onClick={ev => onBarClicked(i)}
                     >

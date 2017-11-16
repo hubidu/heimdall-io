@@ -24,7 +24,9 @@ type ReportGroup struct {
 
 type ReportSlim struct {
 	Id             bson.ObjectId `json:"_id,omitempty" bson:"_id,omitempty"`
+	StartedAt      int64
 	Result         string
+	Duration       float32
 	DeviceSettings DeviceSettings
 }
 

@@ -83,7 +83,7 @@ func GetReportCategories(c *gin.Context) {
 			reportGroup := &model.ReportGroup{HashCategory: report.HashCategory, Prefix: report.Prefix, Title: report.Title, Type: report.Type, LastReport: report, Items: nil}
 			reportsByCategory[report.HashCategory] = reportGroup
 		}
-		reportsByCategory[report.HashCategory].Items = append(reportsByCategory[report.HashCategory].Items, model.ReportSlim{Id: report.Id, Result: report.Result, DeviceSettings: report.DeviceSettings})
+		reportsByCategory[report.HashCategory].Items = append(reportsByCategory[report.HashCategory].Items, model.ReportSlim{Id: report.Id, StartedAt: report.StartedAt, Result: report.Result, Duration: report.Duration, DeviceSettings: report.DeviceSettings})
 	}
 
 	c.JSON(http.StatusOK, reportsByCategory)

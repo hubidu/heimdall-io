@@ -5,10 +5,13 @@
 - DONE Show console messages in tree view
 - DONE Show error message and error screenshot in tree view
 
-- Add a single detail test view
 - Show recent deployments
+- Show last update of test project
+- Add a hash id for errors
+- Add failure rate per test
 - Group tests by time (just now, recently, some time ago)
-- Fix scrollbars
+- Add a single detail test view
+- Fix scrollbars (hat mit den popovers zu tun)
 - Show chart failed/successful tests
 - Show failed tests first in list
 - Show test status per device in tree view

@@ -30,6 +30,20 @@ services:
       - /etc/timezone:/etc/timezone
       - /etc/localtime:/etc/localtime
       - /data/e2e-reports:/go/src/app/reports
+
+  deployment-service:
+    image: hubidu27/deployment-service:latest
+    ports:
+      - 8002:8000
+    links:
+      - mongodb
+    environment:
+      - BAMBOO_HOST=${BAMBOO_HOST}
+      - BAMBOO_USER=${BAMBOO_USER}
+      - BAMBOO_PASSWORD=${BAMBOO_PASSWORD}
+    volumes:
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
           
   mongodb:
     image: mongo:3.0
