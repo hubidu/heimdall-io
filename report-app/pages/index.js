@@ -4,12 +4,13 @@ import Layout from '../components/layout'
 import TestReportList from '../components/test-report-list'
 
 import getReportGroups from '../services/get-report-groups'
+import getDeployments from '../services/get-deployments'
 
 export default class IndexPage extends React.Component {
   static async getInitialProps () {
     const tests = await getReportGroups()
-
-    return { tests }
+    const deployments = await getDeployments()
+    return { tests, deployments }
   }
 
   render () {
@@ -33,7 +34,7 @@ export default class IndexPage extends React.Component {
           </h3>
           : null
         }
-        <TestReportList reports={this.props.tests.succeeded} />
+        <TestReportList deployments={this.props.deployments} reports={this.props.tests.succeeded} />
       </Layout>
     )
   }

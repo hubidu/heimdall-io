@@ -1,112 +1,33 @@
 import moment from 'moment'
+import TestReportGroup from '../components/test-report-group'
 
-import TestDetailPopover from '../components/test-detail-popover'
-import TestBrowserlogPopover from '../components/test-browserlog-popover'
-import TestOutlinePopover from '../components/test-outline-popover'
-import TestResultDeviceIcon from '../components/test-result-device-icon'
-
-import SuccessesAndFailuresBars from '../components/SuccessesAndFailuresBars'
-
-const getFailedStepName = steps => {
-  const failedStep = steps.find(step => step.Success === false)
-  if (failedStep) {
-    return failedStep.Name;
+export default ({reports, deployments}) => {
+  const bySortKey = (a, b) => {
+    return a.SortKey - b.SortKey
   }
-}
+  const desc = sortFn => (a, b) => -1 * sortFn(a, b)
 
-const getFailedCommand = screenshot => {
-  const codeStack = screenshot.CodeStack
-  const line = codeStack[0].Location.Line
-  return codeStack[0].Source.find(sourceLine => sourceLine.Line === line)
-    .Value.replace('await', '').replace('(', ' (').trim()
-}
+  const reportsAndDeployments = deployments === undefined ? reports : reports.concat(deployments).sort(desc(bySortKey))
 
-const trunc = (msg, MaxLen = 80) => {
-  let res = msg
-  if (msg.length > MaxLen) {
-    res = msg.substring(0, MaxLen) + '...'
-  }
-  return res
-}
-
-const mapToSuccessAndFailure = runs => runs.map(run => ({ t: run.StartedAt, value: run.Duration, success: run.Result === 'success'}))
-
-
-export default ({reports}) =>
+  return (
   <div className="TestReportGroups">
   {
-    reports.map((reportGroup, i) =>
-      <div key={i} className="shadow-4 pa1">
-        <div className="cf cf-ns nl2 nr2 pv1">
-          <div className="fl-ns w-10-ns ph2">
-            <TestResultDeviceIcon result={reportGroup.LastReport.Result} deviceSettings={reportGroup.LastReport.DeviceSettings} />
-        </div>
-          <div className="fl-ns w-70-ns ph2">
-            <h4 className="ma0 pa1 f5">
-              {reportGroup.Title}
-            </h4>
-              {
-                reportGroup.LastReport.Result === 'error' ?
-              <div className="f5">
-                <div className="black-40">
-                  at step
-                  &nbsp;
-                  <span className="black-90">
-                  "
-                    {getFailedStepName(reportGroup.LastReport.Outline.Steps)}
-                  "
-                  </span>
-                </div>
-                <div className="black-40">
-                  with
-                  &nbsp;
-                  <code className="orange">
-                    {trunc(reportGroup.LastReport.Screenshots[0].Message)}
-                  </code>
-
-                </div>
-            </div>
-                : null
-              }
-          </div>
-          <div className="fl-ns w-20-ns ph2 f7">
-            <div>
-              {moment(reportGroup.LastReport.Started).fromNow()}
-            </div>
-          </div>
-        </div>
-
-        <div className="cf cf-ns nl2 nr2 f7 pv1">
-          <div className="fl-ns w-10-ns ph2">
-          {reportGroup.LastReport.DeviceSettings.Type}/{reportGroup.LastReport.DeviceSettings.Name}
-          </div>
-          <div className="fl-ns w-70-ns ph2">
-            {
-              reportGroup.LastReport.Result === 'error' ?
-                <SuccessesAndFailuresBars
-                  data={mapToSuccessAndFailure(reportGroup.Items)}
-                  maxBars={50}
-                />
-                : <span>&nbsp;</span>
-            }
-          </div>
-          <div className="fl-ns w-20-ns ph2">
-          {reportGroup.LastReport.Duration}s
-          |
-          <TestBrowserlogPopover browserLog={reportGroup.LastReport.Logs} />
+    reportsAndDeployments.map((event, i) => {
+      if (event.Type === 'deployment-event') {
+        return <div key={i} className="shadow-4 pa1 ma1">
+          {moment(event.FinishedAt).format('llll')}
           &nbsp;
-          |
-          <TestOutlinePopover testTitle={reportGroup.LastReport.Title} outline={reportGroup.LastReport.Outline} />
-
-          <TestDetailPopover
-          testPath={reportGroup.LastReport.ReportDir}
-          lastScreenshot={reportGroup.LastReport.Screenshots[0]}
-          ></TestDetailPopover>
-
-          </div>
+          <strong>
+            {event.ProjectName}
+          </strong>
+          &nbsp;
+          at {event.Version}
         </div>
-
-      </div>
-    )
+      } else {
+        return <TestReportGroup key={i} reportGroup={event} />
+      }
+    })
   }
   </div>
+  )
+}
