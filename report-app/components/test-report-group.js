@@ -28,15 +28,15 @@ const trunc = (msg, MaxLen = 80) => {
 }
 
 const mapToSuccessAndFailure = runs => runs.map(run => ({ t: run.StartedAt, value: run.Duration, success: run.Result === 'success'}))
+const mapDeploymentsToMarkers = deployments => deployments.map(d => Object.assign({}, { t: d.FinishedAt }))
 
-
-export default({reportGroup}) =>
+export default({reportGroup, deployments = []}) =>
 <div className="shadow-4 pa1">
   <div className="cf cf-ns nl2 nr2 pv1">
     <div className="fl-ns w-10-ns ph2">
       <TestResultDeviceIcon result={reportGroup.LastReport.Result} deviceSettings={reportGroup.LastReport.DeviceSettings} />
   </div>
-    <div className="fl-ns w-70-ns ph2">
+    <div className="fl-ns w-60-ns ph2">
       <h4 className="ma0 pa1 f5">
         {reportGroup.Title}
       </h4>
@@ -65,15 +65,21 @@ export default({reportGroup}) =>
         }
     </div>
     <div className="fl-ns w-20-ns ph2 f7">
+    <div>
+      <SuccessesAndFailuresBars
+        data={mapToSuccessAndFailure(reportGroup.Items)}
+        markers={mapDeploymentsToMarkers(deployments)}
+        maxBars={20}
+        />
+      </div>
+
+    </div>
+    <div className="fl-ns w-10-ns ph2 f7">
       <div>
         <strong>{moment(reportGroup.LastReport.Started).fromNow()}</strong>
-        &nbsp; in {~~reportGroup.LastReport.Duration}s
-      </div>
-      <div className="o-50">
-        <SuccessesAndFailuresBars
-        data={mapToSuccessAndFailure(reportGroup.Items)}
-        maxBars={10}
-      />
+        <span className="black-40">
+          &nbsp; in {~~reportGroup.LastReport.Duration}s
+        </span>
       </div>
 
     </div>
@@ -83,19 +89,20 @@ export default({reportGroup}) =>
     <div className="fl-ns w-10-ns ph2">
     {reportGroup.LastReport.DeviceSettings.Type}/{reportGroup.LastReport.DeviceSettings.Name}
     </div>
-    <div className="fl-ns w-70-ns ph2">
-        &nbsp;
+    <div className="fl-ns w-80-ns ph2">
+        <span className="black-40">
+          {reportGroup.LastReport.Prefix.replace(/--/gi, '/')}
+        </span>
     </div>
-    <div className="fl-ns w-20-ns ph2">
-    <TestBrowserlogPopover browserLog={reportGroup.LastReport.Logs} />
-    &nbsp;
-    |
-    <TestOutlinePopover testTitle={reportGroup.LastReport.Title} outline={reportGroup.LastReport.Outline} />
-
-    <TestDetailPopover
-    testPath={reportGroup.LastReport.ReportDir}
-    lastScreenshot={reportGroup.LastReport.Screenshots[0]}
-    ></TestDetailPopover>
+    <div className="fl-ns w-10-ns ph2">
+      <TestBrowserlogPopover browserLog={reportGroup.LastReport.Logs} />
+      &nbsp;
+      <TestOutlinePopover testTitle={reportGroup.LastReport.Title} outline={reportGroup.LastReport.Outline} />
+      &nbsp;
+      <TestDetailPopover
+        testPath={reportGroup.LastReport.ReportDir}
+        lastScreenshot={reportGroup.LastReport.Screenshots[0]}
+      />
 
     </div>
   </div>

@@ -16,7 +16,7 @@ export default ({reports, deployments}) => {
       if (event.Type === 'deployment-event') {
         return <DeploymentEvent key={i} event={event} />
       } else {
-        return <TestReportGroup key={i} reportGroup={event} />
+        return <TestReportGroup key={i} reportGroup={event} deployments={deployments} />
       }
     })
   }

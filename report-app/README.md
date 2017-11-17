@@ -9,8 +9,9 @@
 - DONE Show failed tests first in list
 
 - Add a hash id for errors
+- DONE Add path to test as tag
 - Make success/failure bars selectable again
-- Add path to test as tag
+- Show deployments in bars
 - Display if test is known to fail with this error
 - Group tests by time (just now, recently, some time ago)
 - FEAT Filter tests by device
