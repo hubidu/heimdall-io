@@ -1,6 +1,7 @@
 version: '3'
 services:
   report-app:
+    restart: always
     image: hubidu27/report-app:latest
     ports:
       - 4000:4000
@@ -12,6 +13,7 @@ services:
       - /etc/localtime:/etc/localtime
 
   report-importer:
+    restart: always
     image: hubidu27/report-importer:latest
     links:
       - mongodb
@@ -21,6 +23,7 @@ services:
       - /data/e2e-reports:/go/src/app/reports
       
   report-service:
+    restart: always
     image: hubidu27/report-service:latest
     ports:
       - 8001:8000
@@ -32,6 +35,7 @@ services:
       - /data/e2e-reports:/go/src/app/reports
 
   deployment-service:
+    restart: always
     image: hubidu27/deployment-service:latest
     ports:
       - 8002:8000
@@ -46,6 +50,7 @@ services:
       - /etc/localtime:/etc/localtime
           
   mongodb:
+    restart: always
     image: mongo:3.0
     command: mongod --smallfiles --quiet --logpath=/dev/null
     volumes:

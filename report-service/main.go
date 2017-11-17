@@ -6,7 +6,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/hubidu/e2e-backend/report-lib/db"
-	"github.com/hubidu/e2e-backend/report-service/middlewares"
+	"github.com/hubidu/e2e-backend/report-lib/middlewares"
 	reports "github.com/hubidu/e2e-backend/report-service/routes"
 	screenshots "github.com/hubidu/e2e-backend/report-service/routes"
 )
