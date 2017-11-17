@@ -61,6 +61,7 @@ type Step struct {
 }
 
 type Screenshot struct {
+	HashID     uint32 // identify similar screenshots
 	ShotAt     int
 	Success    bool
 	Message    string
@@ -73,6 +74,18 @@ type Screenshot struct {
 type CodeStack struct {
 	Location Location
 	Source   []SourceLine
+}
+
+func (m *CodeStack) GetExecutedCommand() string {
+	execLine := m.Location.Line
+	var ret string
+	for _, line := range m.Source {
+		if line.Line == execLine {
+			ret = line.Value
+		}
+	}
+
+	return ret
 }
 
 type Page struct {
@@ -133,6 +146,10 @@ func GetReportFiles(baseDir string) []Report {
 		r.ReportDir = strings.Replace(filepath.Dir(path), baseDir, "", -1)
 		r.HashCategory = hash(r.FullTitle)
 		r.Started = time.Unix(r.StartedAt/1000, 0)
+
+		for _, s := range r.Screenshots {
+			s.HashID = hash(s.Message + s.CodeStack[0].Location.File + s.CodeStack[0].GetExecutedCommand())
+		}
 
 		fileList = append(fileList, r)
 		return nil
