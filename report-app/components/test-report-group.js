@@ -69,7 +69,7 @@ export default({reportGroup}) =>
         <strong>{moment(reportGroup.LastReport.Started).fromNow()}</strong>
         &nbsp; in {~~reportGroup.LastReport.Duration}s
       </div>
-      <div>
+      <div className="o-50">
         <SuccessesAndFailuresBars
         data={mapToSuccessAndFailure(reportGroup.Items)}
         maxBars={10}

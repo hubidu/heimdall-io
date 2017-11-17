@@ -1,5 +1,5 @@
-import moment from 'moment'
 import TestReportGroup from '../components/test-report-group'
+import DeploymentEvent from '../components/deployment-event'
 
 export default ({reports, deployments}) => {
   const bySortKey = (a, b) => {
@@ -14,15 +14,7 @@ export default ({reports, deployments}) => {
   {
     reportsAndDeployments.map((event, i) => {
       if (event.Type === 'deployment-event') {
-        return <div key={i} className="shadow-4 pa1 ma1">
-          {moment(event.FinishedAt).format('llll')}
-          &nbsp;
-          <strong>
-            {event.ProjectName}
-          </strong>
-          &nbsp;
-          at {event.Version}
-        </div>
+        return <DeploymentEvent key={i} event={event} />
       } else {
         return <TestReportGroup key={i} reportGroup={event} />
       }
