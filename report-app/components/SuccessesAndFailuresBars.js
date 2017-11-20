@@ -31,7 +31,7 @@ export default ({ data, markers = [], selectedBar = -1, labelFormatFn = defaultL
   mappedData = mappedData.filter(m => !!m)
 
   return (
-      <div style={{height: `${Height}px`, width: `${maxBars * (BarWidth + BarGap)}px`}}>
+      <div style={{display: 'inline-block', 'lineHeight': 1, 'verticalAlign': 'baseline', height: `${Height}px`, width: `${maxBars * (BarWidth + BarGap)}px`}}>
       {
         mappedData.map((d, i) =>
           <div key={i} style={{'position': 'relative', display: 'inline-block', width: `${BarWidth}px`, 'height': `100%`, 'marginRight': `${BarGap}px`, 'backgroundColor': `${selectedColor(selectedBar === i)}`}}

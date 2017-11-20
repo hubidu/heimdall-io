@@ -7,15 +7,22 @@
 - DONE Show recent deployments
 - DONE Show browser logs
 - DONE Show failed tests first in list
-
-- Add a hash id for errors
+- DONE Show deployments in bars
 - DONE Add path to test as tag
+
+- Add a single detail test view
+- Detail View: Show device
+- Detail View: Show history and switch between tests
+- Detail View: Merge steps into screenshot timeline
+- Detail View: Merge browser logs into screenshot timeline?
+- Detail View: Enlarge screenshots
+- Detail View: Reference successes/failures of other test runs
+- NEW Show also released tickets/stories in timeline
+- Add a hash id for errors
 - Make success/failure bars selectable again
-- Show deployments in bars
 - Display if test is known to fail with this error
 - Group tests by time (just now, recently, some time ago)
 - FEAT Filter tests by device
-- Add a single detail test view
 - Show last update of test project
 - Add failure rate per test
 - Show test status per device in tree view
