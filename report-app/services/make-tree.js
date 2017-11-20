@@ -37,6 +37,7 @@ const propagateTestResults = (node, nodeName = 'root') => {
   return aggregatedResult
 }
 
+// Obsolete
 export default (testRuns, deviceType = 'desktop') => {
   const byDeviceType = test => test.deviceSettings && test.deviceSettings.type === deviceType
   // Get the latest test run

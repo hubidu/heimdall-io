@@ -35,11 +35,13 @@ export default({reportGroup, deployments = []}) =>
   <div className="cf cf-ns nl2 nr2 pv1">
     <div className="fl-ns w-10-ns ph2">
       <TestResultDeviceIcon result={reportGroup.LastReport.Result} deviceSettings={reportGroup.LastReport.DeviceSettings} />
-  </div>
+    </div>
     <div className="fl-ns w-60-ns ph2">
-      <h4 className="ma0 pa1 f5">
-        {reportGroup.Title}
-      </h4>
+      <a href={`/details?id=${reportGroup.LastReport._id}`} className="black-80" >
+        <h4 className="ma0 pa1 f5">
+          {reportGroup.Title}
+        </h4>
+      </a>
         {
           reportGroup.LastReport.Result === 'error' ?
         <div className="f5">

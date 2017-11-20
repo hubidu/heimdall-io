@@ -8,9 +8,12 @@ import getDeployments from '../services/get-deployments'
 
 export default class IndexPage extends React.Component {
   static async getInitialProps () {
-    const tests = await getReportGroups()
-    const deployments = await getDeployments()
-    return { tests, deployments }
+    // const tests = await getReportGroups()
+    // const deployments = await getDeployments()
+
+    const results = await Promise.all([getReportGroups(), getDeployments()])
+
+    return { tests: results[0], deployments: results[1] }
   }
 
   render () {
