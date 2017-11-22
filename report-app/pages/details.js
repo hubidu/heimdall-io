@@ -1,5 +1,5 @@
 import React from 'react'
-import{Header, Label, Item} from 'semantic-ui-react'
+import{Card, Image, Icon, Header, Label, Item} from 'semantic-ui-react'
 import moment from 'moment'
 
 import Layout from '../components/layout'
@@ -24,7 +24,7 @@ const AtSecond = ({shotAt, startShotAt}) =>
 const ResultIcon = ({report}) =>
   report.Result === 'success' ?
     <Label as='a' color='green'>Succeeded</Label>
-    : <Label as='a' color='red'>Failed</Label>
+    : <Label as='a' color='orange'>Failed</Label>
 
 const CommandName = ({codeStack}) =>
   <span>
@@ -37,81 +37,141 @@ const CommandName = ({codeStack}) =>
     }
   </span>
 
+const color = success => success ? 'green' : 'orange'
+
 const Timeline = ({reportDir, startTimeline, timeline}) =>
-  <Item.Group divided>
-  {
-    timeline.map((s, i) =>
-    <Item key={i}>
-      <Item.Image src={getScreenshotUrl(reportDir, s.Screenshot)} />
-      <Item.Content>
-        <Item.Header as='a'>
-          <CommandName codeStack={s.CodeStack} />
-        </Item.Header>
-        <Item.Meta>
-          at second <AtSecond shotAt={s.ShotAt} startShotAt={startTimeline} />
-        </Item.Meta>
-        <Item.Meta>
-          <a href={s.Page.Url}>{s.Page.Title}</a>
-        </Item.Meta>
-        <Item.Description>
-          <SourceCodeSnippet key={i} code={s.CodeStack[0].Source} location={s.CodeStack[0].Location} />
-        </Item.Description>
-        <Item.Extra>
-          { s.Success === false &&
-            <span>
-              <Label color="red">
-                {s.Message}
-              </Label>
-              <br/>
-              <verbatim>
-              <code>
-                {s.OrgStack}
-              </code>
-              </verbatim>
-
-            </span>
+  <div className="Timeline mt4">
+    <h2>Timeline</h2>
+    <Item.Group divided>
+    {
+      timeline.map((s, i) =>
+      <Item key={i}>
+        <Item.Image as='a' href={getScreenshotUrl(reportDir, s.Screenshot)} target='_blank' src={getScreenshotUrl(reportDir, s.Screenshot)} />
+        <Item.Content>
+          <Item.Header as='a'>
+            <CommandName codeStack={s.CodeStack} />
+          </Item.Header>
+          <Item.Meta>
+            at second <AtSecond shotAt={s.ShotAt} startShotAt={startTimeline} />
+          </Item.Meta>
+          <Item.Meta>
+            <a href={s.Page.Url}>{s.Page.Title}</a>
+          </Item.Meta>
+          <Item.Meta>
+          { s.Message &&
+            <Label size='medium' basic color="orange">
+              {s.Message}
+            </Label>
           }
-        </Item.Extra>
-      </Item.Content>
-    </Item>
-    )
-  }
-  </Item.Group>
+          </Item.Meta>
+          <Item.Description>
+            <small>
+              <SourceCodeSnippet key={i} code={s.CodeStack[0].Source} location={s.CodeStack[0].Location} />
+            </small>
+          </Item.Description>
+          <Item.Extra>
+            { s.Success === false &&
+              <span>
+                <pre>
+                  <code>
+                    {s.OrgStack}
+                  </code>
+                </pre>
 
+              </span>
+            }
+          </Item.Extra>
+        </Item.Content>
+      </Item>
+      )
+    }
+    </Item.Group>
+  </div>
+
+
+const RecentFailures = ({reportDir, failedReports}) =>
+  <div className="RecentFailures mt4">
+    <h2>Recent failures</h2>
+    <Card.Group stacked itemsPerRow={4}>
+    {
+      failedReports.map((r, i) =>
+        <Card key={i} color='orange'>
+          <Image size='small' centered src={getScreenshotUrl(reportDir, r.Screenshots[0].Screenshot)} />
+          <Card.Content>
+            <Card.Meta>
+              <small className='date'>
+                {moment(r.Screenshots[0].ShotAt).fromNow()}
+              </small>
+              <small className='date'>
+                {r.Duration}s
+              </small>
+              <small>
+                {r.Screenshots[0].Page.Title}
+             </small>
+            </Card.Meta>
+            <Card.Description>
+              <CommandName codeStack={r.Screenshots[0].CodeStack} />
+
+              <Label size='medium' basic color="orange">
+                {r.Screenshots[0].Message}
+              </Label>
+
+              <small>
+                <SourceCodeSnippet code={r.Screenshots[0].CodeStack[0].Source} location={r.Screenshots[0].CodeStack[0].Location} />
+              </small>
+
+            </Card.Description>
+          </Card.Content>
+        </Card>
+      )
+    }
+    </Card.Group>
+  </div>
 
 export default class extends React.Component {
   static async getInitialProps ({ query: { id } }) {
     const report = await getReportById(id)
     const historicReports = await getReportsByCategory(report.HashCategory)
-    return { report, historicReports }
+    const failedReports = historicReports
+                            .filter(r => r.Result !== 'success')
+                            .filter(r => r.DeviceSettings.Name === report.DeviceSettings.Name)
+                            .slice(1, 5)
+
+    return { report, historicReports, failedReports }
   }
 
   render () {
     return (
       <Layout title="Test Report">
-        <Header as='h2' dividing>
-          {this.props.report.Title}
-          <Header.Subheader>
-            {this.props.report.Prefix}
-          </Header.Subheader>
-        </Header>
+        <div className="mt4">
+          <Header as='h2' dividing>
+            {this.props.report.Title}
+          </Header>
 
-        <ResultIcon report={this.props.report} />
-        &nbsp;
-        {moment(this.props.Started).fromNow()}
-        &nbsp;
-        <Label as='a' >{this.props.report.DeviceSettings.Type} / {this.props.report.DeviceSettings.Name}</Label>
-        <span className="fr mt1">
-          <SuccessesAndFailuresBars
-          data={mapToSuccessAndFailure(this.props.historicReports)}
-          maxBars={50}
-          />
-        </span>
+          <div className="black-60">
+            <small>
+              {this.props.report.Prefix}
+            </small>
+          </div>
+          <ResultIcon report={this.props.report} />
+          &nbsp;
+          <Label as='a' >{this.props.report.DeviceSettings.Type} / {this.props.report.DeviceSettings.Name}</Label>
+          &nbsp;
+          {moment(this.props.Started).fromNow()}
+          <span className="fr mt1">
+            <SuccessesAndFailuresBars
+            data={mapToSuccessAndFailure(this.props.historicReports)}
+            maxBars={50}
+            />
+          </span>
 
-        <Timeline
-          reportDir={this.props.report.ReportDir}
-          startTimeline={this.props.report.Screenshots[this.props.report.Screenshots.length - 1].ShotAt}
-          timeline={this.props.report.Screenshots} />
+          <RecentFailures reportDir={this.props.report.ReportDir} failedReports={this.props.failedReports} />
+
+          <Timeline
+            reportDir={this.props.report.ReportDir}
+            startTimeline={this.props.report.Screenshots[this.props.report.Screenshots.length - 1].ShotAt}
+            timeline={this.props.report.Screenshots} />
+        </div>
       </Layout>
     )
   }

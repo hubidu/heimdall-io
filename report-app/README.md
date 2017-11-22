@@ -9,9 +9,11 @@
 - DONE Show failed tests first in list
 - DONE Show deployments in bars
 - DONE Add path to test as tag
+- DONE Add a single detail test view
+- DONE Detail View: Show device
 
-- Add a single detail test view
-- Detail View: Show device
+- Looks like deployment info is not always reliable
+- Show other errors
 - Detail View: Show history and switch between tests
 - Detail View: Merge steps into screenshot timeline
 - Detail View: Merge browser logs into screenshot timeline?
