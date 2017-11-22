@@ -14,6 +14,7 @@
 
 - Looks like deployment info is not always reliable
 - Show other errors
+- Add label to deployment bars
 - Detail View: Show history and switch between tests
 - Detail View: Merge steps into screenshot timeline
 - Detail View: Merge browser logs into screenshot timeline?

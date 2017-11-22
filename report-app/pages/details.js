@@ -39,6 +39,8 @@ const CommandName = ({codeStack}) =>
 
 const color = success => success ? 'green' : 'orange'
 
+const trunc = msg => msg.substring(0, 50)
+
 const Timeline = ({reportDir, startTimeline, timeline}) =>
   <div className="Timeline mt4">
     <h2>Timeline</h2>
@@ -113,7 +115,7 @@ const RecentFailures = ({reportDir, failedReports}) =>
               <CommandName codeStack={r.Screenshots[0].CodeStack} />
 
               <Label size='medium' basic color="orange">
-                {r.Screenshots[0].Message}
+                {trunc(r.Screenshots[0].Message)}
               </Label>
 
               <small>
@@ -165,7 +167,10 @@ export default class extends React.Component {
             />
           </span>
 
-          <RecentFailures reportDir={this.props.report.ReportDir} failedReports={this.props.failedReports} />
+          {
+            this.props.failedReports.length > 0 &&
+              <RecentFailures reportDir={this.props.report.ReportDir} failedReports={this.props.failedReports} />
+          }
 
           <Timeline
             reportDir={this.props.report.ReportDir}
