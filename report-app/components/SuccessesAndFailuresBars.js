@@ -10,7 +10,7 @@ const BarGap = 2
 const Height = 20
 
 const color = success => success ? '#19a974' : '#ff6300'
-const selectedColor = selected => selected ? 'lightblue' : '#eee'
+const selectedColor = selected => selected ? 'blue' : '#eee'
 const byDate = (a, b) => {
   return a.t - b.t
 }
@@ -34,25 +34,26 @@ export default ({ data, markers = [], selectedBar = -1, labelFormatFn = defaultL
       <div style={{display: 'inline-block', 'lineHeight': 1, 'verticalAlign': 'baseline', height: `${Height}px`, width: `${maxBars * (BarWidth + BarGap)}px`}}>
       {
         mappedData.map((d, i) =>
-          <div key={i} style={{'position': 'relative', display: 'inline-block', width: `${BarWidth}px`, 'height': `100%`, 'marginRight': `${BarGap}px`, 'backgroundColor': `${selectedColor(selectedBar === i)}`}}
+          <a href={d.href} key={i}
+            style={{'position': 'relative', display: 'inline-block', width: `${BarWidth}px`, 'height': `100%`, 'marginRight': `${BarGap}px`, 'backgroundColor': `#eee`, 'borderBottom': `2px solid ${selectedColor(selectedBar === i)}`}}
             title={labelFormatFn(d)}
             onClick={ev => onBarClicked(i)}
             >
-            { d.value === undefined ?
-              <div style={{'position': 'absolute', 'left': `${BarWidth/2}px`,'bottom': 0, height: `${Height}px`, width: `2px`, 'backgroundColor': `#96ccff`}}
-              onClick={ev => onBarClicked(i)}
-              >
-              &nbsp;
-              </div>
+                { d.value === undefined ?
+                  <div style={{'position': 'absolute', 'left': `${BarWidth/2}px`,'bottom': 0, height: `${Height}px`, width: `2px`, 'backgroundColor': `#96ccff`}}
+                  onClick={ev => onBarClicked(i)}
+                  >
+                  &nbsp;
+                  </div>
 
-              :
-              <div style={{'position': 'absolute', 'bottom': 0, height: `${capValue(d.value / maxValue) * Height}px`, width: `${BarWidth}px`, 'backgroundColor': `${color(d.success)}`}}
-              onClick={ev => onBarClicked(i)}
-              >
-              &nbsp;
-              </div>
-            }
-          </div>
+                  :
+                  <div style={{'position': 'absolute', 'bottom': 0, height: `${capValue(d.value / maxValue) * Height}px`, width: `${BarWidth}px`, 'backgroundColor': `${color(d.success)}`}}
+                  onClick={ev => onBarClicked(i)}
+                  >
+                  &nbsp;
+                  </div>
+                }
+          </a>
       )
       }
       </div>

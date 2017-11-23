@@ -11,13 +11,15 @@
 - DONE Add path to test as tag
 - DONE Add a single detail test view
 - DONE Detail View: Show device
+- DONE Mark the currently selected test in success/failure bars
+- DONE Make success/failure bars clickable (go to test details page)
+- DONE Show other errors
 
+- Use icon with device
 - Use a card view to show the test timeline
-- Make success/failure bars clickable (go to test details page)
-- Mark the currently selected test in success/failure bars
+- Mark same error as current in previous failures
 - Show more info about the test in success/failure bars popover
 - Looks like deployment info is not always reliable (some deployments are not showing up)
-- Show other errors
 - Add label to deployment bars
 - ava-codeceptjs should also log command/function name and parameters
 - Detail View: Show history and switch between tests
@@ -27,7 +29,6 @@
 - Detail View: Reference successes/failures of other test runs
 - NEW Show also released tickets/stories in timeline
 - Add a hash id for errors
-- Make success/failure bars selectable again
 - Display if test is known to fail with this error
 - Group tests by time (just now, recently, some time ago)
 - FEAT Filter tests by device

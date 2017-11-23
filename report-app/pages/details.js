@@ -3,17 +3,24 @@ import{Card, Image, Icon, Header, Label, Item} from 'semantic-ui-react'
 import moment from 'moment'
 
 import Layout from '../components/layout'
+import Collapsible from '../components/Collapsible'
 import SourceCodeSnippet from '../components/SourceCodeSnippet'
 import SuccessesAndFailuresBars from '../components/SuccessesAndFailuresBars'
-
+import TestResultDeviceIcon from '../components/test-result-device-icon'
 import getReportById from '../services/get-report-by-id'
 import getReportsByCategory from '../services/get-reports-by-category'
 import getScreenshotUrl from '../services/get-sceenshot-url'
 
+import SuccessIcon from 'react-icons/lib/fa/check'
+import FailIcon from 'react-icons/lib/md/close'
+
+const MAX_RECENT_FAILURES = 4
+
 const mapToSuccessAndFailure = historicReports => historicReports.map(r => Object.assign({}, {
   t: r.StartedAt,
   value: r.Duration,
-  success: r.Result === 'success'
+  success: r.Result === 'success',
+  href: `/details?id=${r._id}`
 }))
 
 const AtSecond = ({shotAt, startShotAt}) =>
@@ -21,10 +28,8 @@ const AtSecond = ({shotAt, startShotAt}) =>
     {(shotAt - startShotAt) / 1000}
   </span>
 
-const ResultIcon = ({report}) =>
-  report.Result === 'success' ?
-    <Label as='a' color='green'>Succeeded</Label>
-    : <Label as='a' color='orange'>Failed</Label>
+// const ResultIcon = ({report}) =>
+//   report.Result === 'success' ? <span className="f2 light-green"><SuccessIcon /></span> : <span className="f2 orange"><FailIcon /></span>
 
 const CommandName = ({codeStack}) =>
   <span>
@@ -41,9 +46,11 @@ const color = success => success ? 'green' : 'orange'
 
 const trunc = msg => msg ? msg.substring(0, 50) + '...' : msg
 
+const indexOfReport = (report, reports) => reports.findIndex(r => r._id === report._id)
+
 const Timeline = ({reportDir, startTimeline, timeline}) =>
   <div className="Timeline mt4">
-    <h2>Timeline</h2>
+    <h3>Sequence of steps ({timeline.length})</h3>
     <Item.Group divided>
     {
       timeline.map((s, i) =>
@@ -93,27 +100,34 @@ const Timeline = ({reportDir, startTimeline, timeline}) =>
 
 const RecentFailures = ({failedReports}) =>
   <div className="RecentFailures mt4">
-    <h2>Recent failures</h2>
-    <Card.Group itemsPerRow={4}>
+    <h3>Previous failures ({failedReports.length})</h3>
+    <Card.Group itemsPerRow={MAX_RECENT_FAILURES}>
     {
       failedReports.map((r, i) =>
         <Card key={i} color='orange'>
-          <Image size='small' centered src={getScreenshotUrl(r.ReportDir, r.Screenshots[0].Screenshot)} />
           <Card.Content>
+            <Image
+              as='a'
+              size='tiny'
+              floated='right'
+              href={`/details?id=${r._id}`}
+              target='_blank'
+              src={getScreenshotUrl(r.ReportDir, r.Screenshots[0].Screenshot)} />
             <Card.Meta>
+              <div>
+                {r.Screenshots[0].Page.Title}
+              </div>
               <small className='date'>
                 {moment(r.Screenshots[0].ShotAt).fromNow()}
               </small>
               <small className='date'>
                 {r.Duration}s
               </small>
-              <small>
-                {r.Screenshots[0].Page.Title}
-             </small>
-
             </Card.Meta>
             <Card.Description>
-              <CommandName codeStack={r.Screenshots[0].CodeStack} />
+              <strong>
+                <CommandName codeStack={r.Screenshots[0].CodeStack} />
+              </strong>
 
               { r.Screenshots[0].Message &&
                 <Label size='medium' basic color="orange" title={r.Screenshots[0].Message}>
@@ -121,11 +135,13 @@ const RecentFailures = ({failedReports}) =>
                 </Label>
               }
 
-              <small>
-                <SourceCodeSnippet code={r.Screenshots[0].CodeStack[0].Source} location={r.Screenshots[0].CodeStack[0].Location} />
-              </small>
-
-              <a target="_blank" href={`/details?id=${r._id}`}>Details...</a>
+              <div className="mt1">
+                <Collapsible className="mt2" label="Details">
+                  <small>
+                    <SourceCodeSnippet code={r.Screenshots[0].CodeStack[0].Source} location={r.Screenshots[0].CodeStack[0].Location} />
+                  </small>
+                </Collapsible>
+              </div>
 
               </Card.Description>
           </Card.Content>
@@ -138,11 +154,12 @@ const RecentFailures = ({failedReports}) =>
 export default class extends React.Component {
   static async getInitialProps ({ query: { id } }) {
     const report = await getReportById(id)
-    const historicReports = await getReportsByCategory(report.HashCategory)
+    // TODO Should only get reports after (in time) the current report
+    const historicReports = await getReportsByCategory(report.HashCategory, {since: report.StartedAt})
     const failedReports = historicReports
                             .filter(r => r.Result !== 'success')
                             .filter(r => r.DeviceSettings.Name === report.DeviceSettings.Name)
-                            .slice(1, 5)
+                            .slice(1, MAX_RECENT_FAILURES + 1)
 
     console.log(report, failedReports)
     return { report, historicReports, failedReports }
@@ -153,21 +170,26 @@ export default class extends React.Component {
       <Layout title="Test Report">
         <div className="mt4">
           <Header as='h2' dividing>
-            {this.props.report.Title}
+            <TestResultDeviceIcon result={this.props.report.Result} deviceSettings={this.props.report.DeviceSettings} />
+            &nbsp;
+           {this.props.report.Title}
           </Header>
 
           <div className="black-60">
-            <small>
+            <strong>
+            {moment(this.props.report.StartedAt).fromNow()}
+            </strong>
+            &nbsp;
+            &middot;
+            &nbsp;
+            <span>
               {this.props.report.Prefix}
-            </small>
+            </span>
           </div>
-          <ResultIcon report={this.props.report} />
-          &nbsp;
-          <Label as='a' >{this.props.report.DeviceSettings.Type} / {this.props.report.DeviceSettings.Name}</Label>
-          &nbsp;
-          {moment(this.props.report.StartedAt).fromNow()}
+
           <span className="fr mt1">
             <SuccessesAndFailuresBars
+            selectedBar={indexOfReport(this.props.report, this.props.historicReports)}
             data={mapToSuccessAndFailure(this.props.historicReports)}
             maxBars={50}
             />

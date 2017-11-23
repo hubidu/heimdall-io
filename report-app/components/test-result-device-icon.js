@@ -1,6 +1,6 @@
 import DesktopIcon from 'react-icons/lib/fa/desktop'
 import MobileIcon from 'react-icons/lib/fa/mobile'
-import TabletIcon from 'react-icons/lib/fa/desktop'
+import TabletIcon from 'react-icons/lib/fa/tablet'
 
 export default ({result, deviceSettings}) => {
   const color = (result === 'error' || result === false) ? 'orange' : 'green'
