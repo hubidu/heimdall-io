@@ -39,7 +39,7 @@ const CommandName = ({codeStack}) =>
 
 const color = success => success ? 'green' : 'orange'
 
-const trunc = msg => msg.substring(0, 50)
+const trunc = msg => msg.substring(0, 50) + '...'
 
 const Timeline = ({reportDir, startTimeline, timeline}) =>
   <div className="Timeline mt4">
@@ -48,9 +48,9 @@ const Timeline = ({reportDir, startTimeline, timeline}) =>
     {
       timeline.map((s, i) =>
       <Item key={i}>
-        <Item.Image as='a' href={getScreenshotUrl(reportDir, s.Screenshot)} target='_blank' src={getScreenshotUrl(reportDir, s.Screenshot)} />
+        <Item.Image as='a' size='medium' href={getScreenshotUrl(reportDir, s.Screenshot)} src={getScreenshotUrl(reportDir, s.Screenshot)} />
         <Item.Content>
-          <Item.Header as='a'>
+          <Item.Header>
             <CommandName codeStack={s.CodeStack} />
           </Item.Header>
           <Item.Meta>
@@ -94,7 +94,7 @@ const Timeline = ({reportDir, startTimeline, timeline}) =>
 const RecentFailures = ({reportDir, failedReports}) =>
   <div className="RecentFailures mt4">
     <h2>Recent failures</h2>
-    <Card.Group stacked itemsPerRow={4}>
+    <Card.Group itemsPerRow={4}>
     {
       failedReports.map((r, i) =>
         <Card key={i} color='orange'>
@@ -110,11 +110,12 @@ const RecentFailures = ({reportDir, failedReports}) =>
               <small>
                 {r.Screenshots[0].Page.Title}
              </small>
+
             </Card.Meta>
             <Card.Description>
               <CommandName codeStack={r.Screenshots[0].CodeStack} />
 
-              <Label size='medium' basic color="orange">
+              <Label size='medium' basic color="orange" title={r.Screenshots[0].Message}>
                 {trunc(r.Screenshots[0].Message)}
               </Label>
 
@@ -122,7 +123,9 @@ const RecentFailures = ({reportDir, failedReports}) =>
                 <SourceCodeSnippet code={r.Screenshots[0].CodeStack[0].Source} location={r.Screenshots[0].CodeStack[0].Location} />
               </small>
 
-            </Card.Description>
+              <a target="_blank" href={`/details?id=${r._id}`}>Details...</a>
+
+              </Card.Description>
           </Card.Content>
         </Card>
       )
@@ -159,7 +162,7 @@ export default class extends React.Component {
           &nbsp;
           <Label as='a' >{this.props.report.DeviceSettings.Type} / {this.props.report.DeviceSettings.Name}</Label>
           &nbsp;
-          {moment(this.props.Started).fromNow()}
+          {moment(this.props.report.StartedAt).fromNow()}
           <span className="fr mt1">
             <SuccessesAndFailuresBars
             data={mapToSuccessAndFailure(this.props.historicReports)}
