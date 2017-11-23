@@ -8,7 +8,7 @@ import SuccessesAndFailuresBars from '../components/SuccessesAndFailuresBars'
 const getFailedStepName = steps => {
   const failedStep = steps.find(step => step.Success === false)
   if (failedStep) {
-    return failedStep.Name;
+    return failedStep.ActualName || failedStep.Name;
   }
 }
 

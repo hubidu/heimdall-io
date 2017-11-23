@@ -56,6 +56,7 @@ func GetReportsByCategory(c *gin.Context) {
 	var reports []model.Report
 	query := bson.M{"hashcategory": hashcategory}
 
+	// TODO Use listReports
 	err := db.C(ReportsCollection).Find(query).Sort("-startedat").Limit(limit).All(&reports)
 	if err != nil {
 		c.Error(err)

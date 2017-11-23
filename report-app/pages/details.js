@@ -39,7 +39,7 @@ const CommandName = ({codeStack}) =>
 
 const color = success => success ? 'green' : 'orange'
 
-const trunc = msg => msg.substring(0, 50) + '...'
+const trunc = msg => msg ? msg.substring(0, 50) + '...' : msg
 
 const Timeline = ({reportDir, startTimeline, timeline}) =>
   <div className="Timeline mt4">
@@ -91,14 +91,14 @@ const Timeline = ({reportDir, startTimeline, timeline}) =>
   </div>
 
 
-const RecentFailures = ({reportDir, failedReports}) =>
+const RecentFailures = ({failedReports}) =>
   <div className="RecentFailures mt4">
     <h2>Recent failures</h2>
     <Card.Group itemsPerRow={4}>
     {
       failedReports.map((r, i) =>
         <Card key={i} color='orange'>
-          <Image size='small' centered src={getScreenshotUrl(reportDir, r.Screenshots[0].Screenshot)} />
+          <Image size='small' centered src={getScreenshotUrl(r.ReportDir, r.Screenshots[0].Screenshot)} />
           <Card.Content>
             <Card.Meta>
               <small className='date'>
@@ -115,9 +115,11 @@ const RecentFailures = ({reportDir, failedReports}) =>
             <Card.Description>
               <CommandName codeStack={r.Screenshots[0].CodeStack} />
 
-              <Label size='medium' basic color="orange" title={r.Screenshots[0].Message}>
-                {trunc(r.Screenshots[0].Message)}
-              </Label>
+              { r.Screenshots[0].Message &&
+                <Label size='medium' basic color="orange" title={r.Screenshots[0].Message}>
+                  {trunc(r.Screenshots[0].Message)}
+                </Label>
+              }
 
               <small>
                 <SourceCodeSnippet code={r.Screenshots[0].CodeStack[0].Source} location={r.Screenshots[0].CodeStack[0].Location} />
@@ -142,6 +144,7 @@ export default class extends React.Component {
                             .filter(r => r.DeviceSettings.Name === report.DeviceSettings.Name)
                             .slice(1, 5)
 
+    console.log(report, failedReports)
     return { report, historicReports, failedReports }
   }
 

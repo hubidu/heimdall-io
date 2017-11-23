@@ -12,7 +12,11 @@
 - DONE Add a single detail test view
 - DONE Detail View: Show device
 
-- Looks like deployment info is not always reliable
+- Use a card view to show the test timeline
+- Make success/failure bars clickable (go to test details page)
+- Mark the currently selected test in success/failure bars
+- Show more info about the test in success/failure bars popover
+- Looks like deployment info is not always reliable (some deployments are not showing up)
 - Show other errors
 - Add label to deployment bars
 - ava-codeceptjs should also log command/function name and parameters
