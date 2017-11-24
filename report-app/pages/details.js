@@ -48,59 +48,109 @@ const trunc = msg => msg ? msg.substring(0, 50) + '...' : msg
 
 const indexOfReport = (report, reports) => reports.findIndex(r => r._id === report._id)
 
-const Timeline = ({reportDir, startTimeline, timeline}) =>
+// const Timeline = ({reportDir, startTimeline, timeline}) =>
+//   <div className="Timeline mt4">
+//     <h3>Sequence of steps ({timeline.length})</h3>
+//     <Item.Group divided>
+//     {
+//       timeline.map((s, i) =>
+//       <Item key={i}>
+//         <Item.Image as='a' size='medium' target='_blank' href={getScreenshotUrl(reportDir, s.Screenshot)} src={getScreenshotUrl(reportDir, s.Screenshot)} />
+//         <Item.Content>
+//           <Item.Header>
+//             <CommandName codeStack={s.CodeStack} />
+//           </Item.Header>
+//           <Item.Meta>
+//             at second <AtSecond shotAt={s.ShotAt} startShotAt={startTimeline} />
+//           </Item.Meta>
+//           <Item.Meta>
+//             <a href={s.Page.Url}>{s.Page.Title}</a>
+//           </Item.Meta>
+//           <Item.Meta>
+//           { s.Message &&
+//             <Label size='medium' basic color="orange">
+//               {s.Message}
+//             </Label>
+//           }
+//           </Item.Meta>
+//           <Item.Description>
+//             <small>
+//               <SourceCodeSnippet key={i} code={s.CodeStack[0].Source} location={s.CodeStack[0].Location} />
+//             </small>
+//           </Item.Description>
+//           <Item.Extra>
+//             { s.Success === false &&
+//               <span>
+//                 <pre>
+//                   <code>
+//                     {s.OrgStack}
+//                   </code>
+//                 </pre>
+
+//               </span>
+//             }
+//           </Item.Extra>
+//         </Item.Content>
+//       </Item>
+//       )
+//     }
+//     </Item.Group>
+//   </div>
+
+  const Timeline = ({reportDir, startTimeline, timeline}) =>
   <div className="Timeline mt4">
     <h3>Sequence of steps ({timeline.length})</h3>
-    <Item.Group divided>
+
+    <Card.Group itemsPerRow={4}>
     {
       timeline.map((s, i) =>
-      <Item key={i}>
-        <Item.Image as='a' size='medium' href={getScreenshotUrl(reportDir, s.Screenshot)} src={getScreenshotUrl(reportDir, s.Screenshot)} />
-        <Item.Content>
-          <Item.Header>
-            <CommandName codeStack={s.CodeStack} />
-          </Item.Header>
-          <Item.Meta>
-            at second <AtSecond shotAt={s.ShotAt} startShotAt={startTimeline} />
-          </Item.Meta>
-          <Item.Meta>
-            <a href={s.Page.Url}>{s.Page.Title}</a>
-          </Item.Meta>
-          <Item.Meta>
-          { s.Message &&
-            <Label size='medium' basic color="orange">
-              {s.Message}
-            </Label>
-          }
-          </Item.Meta>
-          <Item.Description>
-            <small>
-              <SourceCodeSnippet key={i} code={s.CodeStack[0].Source} location={s.CodeStack[0].Location} />
-            </small>
-          </Item.Description>
-          <Item.Extra>
-            { s.Success === false &&
-              <span>
-                <pre>
-                  <code>
-                    {s.OrgStack}
-                  </code>
-                </pre>
+            <Card stackable>
+              <Card.Content>
 
-              </span>
-            }
-          </Item.Extra>
-        </Item.Content>
-      </Item>
+                <Card.Meta>
+                  <small>
+                    after <AtSecond shotAt={s.ShotAt} startShotAt={startTimeline} />s
+                  </small>
+                </Card.Meta>
+
+                <Card.Meta>
+                  <a href={s.Page.Url}>{s.Page.Title}</a>
+                </Card.Meta>
+
+                <div className="f6 h3">
+                  <CommandName codeStack={s.CodeStack} />
+                </div>
+
+                <Image as='a' size='large' target='_blank' href={getScreenshotUrl(reportDir, s.Screenshot)} src={getScreenshotUrl(reportDir, s.Screenshot)} />
+
+                <Card.Content textAlign="center" className="mt3">
+                  {s.Message &&
+                    <Label size='tiny' basic color="orange">
+                      {s.Message}
+                    </Label>
+                  }
+                </Card.Content>
+
+                <Card.Content extra>
+                  <div className="mt1">
+                  <Collapsible className="mt2" label="Source">
+                    <small>
+                      <SourceCodeSnippet code={s.CodeStack[0].Source} location={s.CodeStack[0].Location} />
+                    </small>
+                  </Collapsible>
+                  </div>
+                  </Card.Content>
+              </Card.Content>
+            </Card>
       )
     }
-    </Item.Group>
+    </Card.Group>
   </div>
 
 
 const RecentFailures = ({failedReports}) =>
   <div className="RecentFailures mt4">
-    <h3>Previous failures ({failedReports.length})</h3>
+    <h3>Previous failures on this device ({failedReports.length})</h3>
     <Card.Group itemsPerRow={MAX_RECENT_FAILURES}>
     {
       failedReports.map((r, i) =>
@@ -155,13 +205,16 @@ export default class extends React.Component {
   static async getInitialProps ({ query: { id } }) {
     const report = await getReportById(id)
     // TODO Should only get reports after (in time) the current report
-    const historicReports = await getReportsByCategory(report.HashCategory, {since: report.StartedAt})
-    const failedReports = historicReports
-                            .filter(r => r.Result !== 'success')
-                            .filter(r => r.DeviceSettings.Name === report.DeviceSettings.Name)
-                            .slice(1, MAX_RECENT_FAILURES + 1)
+    let historicReports = await getReportsByCategory(report.HashCategory, {since: report.StartedAt})
+    console.log(historicReports)
 
-    console.log(report, failedReports)
+    if (historicReports === null) historicReports = []
+
+    const failedReports = historicReports
+      .filter(r => r.Result !== 'success')
+      .filter(r => r.DeviceSettings.Name === report.DeviceSettings.Name)
+      .slice(1, MAX_RECENT_FAILURES + 1)
+
     return { report, historicReports, failedReports }
   }
 
@@ -175,7 +228,7 @@ export default class extends React.Component {
            {this.props.report.Title}
           </Header>
 
-          <div className="black-60">
+          <div className="Headline-details black-60 cf">
             <strong>
             {moment(this.props.report.StartedAt).fromNow()}
             </strong>
@@ -185,15 +238,23 @@ export default class extends React.Component {
             <span>
               {this.props.report.Prefix}
             </span>
+
+            <span className="Headline-successesAndFailures fr">
+              <SuccessesAndFailuresBars
+              selectedBar={indexOfReport(this.props.report, this.props.historicReports)}
+              data={mapToSuccessAndFailure(this.props.historicReports)}
+              maxBars={50}
+              />
+            </span>
           </div>
 
-          <span className="fr mt1">
-            <SuccessesAndFailuresBars
-            selectedBar={indexOfReport(this.props.report, this.props.historicReports)}
-            data={mapToSuccessAndFailure(this.props.historicReports)}
-            maxBars={50}
-            />
-          </span>
+          { this.props.report.Result === 'error' &&
+            <div className="cf mt2 courier orange ba pa1">
+              <strong>
+                {this.props.report.Screenshots[0].Message}
+              </strong>
+            </div>
+          }
 
           {
             this.props.failedReports.length > 0 &&

@@ -14,19 +14,21 @@
 - DONE Mark the currently selected test in success/failure bars
 - DONE Make success/failure bars clickable (go to test details page)
 - DONE Show other errors
+- DONE Use icon with device
+- DONE Detail View: Show history and switch between tests
+- DONE Detail View: Enlarge screenshots
+- DONE Detail View: Reference successes/failures of other test runs
 
-- Use icon with device
-- Use a card view to show the test timeline
+- DONE Use a card view to show the test timeline
+- Detail View: Merge steps into screenshot timeline
 - Mark same error as current in previous failures
+- Ability to hide/quarantine failing tests (also do automatically after X failures)
 - Show more info about the test in success/failure bars popover
+- Rerun failing tests
 - Looks like deployment info is not always reliable (some deployments are not showing up)
 - Add label to deployment bars
 - ava-codeceptjs should also log command/function name and parameters
-- Detail View: Show history and switch between tests
-- Detail View: Merge steps into screenshot timeline
 - Detail View: Merge browser logs into screenshot timeline?
-- Detail View: Enlarge screenshots
-- Detail View: Reference successes/failures of other test runs
 - NEW Show also released tickets/stories in timeline
 - Add a hash id for errors
 - Display if test is known to fail with this error

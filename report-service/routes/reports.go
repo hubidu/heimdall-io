@@ -53,15 +53,18 @@ func GetReportsByCategory(c *gin.Context) {
 	hashcategory, _ := strconv.Atoi(c.Param("hashcategory"))
 
 	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "200"))
-	since, _ := strconv.Atoi(c.DefaultQuery("since", 0))
+	since, _ := strconv.Atoi(c.DefaultQuery("since", "0"))
 
 	var reports []model.Report
 	query := bson.M{
 		"hashcategory": hashcategory,
-		"startedAt": bson.M{
-			"$gt": since,
+		"startedat": bson.M{
+			"$lt": since,
 		},
 	}
+	// query := bson.M{
+	// 	"hashcategory": hashcategory,
+	// }
 
 	// TODO Use listReports
 	err := db.C(ReportsCollection).Find(query).Sort("-startedat").Limit(limit).All(&reports)
