@@ -28,19 +28,28 @@ const AtSecond = ({shotAt, startShotAt}) =>
     {(shotAt - startShotAt) / 1000}
   </span>
 
-// const ResultIcon = ({report}) =>
-//   report.Result === 'success' ? <span className="f2 light-green"><SuccessIcon /></span> : <span className="f2 orange"><FailIcon /></span>
-
-const CommandName = ({codeStack}) =>
-  <span>
-    {
-      codeStack[0].Source.find(src => src.Line === codeStack[0].Location.Line)
-        .Value
-        .replace('await', '')
-        .replace('(', ' (')
-        .trim()
-    }
-  </span>
+const CommandName = ({screenshot, steps}) => {
+  const correspondingStep = steps.find(step => step.ReachedAt === screenshot.ShotAt)
+  if (correspondingStep) {
+    return (
+      <span>
+        <ResultIcon step={correspondingStep} />
+        {correspondingStep.ActualName || correspondingStep.Name}
+      </span>
+    )
+  }
+  return (
+      <span>
+        {
+          screenshot.CodeStack[0].Source.find(src => src.Line === screenshot.CodeStack[0].Location.Line)
+            .Value
+            .replace('await', '')
+            .replace('(', ' (')
+            .trim()
+        }
+      </span>
+    )
+}
 
 const color = success => success ? 'green' : 'orange'
 
@@ -48,56 +57,7 @@ const trunc = msg => msg ? msg.substring(0, 50) + '...' : msg
 
 const indexOfReport = (report, reports) => reports.findIndex(r => r._id === report._id)
 
-// const Timeline = ({reportDir, startTimeline, timeline}) =>
-//   <div className="Timeline mt4">
-//     <h3>Sequence of steps ({timeline.length})</h3>
-//     <Item.Group divided>
-//     {
-//       timeline.map((s, i) =>
-//       <Item key={i}>
-//         <Item.Image as='a' size='medium' target='_blank' href={getScreenshotUrl(reportDir, s.Screenshot)} src={getScreenshotUrl(reportDir, s.Screenshot)} />
-//         <Item.Content>
-//           <Item.Header>
-//             <CommandName codeStack={s.CodeStack} />
-//           </Item.Header>
-//           <Item.Meta>
-//             at second <AtSecond shotAt={s.ShotAt} startShotAt={startTimeline} />
-//           </Item.Meta>
-//           <Item.Meta>
-//             <a href={s.Page.Url}>{s.Page.Title}</a>
-//           </Item.Meta>
-//           <Item.Meta>
-//           { s.Message &&
-//             <Label size='medium' basic color="orange">
-//               {s.Message}
-//             </Label>
-//           }
-//           </Item.Meta>
-//           <Item.Description>
-//             <small>
-//               <SourceCodeSnippet key={i} code={s.CodeStack[0].Source} location={s.CodeStack[0].Location} />
-//             </small>
-//           </Item.Description>
-//           <Item.Extra>
-//             { s.Success === false &&
-//               <span>
-//                 <pre>
-//                   <code>
-//                     {s.OrgStack}
-//                   </code>
-//                 </pre>
-
-//               </span>
-//             }
-//           </Item.Extra>
-//         </Item.Content>
-//       </Item>
-//       )
-//     }
-//     </Item.Group>
-//   </div>
-
-  const Timeline = ({reportDir, startTimeline, timeline}) =>
+const Timeline = ({reportDir, steps, startTimeline, timeline}) =>
   <div className="Timeline mt4">
     <h3>Screenshots ({timeline.length})</h3>
 
@@ -118,7 +78,7 @@ const indexOfReport = (report, reports) => reports.findIndex(r => r._id === repo
                 </Card.Meta>
 
                 <div className="f6 h3">
-                  <CommandName codeStack={s.CodeStack} />
+                  <CommandName screenshot={s} steps={steps} />
                 </div>
 
                 <Image as='a' size='large' target='_blank' href={getScreenshotUrl(reportDir, s.Screenshot)} src={getScreenshotUrl(reportDir, s.Screenshot)} />
@@ -204,7 +164,7 @@ const RecentFailures = ({failedReports}) =>
 
 const ResultIcon = ({step}) => {
   if (step.Success === true)
-    return <List.Icon color="green" name="circle" />
+    return <List.Icon color="green" name="checkmark" />
   if (step.Success === false && step.ReachedAt > 0)
     return <List.Icon color="orange" name="remove" />
   return <List.Icon color="grey" name="circle" />
@@ -299,6 +259,7 @@ export default class extends React.Component {
 
           <Timeline
             reportDir={this.props.report.ReportDir}
+            steps={this.props.report.Outline.Steps}
             startTimeline={this.props.report.Screenshots[this.props.report.Screenshots.length - 1].ShotAt}
             timeline={this.props.report.Screenshots} />
         </div>
