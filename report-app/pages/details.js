@@ -96,6 +96,12 @@ const Timeline = ({reportDir, steps, startTimeline, timeline}) =>
                   <Collapsible className="mt2" label="Source">
                     <small>
                       <SourceCodeSnippet code={s.CodeStack[0].Source} location={s.CodeStack[0].Location} />
+
+                      <pre>
+                      <code>
+                        {s.OrgStack}
+                      </code>
+                    </pre>
                     </small>
                   </Collapsible>
                   </div>
@@ -136,7 +142,7 @@ const RecentFailures = ({failedReports}) =>
             </Card.Meta>
             <Card.Description>
               <strong>
-                <CommandName codeStack={r.Screenshots[0].CodeStack} />
+                <CommandName screenshot={r.Screenshots[0]} steps={r.Outline.Steps} />
               </strong>
 
               { r.Screenshots[0].Message &&
