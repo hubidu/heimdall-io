@@ -1,5 +1,5 @@
 import React from 'react'
-import{Card, Image, Icon, Header, Label, Item} from 'semantic-ui-react'
+import{List, Card, Image, Icon, Header, Label, Item} from 'semantic-ui-react'
 import moment from 'moment'
 
 import Layout from '../components/layout'
@@ -99,12 +99,12 @@ const indexOfReport = (report, reports) => reports.findIndex(r => r._id === repo
 
   const Timeline = ({reportDir, startTimeline, timeline}) =>
   <div className="Timeline mt4">
-    <h3>Sequence of steps ({timeline.length})</h3>
+    <h3>Screenshots ({timeline.length})</h3>
 
     <Card.Group itemsPerRow={4}>
     {
       timeline.map((s, i) =>
-            <Card stackable>
+            <Card key={i}>
               <Card.Content>
 
                 <Card.Meta>
@@ -123,7 +123,7 @@ const indexOfReport = (report, reports) => reports.findIndex(r => r._id === repo
 
                 <Image as='a' size='large' target='_blank' href={getScreenshotUrl(reportDir, s.Screenshot)} src={getScreenshotUrl(reportDir, s.Screenshot)} />
 
-                <Card.Content textAlign="center" className="mt3">
+                <Card.Content className="mt3">
                   {s.Message &&
                     <Label size='tiny' basic color="orange">
                       {s.Message}
@@ -150,7 +150,7 @@ const indexOfReport = (report, reports) => reports.findIndex(r => r._id === repo
 
 const RecentFailures = ({failedReports}) =>
   <div className="RecentFailures mt4">
-    <h3>Previous failures on this device ({failedReports.length})</h3>
+    <h3>Failures on same device ({failedReports.length})</h3>
     <Card.Group itemsPerRow={MAX_RECENT_FAILURES}>
     {
       failedReports.map((r, i) =>
@@ -201,12 +201,71 @@ const RecentFailures = ({failedReports}) =>
     </Card.Group>
   </div>
 
+
+const ResultIcon = ({step}) => {
+  if (step.Success === true)
+    return <List.Icon color="green" name="circle" />
+  if (step.Success === false && step.ReachedAt > 0)
+    return <List.Icon color="orange" name="remove" />
+  return <List.Icon color="grey" name="circle" />
+}
+
+
+const Steps = ({steps, errorMessage}) =>
+    <div>
+      <h3>Steps</h3>
+      <List>
+      {
+        steps.map((step, i) =>
+        <List.Item key={i}>
+          <ResultIcon step={step} />
+          <List.Content>
+            {step.ActualName || step.Name}
+
+            {
+              step.Success === false && step.ReachedAt > 0 &&
+                <div className="cf mt2 courier orange ba pa1">
+                  <strong>
+                    {errorMessage}
+                  </strong>
+                </div>
+            }
+
+          </List.Content>
+        </List.Item>
+        )
+      }
+      </List>
+    </div>
+
+
+const Meta = ({report, history}) =>
+  <div className="Headline-details black-60 cf">
+    <strong>
+      {moment(report.StartedAt).fromNow()}
+    </strong>
+    &nbsp;
+    &middot;
+    &nbsp;
+    <span>
+      {report.Prefix}
+    </span>
+
+    <span className="Headline-successesAndFailures fr">
+      <SuccessesAndFailuresBars
+        selectedBar={indexOfReport(report, history)}
+        data={mapToSuccessAndFailure(history)}
+        maxBars={50}
+      />
+    </span>
+  </div>
+
+
 export default class extends React.Component {
   static async getInitialProps ({ query: { id } }) {
     const report = await getReportById(id)
     // TODO Should only get reports after (in time) the current report
     let historicReports = await getReportsByCategory(report.HashCategory, {since: report.StartedAt})
-    console.log(historicReports)
 
     if (historicReports === null) historicReports = []
 
@@ -222,39 +281,16 @@ export default class extends React.Component {
     return (
       <Layout title="Test Report">
         <div className="mt4">
+          <Meta report={this.props.report} history={this.props.historicReports} />
+
           <Header as='h2' dividing>
             <TestResultDeviceIcon result={this.props.report.Result} deviceSettings={this.props.report.DeviceSettings} />
             &nbsp;
            {this.props.report.Title}
           </Header>
 
-          <div className="Headline-details black-60 cf">
-            <strong>
-            {moment(this.props.report.StartedAt).fromNow()}
-            </strong>
-            &nbsp;
-            &middot;
-            &nbsp;
-            <span>
-              {this.props.report.Prefix}
-            </span>
 
-            <span className="Headline-successesAndFailures fr">
-              <SuccessesAndFailuresBars
-              selectedBar={indexOfReport(this.props.report, this.props.historicReports)}
-              data={mapToSuccessAndFailure(this.props.historicReports)}
-              maxBars={50}
-              />
-            </span>
-          </div>
-
-          { this.props.report.Result === 'error' &&
-            <div className="cf mt2 courier orange ba pa1">
-              <strong>
-                {this.props.report.Screenshots[0].Message}
-              </strong>
-            </div>
-          }
+          <Steps steps={this.props.report.Outline.Steps} errorMessage={this.props.report.Screenshots[0].Message} />
 
           {
             this.props.failedReports.length > 0 &&

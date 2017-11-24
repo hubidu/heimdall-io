@@ -18,9 +18,10 @@
 - DONE Detail View: Show history and switch between tests
 - DONE Detail View: Enlarge screenshots
 - DONE Detail View: Reference successes/failures of other test runs
-
 - DONE Use a card view to show the test timeline
-- Detail View: Merge steps into screenshot timeline
+
+- DONE Detail View: Show list of steps
+- Detail View: Highlight/Mark steps in screenshot list
 - Mark same error as current in previous failures
 - Ability to hide/quarantine failing tests (also do automatically after X failures)
 - Show more info about the test in success/failure bars popover
