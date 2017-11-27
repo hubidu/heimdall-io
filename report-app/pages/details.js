@@ -220,7 +220,7 @@ const Steps = ({steps, errorMessage}) =>
 const Meta = ({report, history}) =>
   <div className="Headline-details black-60 cf">
     <strong>
-      {moment(report.StartedAt).fromNow()}
+      {moment(report.StartedAt).format("ddd, hA")} ({moment(report.StartedAt).fromNow()})
     </strong>
     &nbsp;
     &middot;
