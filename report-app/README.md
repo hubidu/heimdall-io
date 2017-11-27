@@ -1,8 +1,13 @@
 - Failed screenshots: Show last successful screenshot if available
+- Show compact source code snippet as <line in test> -> <line in page object>
+- Display exact date in details
+- Link to test details using hashcategory
+- Show screenshot shotAt delta
 - Filter by environment
 - Filter by device
 - exclude known problems from failures (ESOCKETTIMEOUT)
 - ava-codeceptjs: Make screenshots on click (and highlight the clicked element)
+- Improve report file cleanup (keep last successful and all errors)
 - Mark same error as current in previous failures
 - Refresh page automatically
 - Ability to hide/quarantine failing tests (also do automatically after X failures)

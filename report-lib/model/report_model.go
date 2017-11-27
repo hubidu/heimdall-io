@@ -135,7 +135,6 @@ func GetReportFiles(baseDir string) []Report {
 		raw, err := ioutil.ReadFile(path)
 
 		if err != nil {
-			// log.Fatal(err)
 			return nil
 		}
 
@@ -147,8 +146,10 @@ func GetReportFiles(baseDir string) []Report {
 		r.HashCategory = hash(r.FullTitle)
 		r.Started = time.Unix(r.StartedAt/1000, 0)
 
-		for _, s := range r.Screenshots {
-			s.HashID = hash(s.Message + s.CodeStack[0].Location.File + s.CodeStack[0].GetExecutedCommand())
+		// Add hashid to all screenshots to find them faster
+		for i, s := range r.Screenshots {
+			screenshotHashID := hash(s.Message + s.CodeStack[0].Location.File + s.CodeStack[0].GetExecutedCommand())
+			r.Screenshots[i].HashID = screenshotHashID
 		}
 
 		fileList = append(fileList, r)

@@ -39,6 +39,7 @@ func main() {
 	r.GET("/report-categories/:hashcategory", reports.GetReportsByCategory)
 
 	r.GET("/screenshots/:path/:file", screenshots.GetScreenshotImg)
+	r.GET("/screenshot-categories/:hashids", screenshots.GetScreenshotsByCategory)
 
 	r.Run("0.0.0.0:8000")
 }

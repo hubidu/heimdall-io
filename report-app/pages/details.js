@@ -7,9 +7,11 @@ import Collapsible from '../components/Collapsible'
 import SourceCodeSnippet from '../components/SourceCodeSnippet'
 import SuccessesAndFailuresBars from '../components/SuccessesAndFailuresBars'
 import TestResultDeviceIcon from '../components/test-result-device-icon'
+
 import getReportById from '../services/get-report-by-id'
 import getReportsByCategory from '../services/get-reports-by-category'
 import getScreenshotUrl from '../services/get-sceenshot-url'
+import getLastSuccessScreenshot from '../services/get-last-success-screenshot'
 
 import SuccessIcon from 'react-icons/lib/fa/check'
 import FailIcon from 'react-icons/lib/md/close'
@@ -57,7 +59,7 @@ const trunc = msg => msg ? msg.substring(0, 50) + '...' : msg
 
 const indexOfReport = (report, reports) => reports.findIndex(r => r._id === report._id)
 
-const Timeline = ({reportDir, steps, startTimeline, timeline}) =>
+const Timeline = ({reportDir, steps, startTimeline, lastSuccessScreenshotOfReport, timeline}) =>
   <div className="Timeline mt4">
     <h3>Screenshots ({timeline.length})</h3>
 
@@ -71,11 +73,21 @@ const Timeline = ({reportDir, steps, startTimeline, timeline}) =>
                   <small>
                     after <AtSecond shotAt={s.ShotAt} startShotAt={startTimeline} />s
                   </small>
+                  {
+                    i === 0 && lastSuccessScreenshotOfReport &&
+                      <small>
+                        <a target="_blank" href={getScreenshotUrl(lastSuccessScreenshotOfReport.ReportDir, lastSuccessScreenshotOfReport.Screenshot.Screenshot)}>
+                          Compare to success...
+                        </a>
+                      </small>
+                  }
+
                 </Card.Meta>
 
                 <Card.Meta>
                   <a href={s.Page.Url}>{s.Page.Title}</a>
                 </Card.Meta>
+
 
                 <div className="f6 h3">
                   <CommandName screenshot={s} steps={steps} />
@@ -233,13 +245,23 @@ export default class extends React.Component {
     // TODO Should only get reports after (in time) the current report
     let historicReports = await getReportsByCategory(report.HashCategory, {since: report.StartedAt})
 
+    let lastSuccessScreenshotOfReport
+    if (report.Result === 'error' && report.Screenshots[0].HashID > 0) {
+      const res = await getLastSuccessScreenshot(report.DeviceSettings.Type, report.Screenshots[0].HashID)
+      if (res) {
+        lastSuccessScreenshotOfReport = res[0]
+      }
+      console.log(lastSuccessScreenshotOfReport)
+    }
+
     if (historicReports === null) historicReports = []
 
     const failedReports = historicReports
       .filter(r => r.Result === 'error')
       .filter(r => r.DeviceSettings.Type === report.DeviceSettings.Type)
+      .slice(0, MAX_RECENT_FAILURES)
 
-    return { report, historicReports, failedReports }
+    return { report, historicReports, failedReports, lastSuccessScreenshotOfReport }
   }
 
   render () {
@@ -266,6 +288,7 @@ export default class extends React.Component {
             reportDir={this.props.report.ReportDir}
             steps={this.props.report.Outline.Steps}
             startTimeline={this.props.report.Screenshots[this.props.report.Screenshots.length - 1].ShotAt}
+            lastSuccessScreenshotOfReport={this.props.lastSuccessScreenshotOfReport}
             timeline={this.props.report.Screenshots} />
         </div>
       </Layout>
