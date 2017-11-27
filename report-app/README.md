@@ -1,7 +1,10 @@
+- Failed screenshots: Show last successful screenshot if available
+- Filter by environment
+- Filter by device
 - exclude known problems from failures (ESOCKETTIMEOUT)
 - ava-codeceptjs: Make screenshots on click (and highlight the clicked element)
-- Failed screenshots: Show last successful screenshot if available
 - Mark same error as current in previous failures
+- Refresh page automatically
 - Ability to hide/quarantine failing tests (also do automatically after X failures)
 - Show more info about the test in success/failure bars popover
 - Rerun failing tests

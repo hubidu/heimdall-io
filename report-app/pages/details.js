@@ -236,9 +236,8 @@ export default class extends React.Component {
     if (historicReports === null) historicReports = []
 
     const failedReports = historicReports
-      .filter(r => r.Result !== 'success')
-      .filter(r => r.DeviceSettings.Name === report.DeviceSettings.Name)
-      .slice(1, MAX_RECENT_FAILURES + 1)
+      .filter(r => r.Result === 'error')
+      .filter(r => r.DeviceSettings.Type === report.DeviceSettings.Type)
 
     return { report, historicReports, failedReports }
   }
