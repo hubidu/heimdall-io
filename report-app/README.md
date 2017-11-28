@@ -1,5 +1,5 @@
-- Failed screenshots: Show last successful screenshot if available
 - Show compact source code snippet as <line in test> -> <line in page object>
+- Do a side by side compare of a failed and successful test run
 - Display exact date in details
 - Link to test details using hashcategory
 - Show screenshot shotAt delta
