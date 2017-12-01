@@ -1,3 +1,4 @@
+- Mark known failures (use screenshot hashid)
 - Show compact source code snippet as <line in test> -> <line in page object>
 - Do a side by side compare of a failed and successful test run
 - Display exact date in details
