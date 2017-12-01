@@ -240,19 +240,21 @@ const Meta = ({report, history}) =>
 
 
 export default class extends React.Component {
-  static async getInitialProps ({ query: { id } }) {
+  static async getInitialProps ({ query: { id, hashcategory } }) {
+    // TODO: To optimize could pass in hashcategory instead of id
     const report = await getReportById(id)
     // TODO Should only get reports after (in time) the current report
-    let historicReports = await getReportsByCategory(report.HashCategory, {since: report.StartedAt})
+    let historicReports = await getReportsByCategory(hashcategory, {since: report.StartedAt})
 
     let lastSuccessScreenshotOfReport
-    if (report.Result === 'error' && report.Screenshots[0].HashID > 0) {
-      const res = await getLastSuccessScreenshot(report.DeviceSettings.Type, report.Screenshots[0].HashID)
-      if (res) {
-        lastSuccessScreenshotOfReport = res[0]
-      }
-      console.log(lastSuccessScreenshotOfReport)
-    }
+    // TODO Rethink that feature
+    // if (report.Result === 'error' && report.Screenshots[0].HashID > 0) {
+    //   const res = await getLastSuccessScreenshot(report.DeviceSettings.Type, report.Screenshots[0].HashID)
+    //   if (res) {
+    //     lastSuccessScreenshotOfReport = res[0]
+    //   }
+    //   console.log(lastSuccessScreenshotOfReport)
+    // }
 
     if (historicReports === null) historicReports = []
 

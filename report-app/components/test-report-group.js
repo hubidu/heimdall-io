@@ -37,7 +37,7 @@ export default({reportGroup, deployments = []}) =>
       <TestResultDeviceIcon result={reportGroup.LastReport.Result} deviceSettings={reportGroup.LastReport.DeviceSettings} />
     </div>
     <div className="fl-ns w-60-ns ph2">
-      <a href={`/details?id=${reportGroup.LastReport._id}`} className="black-80" >
+      <a href={`/details?id=${reportGroup.LastReport._id}&hashcategory=${reportGroup.HashCategory}`} className="black-80" >
         <h4 className="ma0 pa1 f5">
           {reportGroup.Title}
         </h4>
