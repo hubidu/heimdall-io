@@ -101,10 +101,12 @@ export default({reportGroup, deployments = []}) =>
       &nbsp;
       <TestOutlinePopover testTitle={reportGroup.LastReport.Title} outline={reportGroup.LastReport.Outline} />
       &nbsp;
-      <TestDetailPopover
-        testPath={reportGroup.LastReport.ReportDir}
-        lastScreenshot={reportGroup.LastReport.Screenshots[0]}
-      />
+      { reportGroup.LastReport.Screenshots[0] &&
+        <TestDetailPopover
+          testPath={reportGroup.LastReport.ReportDir}
+          lastScreenshot={reportGroup.LastReport.Screenshots[0]}
+        />
+      }
 
     </div>
   </div>

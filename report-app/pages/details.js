@@ -243,7 +243,7 @@ export default class extends React.Component {
   static async getInitialProps ({ query: { id, hashcategory } }) {
     // TODO: To optimize could pass in hashcategory instead of id
     const report = await getReportById(id)
-    // TODO Should only get reports after (in time) the current report
+
     let historicReports = await getReportsByCategory(hashcategory, {since: report.StartedAt})
 
     let lastSuccessScreenshotOfReport
@@ -279,7 +279,7 @@ export default class extends React.Component {
           </Header>
 
 
-          <Steps steps={this.props.report.Outline.Steps} errorMessage={this.props.report.Screenshots[0].Message} />
+          <Steps steps={this.props.report.Outline.Steps} errorMessage={this.props.report.Screenshots[0] && this.props.report.Screenshots[0].Message} />
 
           {
             this.props.failedReports.length > 0 &&
@@ -289,7 +289,7 @@ export default class extends React.Component {
           <Timeline
             reportDir={this.props.report.ReportDir}
             steps={this.props.report.Outline.Steps}
-            startTimeline={this.props.report.Screenshots[this.props.report.Screenshots.length - 1].ShotAt}
+            startTimeline={this.props.report.StartedAt}
             lastSuccessScreenshotOfReport={this.props.lastSuccessScreenshotOfReport}
             timeline={this.props.report.Screenshots} />
         </div>
