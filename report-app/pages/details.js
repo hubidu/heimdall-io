@@ -107,8 +107,10 @@ const Timeline = ({reportDir, steps, startTimeline, lastSuccessScreenshotOfRepor
                   <div className="mt1">
                   <Collapsible className="mt2" label="Source">
                     <small>
-                      <SourceCodeSnippet code={s.CodeStack[0].Source} location={s.CodeStack[0].Location} />
-
+                      { s.CodeStack[1] &&
+                        <SourceCodeSnippet code={s.CodeStack[1].Source} location={s.CodeStack[1].Location} />
+                      }
+                        <SourceCodeSnippet code={s.CodeStack[0].Source} location={s.CodeStack[0].Location} />
                       <pre>
                       <code>
                         {s.OrgStack}
