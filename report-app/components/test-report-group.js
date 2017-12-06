@@ -58,7 +58,10 @@ export default({reportGroup, deployments = []}) =>
             with
             &nbsp;
             <code className="orange">
-              {trunc(reportGroup.LastReport.Screenshots[0].Message)}
+              {
+                reportGroup.LastReport.Screenshots[0] &&
+                trunc(reportGroup.LastReport.Screenshots[0].Message)
+              }
             </code>
 
           </div>
