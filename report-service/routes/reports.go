@@ -24,7 +24,7 @@ func listReports(c *gin.Context) []model.Report {
 
 	// fields := bson.M{"hashcategory": 1, "filename": 1, "startedat": 1, "started": 1, "type": 1, "prefix": 1, "title": 1, "fulltitle": 1, "result": 1, "duration": 1}
 	var reports []model.Report
-	err := db.C(ReportsCollection).Find(nil).Sort("-startedat").Limit(reportLimit).All(&reports)
+	err := db.C(ReportsCollection).Find(nil).Sort("-_id").Limit(reportLimit).All(&reports)
 	if err != nil {
 		c.Error(err)
 	}
@@ -67,7 +67,7 @@ func GetReportsByCategory(c *gin.Context) {
 	// }
 
 	// TODO Use listReports
-	err := db.C(ReportsCollection).Find(query).Sort("-startedat").Limit(limit).All(&reports)
+	err := db.C(ReportsCollection).Find(query).Sort("-_id").Limit(limit).All(&reports)
 	if err != nil {
 		c.Error(err)
 	}

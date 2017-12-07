@@ -60,7 +60,7 @@ func GetScreenshotsByCategory(c *gin.Context) {
 	}
 
 	var reports []model.Report
-	err := db.C(ReportsCollection).Find(query).Sort("-startedat").Limit(1).All(&reports)
+	err := db.C(ReportsCollection).Find(query).Sort("-_id").Limit(1).All(&reports)
 	if err != nil {
 		c.Error(err)
 	}

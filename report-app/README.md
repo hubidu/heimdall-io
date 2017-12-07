@@ -1,3 +1,6 @@
+- Show last errors on other devices
+- Show last change date of test files
+- Make mongodb query more efficient
 - Cleanup report database regularly
 - Mark known failures (use screenshot hashid)
 - Show compact source code snippet as <line in test> -> <line in page object>
