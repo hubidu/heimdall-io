@@ -1,3 +1,4 @@
+- Detail View: Rather show list of commands and a big screenshot in a separate pane
 - Show last errors on other devices
 - Show last change date of test files
 - Make mongodb query more efficient
