@@ -1,6 +1,6 @@
 mkdir -p ./bin
 
-IMAGE_NAME=report-importer
+IMAGE_NAME=alert-service
 
 CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ./bin/main . || exit 1
 
