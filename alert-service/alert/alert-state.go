@@ -13,12 +13,7 @@ func init() {
 }
 
 func HasBeenReported(report *model.Report) bool {
-	for _, alertedReport := range alertedReports {
-		if alertedReport.HashCategory == report.HashCategory {
-			return true
-		}
-	}
-	return false
+	return contains(alertedReports, report)
 }
 
 func contains(reports []model.Report, report model.Report) int {
