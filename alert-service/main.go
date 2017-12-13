@@ -20,6 +20,8 @@ func main() {
 	} else {
 		// Run once
 		alert.AlertTask()
+		alert.AlertTask()
+		alert.AlertTask()
 	}
 
 }

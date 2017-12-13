@@ -62,7 +62,25 @@ services:
   #   volumes:
   #     - /etc/timezone:/etc/timezone
   #     - /etc/localtime:/etc/localtime
-          
+
+  selenium-chrome:
+    privileged: true
+    image: elgalu/selenium:3.7.1-p6 # 3.8.1-p0 is not running tests correctly in mobile emulation mode (wrong screensize)
+    environment:
+      - JAVA_OPTS=-Xmx1024m
+      - MAX_INSTANCES=5
+      - MAX_SESSIONS=5
+      - CHROME=true
+      - FIREFOX=false
+    ports:
+     - "5900:25900"
+     - "4444:24444"
+    volumes:
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
+      - /dev/shm:/dev/shm
+      - /data/e2e-reports/files:/opt/files
+
   mongodb:
     restart: always
     image: mongo:3.0

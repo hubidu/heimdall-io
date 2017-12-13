@@ -52,7 +52,7 @@ func getAlertableReports(reports []model.Report) []model.Report {
 	alertableReports := []model.Report{}
 
 	for _, report := range reports {
-		if !HasBeenReported(&report) {
+		if !HasBeenReported(report) {
 			alertableReports = append(alertableReports, report)
 		}
 	}

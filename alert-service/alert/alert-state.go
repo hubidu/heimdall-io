@@ -12,8 +12,8 @@ func init() {
 	alertedReports = []model.Report{}
 }
 
-func HasBeenReported(report *model.Report) bool {
-	return contains(alertedReports, report)
+func HasBeenReported(report model.Report) bool {
+	return contains(alertedReports, report) >= 0
 }
 
 func contains(reports []model.Report, report model.Report) int {
