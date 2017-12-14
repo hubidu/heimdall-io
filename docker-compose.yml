@@ -73,7 +73,6 @@ services:
       - CHROME=true
       - FIREFOX=false
       - VIDEO=false
-      - GRID=false
     ports:
      - "5900:25900"
      - "4444:24444"
