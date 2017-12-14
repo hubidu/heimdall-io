@@ -65,11 +65,11 @@ services:
 
   selenium-chrome:
     privileged: true
-    image: elgalu/selenium:3.7.1-p6 # 3.8.1-p0 is not running tests correctly in mobile emulation mode (wrong screensize)
+    image: elgalu/selenium:3.8.1-p3
     environment:
-      - JAVA_OPTS=-Xmx1024m
-      - MAX_INSTANCES=5
-      - MAX_SESSIONS=5
+      - JAVA_OPTS=-Xmx1248m
+      - MAX_INSTANCES=2
+      - MAX_SESSIONS=2
       - CHROME=true
       - FIREFOX=false
     ports:

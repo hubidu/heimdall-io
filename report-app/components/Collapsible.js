@@ -6,7 +6,7 @@ export default class  extends React.Component {
         super(props)
 
         this.state = {
-            visible: false
+            visible: props.visible || false
         }
     }
 
