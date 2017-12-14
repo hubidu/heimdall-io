@@ -65,7 +65,7 @@ services:
 
   selenium-chrome:
     privileged: true
-    image: elgalu/selenium:3.8.1-p3
+    image: elgalu/selenium:3.7.1-p7
     environment:
       - JAVA_OPTS=-Xmx1248m
       - MAX_INSTANCES=2
