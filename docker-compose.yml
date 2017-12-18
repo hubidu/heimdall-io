@@ -63,24 +63,27 @@ services:
   #     - /etc/timezone:/etc/timezone
   #     - /etc/localtime:/etc/localtime
 
-  selenium-chrome:
-    privileged: true
-    image: elgalu/selenium:3.7.1-p7
-    environment:
-      - JAVA_OPTS=-Xmx1248m
-      - MAX_INSTANCES=2
-      - MAX_SESSIONS=2
-      - CHROME=true
-      - FIREFOX=false
-      - VIDEO=false
-    ports:
-     - "5900:25900"
-     - "4444:24444"
-    volumes:
-      - /etc/timezone:/etc/timezone
-      - /etc/localtime:/etc/localtime
-      - /dev/shm:/dev/shm
-      - /data/e2e-reports/files:/opt/files
+  # selenium-chrome:
+  #   privileged: true
+  #   # image: elgalu/selenium:3.7.1-p7
+  #   image: elgalu/selenium:3.7.1-p7
+  #   environment:
+  #     - JAVA_OPTS=-Xmx1248m
+  #     # - MAX_INSTANCES=2
+  #     # - MAX_SESSIONS=2
+  #     # - CHROME=true
+  #     # - FIREFOX=false
+  #     # - VIDEO=false
+  #     - NODE_MAX_INSTANCE=5
+  #     - NODE_MAX_SESSION=5      
+  #   ports:
+  #    - "5900:25900"
+  #    - "4444:24444"
+  #   volumes:
+  #     - /etc/timezone:/etc/timezone
+  #     - /etc/localtime:/etc/localtime
+  #     - /dev/shm:/dev/shm
+  #     - /data/e2e-reports/files:/opt/files
 
   mongodb:
     restart: always

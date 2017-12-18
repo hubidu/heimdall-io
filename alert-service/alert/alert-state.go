@@ -36,7 +36,11 @@ func logReports(title string, reports []model.Report) {
 	}
 }
 
-func UpdateAlertedReports(alertableReports []model.Report, successfulReports []model.Report) {
+func ClearAlertedReports() {
+	alertedReports = []model.Report{}
+}
+
+func UpdateAlertedReports(alertableReports []model.Report, successfulReports []model.Report) []model.Report {
 	logReports("New alerts:", alertableReports)
 	for _, alertableReport := range alertableReports {
 		alertedReports = append(alertedReports, alertableReport)
@@ -49,4 +53,6 @@ func UpdateAlertedReports(alertableReports []model.Report, successfulReports []m
 	}
 
 	logReports("Now alerted reports:", alertedReports)
+
+	return alertedReports
 }
