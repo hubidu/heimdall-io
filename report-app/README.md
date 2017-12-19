@@ -1,3 +1,6 @@
+- ava-codeceptjs: Tag each test run with a unique identifier
+- ava-codeceptjs: Automatically retry test on a (different?) device
+- ava-codeceptjs: Tag tests as integration test
 - Detail View: Rather show list of commands and a big screenshot in a separate pane
 - Show last errors on other devices
 - Show last change date of test files
@@ -12,7 +15,6 @@
 - Filter by environment
 - Filter by device
 - exclude known problems from failures (ESOCKETTIMEOUT)
-- ava-codeceptjs: Make screenshots on click (and highlight the clicked element)
 - Improve report file cleanup (keep last successful and all errors)
 - Mark same error as current in previous failures
 - Refresh page automatically
