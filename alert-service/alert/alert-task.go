@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/hubidu/e2e-backend/alert-service/email"
 	"github.com/hubidu/e2e-backend/report-lib/model"
 )
 
@@ -63,10 +64,12 @@ func AlertTask() {
 	failedReports := getFailedReports(reportGroups)
 	successfulReports := getSuccessfulReports(reportGroups)
 
-	newAlerts, _ := UpdateAlertedReports(failedReports, successfulReports)
+	newAlerts, fixedAlerts := UpdateAlertedReports(failedReports, successfulReports)
 
 	if len(newAlerts) > 0 {
-		fmt.Println("Got new alerts", len(newAlerts))
-		// email.SendAlert(newAlerts, fixedAlerts)
+		fmt.Println("Finishing with new alerts", len(newAlerts))
+		email.SendAlert(newAlerts, fixedAlerts)
+	} else {
+		fmt.Println("Finishing with no new alerts")
 	}
 }
