@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/hubidu/e2e-backend/alert-service/email"
+	"github.com/hubidu/e2e-backend/alert-service/service"
 	"github.com/hubidu/e2e-backend/report-lib/model"
 )
 
@@ -46,9 +47,18 @@ func getSuccessfulReports(reportGroups []model.ReportGroup) []model.Report {
 	return successfulReports
 }
 
+func getScreenshots(reports []model.Report) []service.DownloadedScreenshot {
+	downloadedScreenshots := []service.DownloadedScreenshot{}
+	for _, report := range reports {
+		downloadedScreenshot := service.DownloadScreenshot(report.Prefix, report.Screenshots[0].Screenshot)
+		downloadedScreenshots = append(downloadedScreenshots, downloadedScreenshot)
+	}
+	return downloadedScreenshots
+}
+
 func AlertTask() {
 	fmt.Println("Checking alerts...")
-	resp, err := GetReportCategories()
+	resp, err := service.GetReportCategories()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -68,7 +78,9 @@ func AlertTask() {
 
 	if len(newAlerts) > 0 {
 		fmt.Println("Finishing with new alerts", len(newAlerts))
-		email.SendAlert(newAlerts, fixedAlerts)
+
+		newAlertScreenshots := getScreenshots(newAlerts)
+		email.SendAlert(newAlerts, fixedAlerts, newAlertScreenshots)
 	} else {
 		fmt.Println("Finishing with no new alerts")
 	}
