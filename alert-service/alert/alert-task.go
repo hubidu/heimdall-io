@@ -50,7 +50,7 @@ func getSuccessfulReports(reportGroups []model.ReportGroup) []model.Report {
 func getScreenshots(reports []model.Report) []service.DownloadedScreenshot {
 	downloadedScreenshots := []service.DownloadedScreenshot{}
 	for _, report := range reports {
-		downloadedScreenshot := service.DownloadScreenshot(report.Prefix, report.Screenshots[0].Screenshot)
+		downloadedScreenshot := service.DownloadScreenshot(report.ReportDir, report.Screenshots[0].Screenshot)
 		downloadedScreenshots = append(downloadedScreenshots, downloadedScreenshot)
 	}
 	return downloadedScreenshots

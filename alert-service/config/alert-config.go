@@ -1,14 +1,17 @@
 package config
 
-import "os"
+import (
+	"os"
+	"strings"
+)
 
 type AlertConfig struct {
 	From       string
-	Recipients string
+	Recipients []string
 }
 
 func NewAlertConfig() *AlertConfig {
-	cfg := AlertConfig{From: os.Getenv("ALERT_FROM"), Recipients: os.Getenv("ALERT_RECIPIENTS")}
+	cfg := AlertConfig{From: os.Getenv("ALERT_FROM"), Recipients: strings.Split(os.Getenv("ALERT_RECIPIENTS"), ",")}
 
 	return &cfg
 }
