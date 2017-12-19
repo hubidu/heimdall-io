@@ -1,3 +1,5 @@
+- Put tests into quarantine
+- ava-codeceptjs: If click is used with two parameters, then use waitForText instead of waitForVisible
 - ava-codeceptjs: Tag each test run with a unique identifier
 - ava-codeceptjs: Automatically retry test on a (different?) device
 - ava-codeceptjs: Tag tests as integration test
