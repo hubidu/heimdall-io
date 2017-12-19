@@ -2,9 +2,9 @@ package alert
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
-	"github.com/hubidu/e2e-backend/alert-service/email"
 	"github.com/hubidu/e2e-backend/report-lib/model"
 )
 
@@ -46,6 +46,7 @@ func getSuccessfulReports(reportGroups []model.ReportGroup) []model.Report {
 }
 
 func AlertTask() {
+	fmt.Println("Checking alerts...")
 	resp, err := GetReportCategories()
 	if err != nil {
 		log.Fatal(err)
@@ -62,9 +63,10 @@ func AlertTask() {
 	failedReports := getFailedReports(reportGroups)
 	successfulReports := getSuccessfulReports(reportGroups)
 
-	newAlerts, fixedAlerts := UpdateAlertedReports(failedReports, successfulReports)
+	newAlerts, _ := UpdateAlertedReports(failedReports, successfulReports)
 
 	if len(newAlerts) > 0 {
-		email.SendAlert(newAlerts, fixedAlerts)
+		fmt.Println("Got new alerts", len(newAlerts))
+		// email.SendAlert(newAlerts, fixedAlerts)
 	}
 }

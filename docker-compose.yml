@@ -49,19 +49,19 @@ services:
       - /etc/timezone:/etc/timezone
       - /etc/localtime:/etc/localtime
 
-  # alert-service:
-  #   restart: always
-  #   image: hubidu27/alert-service:latest
-  #   links:
-  #     - report-service
-  #   environment:
-  #     - SMTP_HOST=${SMTP_HOST}
-  #     - SMTP_PORT=25
-  #     - ALERT_FROM=${ALERT_FROM}
-  #     - ALERT_RECIPIENTS=${ALERT_RECIPIENTS}
-  #   volumes:
-  #     - /etc/timezone:/etc/timezone
-  #     - /etc/localtime:/etc/localtime
+  alert-service:
+    restart: always
+    image: hubidu27/alert-service:latest
+    links:
+      - report-service
+    environment:
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=25
+      - ALERT_FROM=${ALERT_FROM}
+      - ALERT_RECIPIENTS=${ALERT_RECIPIENTS}
+    volumes:
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
 
   mongodb:
     restart: always
