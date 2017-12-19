@@ -40,6 +40,8 @@ func SendAlert(newAlerts []model.Report, fixedAlerts []model.Report, newAlertScr
 		failedTests = append(failedTests, report.Title)
 	}
 	m.SetBody("text/plain", formatMessage(newAlerts))
+
+	fmt.Println("Attaching screenshots", newAlertScreenshots)
 	for _, alertScreenshot := range newAlertScreenshots {
 		m.Attach(alertScreenshot.Path)
 	}

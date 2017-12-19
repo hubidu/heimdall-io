@@ -21,7 +21,7 @@ func DownloadScreenshot(testPath string, screenshot string) DownloadedScreenshot
 
 	downloadURL := fmt.Sprintf("%s/screenshots/%s/%s", config.ReportServiceHost, pathEncoded, screenshotEncoded)
 	resty.SetOutputDirectory("/tmp")
-	resty.R().SetOutput(screenshot + ".png").Get(downloadURL)
+	resty.R().SetOutput(screenshot).Get(downloadURL)
 
-	return DownloadedScreenshot{Path: path.Join("tmp", screenshot+".png")}
+	return DownloadedScreenshot{Path: path.Join("tmp", screenshot)}
 }
