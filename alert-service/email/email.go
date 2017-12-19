@@ -32,7 +32,7 @@ func SendAlert(newAlerts []model.Report, fixedAlerts []model.Report, newAlertScr
 
 	m := gomail.NewMessage()
 	m.SetHeader("From", alertConfig.From)
-	m.SetHeader("To", alertConfig.Recipients)
+	m.SetHeader("To", alertConfig.Recipients...)
 	m.SetHeader("Subject", formatSubject(newAlerts))
 
 	var failedTests []string
