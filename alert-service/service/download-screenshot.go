@@ -23,5 +23,5 @@ func DownloadScreenshot(testPath string, screenshot string) DownloadedScreenshot
 	resty.SetOutputDirectory("/tmp")
 	resty.R().SetOutput(screenshot).Get(downloadURL)
 
-	return DownloadedScreenshot{Path: path.Join("tmp", screenshot)}
+	return DownloadedScreenshot{Path: path.Join("/tmp", screenshot)}
 }
