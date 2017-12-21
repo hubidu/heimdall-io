@@ -1,13 +1,26 @@
+import moment from 'moment'
 import Layout from '../components/layout'
-import {Container, Segment, Menu, Sidebar, List, Card, Image, Icon, Header, Label, Item} from 'semantic-ui-react'
+import Head from 'next/head'
+import {Grid, Container, Segment, Menu, Sidebar, List, Card, Image, Icon, Header, Label, Item} from 'semantic-ui-react'
 import Collapsible from '../components/Collapsible'
 import TestResultDeviceIcon from '../components/test-result-device-icon'
+import SuccessesAndFailuresBars from '../components/SuccessesAndFailuresBars'
+import SourceCodeSnippet from '../components/SourceCodeSnippet'
 
 import getReportById from '../services/get-report-by-id'
+import getReportsByCategory from '../services/get-reports-by-category'
 import getScreenshotUrl from '../services/get-sceenshot-url'
 
 const lastOf = items => items[items.length - 1]
 const isErrorStep = step => step.Success === false && step.ReachedAt > 0
+const indexOfReport = (report, reports) => reports.findIndex(r => r._id === report._id)
+const mapToSuccessAndFailure = historicReports => historicReports.map(r => Object.assign({}, {
+  t: r.StartedAt,
+  value: r.Duration,
+  success: r.Result === 'success',
+  href: `/details?id=${r._id}&hashcategory=${r.HashCategory}`
+}))
+
 const groupScreenshotsIntoSteps = (steps, screenshots) => {
   steps.unshift({
     ReachedAt: 0,
@@ -103,17 +116,15 @@ export default class extends React.Component {
 
     const stepsWithScreenshots = groupScreenshotsIntoSteps(report.Outline.Steps, report.Screenshots)
 
-    return { report, stepsWithScreenshots }
+    let history = await getReportsByCategory(hashcategory, {since: report.StartedAt})
+
+    return { report, stepsWithScreenshots, history }
   }
 
-  constructor() {
-    super()
-    this.state = {}
+  state = {hoveredScreenshot: undefined}
 
-    this.onScreenshotHovered = this.onScreenshotHovered.bind(this)
-  }
 
-  onScreenshotHovered(screenshot) {
+  onScreenshotHovered = (screenshot) => {
     this.setState({
       hoveredScreenshot: screenshot
     })
@@ -121,46 +132,111 @@ export default class extends React.Component {
 
   render () {
     return (
-      <Container>
-      <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa strong. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede link mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.</p>
+      <div className="Container">
+        <style global jsx>{`
+          // body {
+          //   font-family: 'roboto, noto';
+          // }
+          .SuccessesAndFailuresContainer {
+            float: right;
+          }
+          .Container {
+            position: relative;
+            height: 100vh;
+          }
+          .StepPane {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 30%;
+            height: 100%;
+            overflow-y: scroll;
+          }
+          .ScreenshotPane {
+            margin-left: 30%;
+            height: 100%;
+          }
+          .ScreenshotContainer {
+            height: 90%;
+          }
+          .ScreenshotContainer-PageTitle {
+            font-weight: bold;
+          }
+          .ScreenshotHeader {
+            height: 10%;
+          }
+          .Screenshot {
+            max-height: 100%;
+          }
+        `}</style>
+        <Head>
+          <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
 
-        <div className="Report">
-
-        <Sidebar.Pushable as={Segment}>
-        <Sidebar as={Menu} animation='slide out' width='thin' visible={true} icon='labeled' vertical inverted>
-          <Menu.Item name='home'>
-            <Icon name='home' />
-            Home
-          </Menu.Item>
-          <Menu.Item name='gamepad'>
-            <Icon name='gamepad' />
-            Games
-          </Menu.Item>
-          <Menu.Item name='camera'>
-            <Icon name='camera' />
-            Channels
-          </Menu.Item>
-        </Sidebar>
-        <Sidebar.Pusher>
+          <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/github-gist.css" />
+          <link rel="stylesheet" href="https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css"/>
+          <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css' />
+        </Head>
+        <div className="StepPane">
           <Segment basic>
-            <Header as='h3'>Application Content</Header>
-            <Image src='/assets/images/wireframe/paragraph.png' />
+            <Steps
+              steps={this.props.stepsWithScreenshots}
+              hoveredScreenshot={this.state.hoveredScreenshot}
+              onScreenshotHovered={this.onScreenshotHovered} />
           </Segment>
-        </Sidebar.Pusher>
-      </Sidebar.Pushable>
+        </div>
+        <div className="ScreenshotPane">
+            <Segment className="ScreenshotHeader" >
+              <strong>
+              {moment(this.props.report.StartedAt).format("ddd, hA")} ({moment(this.props.report.StartedAt).fromNow()})
+              </strong>
+              <span className="SuccessesAndFailuresContainer">
+                <SuccessesAndFailuresBars
+                  selectedBar={indexOfReport(this.props.report, this.props.history)}
+                  data={mapToSuccessAndFailure(this.props.history)}
+                  maxBars={50}
+                />
+              </span>
 
-          <div className="Sidebar">
-            <Steps steps={this.props.stepsWithScreenshots} onScreenshotHovered={this.onScreenshotHovered} />
-          </div>
-          <div style={{marginLeft: "45%"}} className="Screenshot w-60">
+              <Header  as='h3'>
+                <TestResultDeviceIcon result={this.props.report.Result} deviceSettings={this.props.report.DeviceSettings} />
+                &nbsp;
+               {this.props.report.Title}
+              </Header>
+
+
+            </Segment>
+
             {
               this.state && this.state.hoveredScreenshot &&
-              <Image spaced={true} fluid={true} src={getScreenshotUrl(this.props.report.ReportDir, this.state.hoveredScreenshot.Screenshot)} />
-            }
-          </div>
-        </div>
+                <Segment className="ScreenshotContainer"  basic>
+                  <div className="ScreenshotContainer-PageTitle">{this.state.hoveredScreenshot.Page.Title}</div>
 
-      </Container>
+                  <a href={this.state.hoveredScreenshot.Page.Url}>
+                    {this.state.hoveredScreenshot.Page.Url}
+                  </a>
+                  <br/>
+
+                  <Collapsible className="mt2" label="Test-Source">
+                    <small>
+                      { this.state.hoveredScreenshot.CodeStack[1] &&
+                        <SourceCodeSnippet code={this.state.hoveredScreenshot.CodeStack[1].Source} location={this.state.hoveredScreenshot.CodeStack[1].Location} />
+                      }
+                        <SourceCodeSnippet code={this.state.hoveredScreenshot.CodeStack[0].Source} location={this.state.hoveredScreenshot.CodeStack[0].Location} />
+                      <pre>
+                      <code>
+                        {this.state.hoveredScreenshot.OrgStack}
+                      </code>
+                    </pre>
+                    </small>
+                  </Collapsible>
+                  <br/>
+
+                  <Image bordered={true} className="Screenshot" src={getScreenshotUrl(this.props.report.ReportDir, this.state.hoveredScreenshot.Screenshot)} />
+                </Segment>
+            }
+
+        </div>
+      </div>
       )
   }
 }
