@@ -11,18 +11,18 @@ import (
 )
 
 func formatMessage(reports []model.Report) string {
-	greetingLine := fmt.Sprintf("Hi there!\n\nWe have %d new test failures. You should probably have a look:\n\n", len(reports))
+	greetingLine := fmt.Sprintf("Hi there!\n\nWe have %d new, repeated test failures. You should definitely have a look:\n\n", len(reports))
 
 	content := ""
 	for _, r := range reports {
-		content += fmt.Sprintf("  - %s\n", r.Title)
+		content += fmt.Sprintf("  - at %s [%s] %s\n", r.Started, r.DeviceSettings.Name, r.Title)
 	}
 
 	return greetingLine + content
 }
 
 func formatSubject(reports []model.Report) string {
-	return fmt.Sprintf("There are %d new end-to-end test failure(s)", len(reports))
+	return fmt.Sprintf("There are %d new e2e-test failure(s)", len(reports))
 }
 
 // SendAlert sends an alert email using a list of new failing tests

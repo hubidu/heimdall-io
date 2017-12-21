@@ -1,9 +1,15 @@
-- Put tests into quarantine
+## In Progress
+- Detail View: Rather show list of commands and a big screenshot in a separate pane (to enable "time traveling")
+
+## Backlog
+- Be able to use the reporter for local test runs (i. e. use a personalized key when running the tests, tag the test results with the key, transfer the test results to the server)
+- Enhance alerting: Add all failing tests to report
+- Enhance alerting: Show times of all test failures
+- Enable users to put tests into quarantine
 - ava-codeceptjs: If click is used with two parameters, then use waitForText instead of waitForVisible
 - ava-codeceptjs: Tag each test run with a unique identifier
 - ava-codeceptjs: Automatically retry test on a (different?) device
 - ava-codeceptjs: Tag tests as integration test
-- Detail View: Rather show list of commands and a big screenshot in a separate pane
 - Show last errors on other devices
 - Show last change date of test files
 - Make mongodb query more efficient

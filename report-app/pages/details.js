@@ -22,7 +22,7 @@ const mapToSuccessAndFailure = historicReports => historicReports.map(r => Objec
   t: r.StartedAt,
   value: r.Duration,
   success: r.Result === 'success',
-  href: `/details?id=${r._id}`
+  href: `/details?id=${r._id}&hashcategory=${r.HashCategory}`
 }))
 
 const AtSecond = ({shotAt, startShotAt}) =>
