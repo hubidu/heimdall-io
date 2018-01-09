@@ -7,7 +7,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "dev": "cross-env REPORT_SERVICE_HOST=veve-dev-test-01.intern.v.check24.de:8001 DEPLOYMENT_SERVICE_HOST=veve-dev-test-01.intern.v.check24.de:8002 node server.js",
+    "dev": "node server.js",
     "build": "next build",
     "start": "cross-env NODE_ENV=production node server.js",
     "test": "ava --verbose"
