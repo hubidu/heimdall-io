@@ -4,4 +4,4 @@ import config from './config'
 const ReportServiceUrl = `http://${config.ReportServiceHost}`
 
 // Notice the double encoding. It's because of gin-gonic
-export default (path, filename) => `${config.ReportServiceUrl}/screenshots/${base64.encode(encodeURIComponent(path))}/${base64.encode(encodeURIComponent(filename))}`
+export default (path, filename) => `${ReportServiceUrl}/screenshots/${base64.encode(encodeURIComponent(path))}/${base64.encode(encodeURIComponent(filename))}`
