@@ -1,5 +1,4 @@
 import moment from 'moment'
-import styled from 'styled-components'
 
 const capValue = val => val >= 1.0 ? 1.0 : val
 

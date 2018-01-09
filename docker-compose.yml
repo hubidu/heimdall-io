@@ -7,6 +7,9 @@ services:
       - 4000:4000
     links:
       - report-service
+    environment:
+      - REPORT_SERVICE_HOST=report-service:8001 
+      - DEPLOYMENT_SERVICE_HOST=report-service:8002    
     volumes:
       - /data/e2e-reports:/opt/app/reports
       - /etc/timezone:/etc/timezone

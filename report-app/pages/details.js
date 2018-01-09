@@ -246,7 +246,7 @@ export default class extends React.Component {
     // TODO: To optimize could pass in hashcategory instead of id
     const report = await getReportById(id)
 
-    let historicReports = await getReportsByCategory(hashcategory, {since: report.StartedAt})
+    let historicReports = await getReportsByCategory(hashcategory, {limit: 10, since: report.StartedAt})
 
     let lastSuccessScreenshotOfReport
     // TODO Rethink that feature

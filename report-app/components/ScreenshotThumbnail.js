@@ -1,5 +1,3 @@
-import styled from 'styled-components'
-
 import getScreenshotUrl from '../services/get-sceenshot-url'
 
 export default ({ success, title, url, path, screenshot }) =>

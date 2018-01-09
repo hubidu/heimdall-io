@@ -1,8 +1,9 @@
 import 'isomorphic-fetch'
+import config from './config'
 
 export default async () => {
     // eslint-disable-next-line no-undef
-    const res = await fetch('http://veve-dev-test-01.intern.v.check24.de:8001/report-categories?limit=400')
+    const res = await fetch(`http://${config.ReportServiceHost}/report-categories?limit=400`)
     const json = await res.json()
 
     const testCategories = Object.keys(json).map(category => json[category])

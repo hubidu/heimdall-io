@@ -1,9 +1,4 @@
 import Highlight from 'react-highlight'
-import styled from 'styled-components'
-
-const SourceCodeSnippet = styled.div`
-  margin: 0.5em;
-`
 
 const sourceCode = (code, location) => code
     .map(entry => {
@@ -13,11 +8,11 @@ const sourceCode = (code, location) => code
     }).join('\n')
 
 export default ({ code, location }) =>
-    <SourceCodeSnippet>
+    <div className="ma1">
         <div className={'black-50'}>
             {location.File}
         </div>
         <Highlight className="javascript">
             {sourceCode(code, location)}
         </Highlight>
-    </SourceCodeSnippet>
+    </div>

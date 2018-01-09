@@ -1,4 +1,3 @@
-import styled from 'styled-components'
 import Highlight from 'react-highlight'
 import Ansi from 'ansi-to-react'
 import moment from 'moment'
@@ -11,16 +10,6 @@ import SuccessIcon from 'react-icons/lib/fa/check-circle'
 import FailureIcon from 'react-icons/lib/fa/times-circle'
 
 import { withState } from 'recompose'
-
-const Green = styled.span`
-    color: MediumSpringGreen;
-    margin-right: 10px;
-`
-const Red = styled.span`
-    color: OrangeRed;
-    margin-right: 10px;
-`
-
 
 const avgDuration = testRun => testRun.runs.map(run => run.duration).reduce((sum, duration) => sum + duration, 0) / testRun.runs.length
 const getErrorMessage = testRun => testRun.screenshots[0].message
