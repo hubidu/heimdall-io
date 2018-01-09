@@ -8,8 +8,8 @@ services:
     links:
       - report-service
     environment:
-      - REPORT_SERVICE_HOST=localhost:8001 
-      - DEPLOYMENT_SERVICE_HOST=localhost:8002    
+      - REPORT_SERVICE_HOST=${REPORT_SERVICE_HOST}
+      - DEPLOYMENT_SERVICE_HOST=${DEPLOYMENT_SERVICE_HOST}
     volumes:
       - /data/e2e-reports:/opt/app/reports
       - /etc/timezone:/etc/timezone
