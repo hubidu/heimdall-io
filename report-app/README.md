@@ -1,8 +1,10 @@
 ## In Progress
-- Detail View: Rather show list of commands and a big screenshot in a separate pane (to enable "time traveling")
+- Be able to use the reporter for local test runs (i. e. use a personalized key when running the tests, tag the test results with the key, transfer the test results to the server)
 
 ## Backlog
-- Be able to use the reporter for local test runs (i. e. use a personalized key when running the tests, tag the test results with the key, transfer the test results to the server)
+- Improve time travel detail view: Highlight selected step
+- Detail View: Filter by device
+- Enhance alerting: Dont send alert if last test run has been successful
 - Enhance alerting: Add all failing tests to report
 - Enhance alerting: Show times of all test failures
 - Enable users to put tests into quarantine

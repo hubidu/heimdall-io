@@ -13,6 +13,8 @@ import (
 
 func init() {
 	db.Connect()
+
+	db.InitializeIndexes()
 }
 
 func main() {

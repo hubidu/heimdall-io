@@ -42,3 +42,19 @@ func Connect() {
 	Session = s
 	Mongo = mongo
 }
+
+// InitializeIndexes initializes indexes on db
+func InitializeIndexes() {
+	// Set mongo db indexes
+	c := Session.DB("e2e").C("reports")
+
+	index := mgo.Index{
+		Key: []string{"hashcategory: 1"},
+	}
+
+	err := c.EnsureIndex(index)
+	if err != nil {
+		panic(err)
+	}
+
+}
