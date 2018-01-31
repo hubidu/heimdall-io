@@ -16,13 +16,14 @@ func formatMessage(reports []model.Report) string {
 	content := ""
 	for _, r := range reports {
 		content += fmt.Sprintf("  - at %s [%s] %s\n", r.Started, r.DeviceSettings.Name, r.Title)
+		content += fmt.Sprintf("    message \"%s\"\n", r.Screenshots[0].Message)
 	}
 
 	return greetingLine + content
 }
 
 func formatSubject(reports []model.Report) string {
-	return fmt.Sprintf("There are %d new e2e-test failure(s)", len(reports))
+	return fmt.Sprintf("We have %d NEW test failure(s)", len(reports))
 }
 
 // SendAlert sends an alert email using a list of new failing tests
@@ -35,10 +36,10 @@ func SendAlert(newAlerts []model.Report, fixedAlerts []model.Report, newAlertScr
 	m.SetHeader("To", alertConfig.Recipients...)
 	m.SetHeader("Subject", formatSubject(newAlerts))
 
-	var failedTests []string
-	for _, report := range newAlerts {
-		failedTests = append(failedTests, report.Title)
-	}
+	// var failedTests []string
+	// for _, report := range newAlerts {
+	// 	failedTests = append(failedTests, report.Title)
+	// }
 	m.SetBody("text/plain", formatMessage(newAlerts))
 
 	fmt.Println("Attaching screenshots", newAlertScreenshots)
@@ -53,6 +54,6 @@ func SendAlert(newAlerts []model.Report, fixedAlerts []model.Report, newAlertScr
 
 	// Send the email to Bob, Cora and Dan.
 	if err := d.DialAndSend(m); err != nil {
-		panic(err)
+		fmt.Println("Failed to send alert", err)
 	}
 }
