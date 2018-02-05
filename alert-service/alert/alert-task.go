@@ -4,9 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"time"
 
+	"github.com/hubidu/e2e-backend/alert-service/config"
 	"github.com/hubidu/e2e-backend/alert-service/email"
 	"github.com/hubidu/e2e-backend/alert-service/service"
+	"github.com/hubidu/e2e-backend/report-lib/deployments"
 	"github.com/hubidu/e2e-backend/report-lib/model"
 )
 
@@ -56,6 +59,24 @@ func getScreenshots(reports []model.Report) []service.DownloadedScreenshot {
 	return downloadedScreenshots
 }
 
+func sendToDeployerIfRecentDeployment(newAlerts []model.Report, fixedAlerts []model.Report, newAlertScreenshots []service.DownloadedScreenshot) {
+	recentDeployments := deployments.GetRecentBambooDeployments()
+	if len(recentDeployments) == 0 {
+		return
+	}
+
+	for _, deployment := range recentDeployments {
+		duration := time.Since(deployment.Finished)
+		if duration.Hours() < 1 {
+			recipients := []string{deployment.Description}
+
+			fmt.Println("There has been a deployment recently. Sending alert also to ", recipients)
+
+			email.SendAlert(recipients, newAlerts, fixedAlerts, newAlertScreenshots)
+		}
+	}
+}
+
 func AlertTask() {
 	fmt.Println("Checking alerts...")
 	resp, err := service.GetReportCategories()
@@ -77,11 +98,15 @@ func AlertTask() {
 	newAlerts, fixedAlerts := UpdateAlertedReports(failedReports, successfulReports)
 
 	if len(newAlerts) > 0 {
+		alertConfig := config.NewAlertConfig()
+
 		fmt.Println("Finishing with new alerts", len(newAlerts))
 
 		newAlertScreenshots := getScreenshots(newAlerts)
-		email.SendAlert(newAlerts, fixedAlerts, newAlertScreenshots)
+		email.SendAlert(alertConfig.Recipients, newAlerts, fixedAlerts, newAlertScreenshots)
+
+		sendToDeployerIfRecentDeployment(newAlerts, fixedAlerts, newAlertScreenshots)
 	} else {
-		fmt.Println("Finishing with no new alerts")
+		fmt.Println("Finishing with no new alerts (nothing to do)")
 	}
 }

@@ -27,13 +27,13 @@ func formatSubject(reports []model.Report) string {
 }
 
 // SendAlert sends an alert email using a list of new failing tests
-func SendAlert(newAlerts []model.Report, fixedAlerts []model.Report, newAlertScreenshots []service.DownloadedScreenshot) {
+func SendAlert(recipients []string, newAlerts []model.Report, fixedAlerts []model.Report, newAlertScreenshots []service.DownloadedScreenshot) {
 	smtpConfig := config.NewSMTPConfig()
 	alertConfig := config.NewAlertConfig()
 
 	m := gomail.NewMessage()
 	m.SetHeader("From", alertConfig.From)
-	m.SetHeader("To", alertConfig.Recipients...)
+	m.SetHeader("To", recipients...)
 	m.SetHeader("Subject", formatSubject(newAlerts))
 
 	// var failedTests []string
