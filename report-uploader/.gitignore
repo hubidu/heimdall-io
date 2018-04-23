@@ -1,0 +1,4 @@
+.vagrant
+*.exe
+reports
+uploads
