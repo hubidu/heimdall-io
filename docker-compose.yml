@@ -28,6 +28,8 @@ services:
   report-uploader:
     restart: always
     image: hubidu27/report-uploader:latest
+    ports:
+      - 8003:8000
     links:
       - mongodb
     volumes:
