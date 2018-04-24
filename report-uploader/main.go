@@ -8,7 +8,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -95,7 +94,8 @@ func main() {
 			return
 		}
 
-		unzip(zipFile, path.Join(ReportDir, strings.TrimSuffix(file.Filename, filepath.Ext(file.Filename))))
+		unzip(zipFile, path.Join(ReportDir, "."))
+		os.Remove(zipFile)
 
 		c.String(http.StatusOK, fmt.Sprintf("Report successfully uploaded"))
 	})
