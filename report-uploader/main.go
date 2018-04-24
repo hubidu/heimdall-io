@@ -78,7 +78,9 @@ func main() {
 	// router.MaxMultipartMemory = 8 << 20 // 8 MiB
 
 	UploadDir := "./uploads"
+	os.MkdirAll(UploadDir, os.ModePerm)
 	ReportDir := "./reports"
+	os.MkdirAll(ReportDir, os.ModePerm)
 
 	router.Static("/", UploadDir)
 	router.POST("/upload", func(c *gin.Context) {
