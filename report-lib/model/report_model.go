@@ -32,6 +32,9 @@ type ReportSlim struct {
 
 type Report struct {
 	Id             bson.ObjectId `json:"_id,omitempty" bson:"_id,omitempty"`
+	OwnerKey       string        // api key of report creator/owner
+	RunID          string        // id which identifies the test run
+	Project        string        // name/id of the test project
 	HashCategory   uint32
 	ReportFileName string
 	ReportDir      string
@@ -111,10 +114,11 @@ type LogEntry struct {
 }
 
 type DeviceSettings struct {
-	Name   string
-	Type   string
-	Width  int32
-	Height int32
+	Name    string
+	Type    string
+	Browser string
+	Width   int32
+	Height  int32
 }
 
 func hash(s string) uint32 {
