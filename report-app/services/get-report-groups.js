@@ -1,9 +1,11 @@
 import 'isomorphic-fetch'
 import config from './config'
 
-export default async () => {
+const buildUrl = (query = {}) => `http://${config.ReportServiceHost}/report-categories?limit=${query.limit || 400}&project=${query.project || ''}`
+
+export default async (query = {}) => {
     // eslint-disable-next-line no-undef
-    const res = await fetch(`http://${config.ReportServiceHost}/report-categories?limit=400`)
+    const res = await fetch(buildUrl(query))
     const json = await res.json()
 
     const testCategories = Object.keys(json).map(category => json[category])

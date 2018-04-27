@@ -17,6 +17,21 @@ var ReportsCollection = "reports"
 // ReportLimit mongo result set limit
 var ReportLimit = 200
 
+func buildQuery(c *gin.Context) bson.M {
+	m := bson.M{}
+
+	project := c.Query("project")
+	if project != "" {
+		m["project"] = project
+	}
+
+	ownerKey := c.Query("ownerKey")
+	if ownerKey != "" {
+		m["ownerKey"] = ownerKey
+	}
+	return m
+}
+
 func listReports(c *gin.Context) []model.Report {
 	db := c.MustGet("db").(*mgo.Database)
 
@@ -24,7 +39,7 @@ func listReports(c *gin.Context) []model.Report {
 
 	// fields := bson.M{"hashcategory": 1, "filename": 1, "startedat": 1, "started": 1, "type": 1, "prefix": 1, "title": 1, "fulltitle": 1, "result": 1, "duration": 1}
 	var reports []model.Report
-	err := db.C(ReportsCollection).Find(nil).Sort("-_id").Limit(reportLimit).All(&reports)
+	err := db.C(ReportsCollection).Find(buildQuery(c)).Sort("-_id").Limit(reportLimit).All(&reports)
 	if err != nil {
 		c.Error(err)
 	}

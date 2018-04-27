@@ -36,7 +36,6 @@ func main() {
 
 	r.GET("/reports", reports.List)
 	r.GET("/reports/:_id", reports.Get)
-	// TODO Strip down the report model in a report group items
 	r.GET("/report-categories", reports.GetReportCategories)
 	r.GET("/report-categories/:hashcategory", reports.GetReportsByCategory)
 

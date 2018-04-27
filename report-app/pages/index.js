@@ -7,13 +7,10 @@ import getReportGroups from '../services/get-report-groups'
 import getDeployments from '../services/get-deployments'
 
 export default class IndexPage extends React.Component {
-  static async getInitialProps () {
-    // const tests = await getReportGroups()
-    // const deployments = await getDeployments()
+  static async getInitialProps ({ query }) {
+    const [tests, deployments] = await Promise.all([getReportGroups(query), getDeployments()])
 
-    const results = await Promise.all([getReportGroups(), getDeployments()])
-
-    return { tests: results[0], deployments: results[1] }
+    return { tests, deployments }
   }
 
   render () {
