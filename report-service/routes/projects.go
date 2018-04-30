@@ -13,9 +13,9 @@ import (
 func GetByOwnerkey(c *gin.Context) {
 	db := c.MustGet("db").(*mgo.Database)
 
-	ownerkey := c.Query("ownerkey")
+	ownerkey := c.Param("ownerkey")
 	if ownerkey == "" {
-		c.Error(errors.New("ownerkey query parameter must be provided"))
+		c.AbortWithError(400, errors.New("ownerkey must be provided"))
 		return
 	}
 

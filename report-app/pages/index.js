@@ -1,41 +1,19 @@
 import React from 'react'
+import Router from 'next/router'
 
-import Layout from '../components/layout'
-import TestReportList from '../components/test-report-list'
+export default class extends React.Component {
+  static async getInitialProps({ query, res }) {
+    if (!query.ownerkey) throw new Error('Please provide your owner key in the query parameters')
 
-import getReportGroups from '../services/get-report-groups'
-import getDeployments from '../services/get-deployments'
-
-export default class IndexPage extends React.Component {
-  static async getInitialProps ({ query }) {
-    const [tests, deployments] = await Promise.all([getReportGroups(query), getDeployments()])
-
-    return { tests, deployments }
-  }
-
-  render () {
-    return (
-      <Layout title="Test Report">
-        {
-          this.props.tests.failed.length > 0 ?
-          <h3>
-            Failed tests
-            ({Object.keys(this.props.tests.failed).length})
-          </h3>
-          : null
-        }
-        <TestReportList reports={this.props.tests.failed} />
-
-        {
-          this.props.tests.succeeded.length > 0 ?
-          <h3>
-            All Tests
-            ({Object.keys(this.props.tests.succeeded).length})
-          </h3>
-          : null
-        }
-        <TestReportList deployments={this.props.deployments} reports={this.props.tests.succeeded} />
-      </Layout>
-    )
+    if (res) {
+      res.writeHead(302, {
+        Location: `/projects?ownerkey=${ownerkey}`
+      })
+      res.end()
+      res.finished = true
+    } else {
+      Router.push(`/projects?ownerkey=${ownerkey}`)
+    }
+    return {}
   }
 }
