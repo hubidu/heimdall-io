@@ -1,9 +1,10 @@
+import moment from 'moment'
 import React from 'react'
 import Link from 'next/link'
+import { List, Header, Icon } from 'semantic-ui-react'
 
 import Layout from '../components/layout'
-import TestReportList from '../components/test-report-list'
-
+import TestResultIcon from '../components/test-result-icon'
 import getProjects from '../services/get-projects'
 
 export default class IndexPage extends React.Component {
@@ -12,7 +13,7 @@ export default class IndexPage extends React.Component {
     if (!ownerkey) throw new Error('Please provide your owner key in the query parameters')
 
     const projects = await getProjects(query.ownerkey)
-    return { projects, ownerkey }
+    return { projects, numberOfProjects: projects.length - 1,  ownerkey }
   }
 
   linkToProject(ownerkey, project) {
@@ -23,25 +24,42 @@ export default class IndexPage extends React.Component {
   }
 
   render () {
+    const attrs = {title: `Test Projects (${this.props.numberOfProjects})`}
+
     return (
-      <Layout title="List of projects">
-        <h2>Projects for Owner Key {this.props.ownerkey}</h2>
-        <ul>
-          <li>
-            <Link href={this.linkToProject(this.props.ownerkey, undefined)}>
-              All projects
-            </Link>
-          </li>
+      <Layout {...attrs}>
+        <Header as='h2'>
+          <Icon name='settings' />
+          Your Test Projects
+          <Header.Subheader>
+            Listing all Projects for Owner Key {this.props.ownerkey}
+          </Header.Subheader>
+        </Header>
+
+        <List divided relaxed>
           {
             this.props.projects.map((project, i) =>
-              <li key={i}>
-                <Link href={this.linkToProject(this.props.ownerkey, project)}>
-                {project}
-                </Link>
-              </li>
-            )
+              <List.Item key={i}>
+                <List.Icon name='github' size='large' verticalAlign='middle' />
+                <List.Content>
+                  <List.Header as='a'>
+                    <Link href={this.linkToProject(this.props.ownerkey, project)}>
+                    {project.Name}
+                    </Link>
+                  </List.Header>
+                  <List.Description>
+                    {moment(project.Report.StartedAt).fromNow()}
+                    &nbsp;
+                    [{project.Report.Duration} s]
+                    &nbsp;
+                    <TestResultIcon result={project.Report.Result} />
+                    {project.Report.Title}
+                  </List.Description>
+                </List.Content>
+                </List.Item>
+              )
           }
-        </ul>
+        </List>
       </Layout>
     )
   }

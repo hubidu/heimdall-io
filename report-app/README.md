@@ -1,9 +1,11 @@
+## DONE
+- Filter by project and ownerKey in url
+
 ## In Progress
-- Be able to use the reporter for local test runs (i. e. use a personalized key when running the tests, tag the test results with the key, transfer the test results to the server)
 
 ## Backlog
 - Show browser name in reports
-- Filter by project and ownerKey in url
+- Be able to use the reporter for local test runs (i. e. use a personalized key when running the tests, tag the test results with the key, transfer the test results to the server)
 - Improve time travel detail view: Highlight selected step
 - Detail View: Filter by device
 - Enhance alerting: Dont send alert if last test run has been successful
