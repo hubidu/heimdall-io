@@ -3,8 +3,12 @@ import React from 'react'
 import Link from 'next/link'
 import { List, Header, Icon } from 'semantic-ui-react'
 
+import ProjectIcon from 'react-icons/lib/fa/archive'
+import KeyIcon from 'react-icons/lib/fa/key'
+
 import Layout from '../components/layout'
 import TestResultIcon from '../components/test-result-icon'
+
 import getProjects from '../services/get-projects'
 
 export default class IndexPage extends React.Component {
@@ -29,7 +33,7 @@ export default class IndexPage extends React.Component {
     return (
       <Layout {...attrs}>
         <Header as='h2'>
-          <Icon name='settings' />
+          <KeyIcon/>
           Your Test Projects
           <Header.Subheader>
             Listing all Projects for Owner Key {this.props.ownerkey}
@@ -40,10 +44,12 @@ export default class IndexPage extends React.Component {
           {
             this.props.projects.map((project, i) =>
               <List.Item key={i}>
-                <List.Icon name='github' size='large' verticalAlign='middle' />
+                <List.Icon size="large">
+                  <ProjectIcon/>
+                </List.Icon>
                 <List.Content>
                   <List.Header as='a'>
-                    <Link href={this.linkToProject(this.props.ownerkey, project)}>
+                    <Link href={this.linkToProject(this.props.ownerkey, project.Name)}>
                     {project.Name}
                     </Link>
                   </List.Header>

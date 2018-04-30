@@ -43,7 +43,7 @@ export default({reportGroup, deployments = []}) =>
         </h4>
       </a>
         {
-          reportGroup.LastReport.Result === 'error' ?
+          reportGroup.LastReport.Result === 'error' && reportGroup.LastReport.Outline.Steps.length > 0 ?
         <div className="f5">
           <div className="black-40">
             at step

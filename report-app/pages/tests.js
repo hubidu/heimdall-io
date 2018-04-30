@@ -1,6 +1,8 @@
 import React from 'react'
-
+import { Header, Icon } from 'semantic-ui-react'
 import Layout from '../components/layout'
+
+import FileIcon from 'react-icons/lib/fa/file-text'
 import TestReportList from '../components/test-report-list'
 
 import getReportGroups from '../services/get-report-groups'
@@ -20,25 +22,29 @@ export default class IndexPage extends React.Component {
   render () {
     return (
       <Layout title="Test Report">
+        <Header as='h2'>
+          <FileIcon />
+          Project {this.props.project}
+          <Header.Subheader>
+            Recent test results
+          </Header.Subheader>
+        </Header>
         {
           this.props.tests.failed.length > 0 ?
-          <h3>
+          <h4>
             Failed tests
             ({Object.keys(this.props.tests.failed).length})
-          </h3>
+          </h4>
           : null
         }
         <TestReportList reports={this.props.tests.failed} />
 
         {
           this.props.tests.succeeded.length > 0 ?
-          <h3>
+          <h4>
             All Tests
-            {
-              this.props.project ? <span> of Project <strong>{this.props.project}</strong></span> : null
-            }
             ({Object.keys(this.props.tests.succeeded).length})
-          </h3>
+          </h4>
           : null
         }
         <TestReportList deployments={this.props.deployments} reports={this.props.tests.succeeded} />

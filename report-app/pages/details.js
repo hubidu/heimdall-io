@@ -280,8 +280,11 @@ export default class extends React.Component {
            {this.props.report.Title}
           </Header>
 
+          {
+            this.props.report.Outline.Steps.length > 0 &&
+              <Steps steps={this.props.report.Outline.Steps} errorMessage={this.props.report.Screenshots[0] && this.props.report.Screenshots[0].Message} />
+          }
 
-          <Steps steps={this.props.report.Outline.Steps} errorMessage={this.props.report.Screenshots[0] && this.props.report.Screenshots[0].Message} />
 
           {
             this.props.failedReports.length > 0 &&

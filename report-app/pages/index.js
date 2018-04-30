@@ -3,7 +3,8 @@ import Router from 'next/router'
 
 export default class extends React.Component {
   static async getInitialProps({ query, res }) {
-    if (!query.ownerkey) throw new Error('Please provide your owner key in the query parameters')
+    const { ownerkey } = query
+    if (!ownerkey) throw new Error('Please provide your owner key in the query parameters')
 
     if (res) {
       res.writeHead(302, {
