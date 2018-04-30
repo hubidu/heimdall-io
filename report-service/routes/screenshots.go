@@ -37,6 +37,7 @@ func GetScreenshotImg(c *gin.Context) {
 	}
 }
 
+// ScreenshotOfReport returns screenshot for report
 type ScreenshotOfReport struct {
 	ReportDir  string
 	Screenshot model.Screenshot

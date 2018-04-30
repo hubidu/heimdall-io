@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/hubidu/e2e-backend/report-lib/db"
 	"github.com/hubidu/e2e-backend/report-lib/middlewares"
+	projects "github.com/hubidu/e2e-backend/report-service/routes"
 	reports "github.com/hubidu/e2e-backend/report-service/routes"
 	screenshots "github.com/hubidu/e2e-backend/report-service/routes"
 )
@@ -41,6 +42,8 @@ func main() {
 
 	r.GET("/screenshots/:path/:file", screenshots.GetScreenshotImg)
 	r.GET("/screenshot-categories/:hashids", screenshots.GetScreenshotsByCategory)
+
+	r.GET("/projects/:ownerkey", projects.GetByOwnerkey)
 
 	r.Run("0.0.0.0:8000")
 }
