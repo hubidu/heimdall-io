@@ -84,8 +84,10 @@ services:
 
   mongodb:
     restart: always
-    image: mongo:3.0
+    image: mongo:3.6.4
     command: mongod --smallfiles --quiet --logpath=/dev/null
+    ports:
+      - 27000:27000
     volumes:
       - /etc/timezone:/etc/timezone
       - /etc/localtime:/etc/localtime
