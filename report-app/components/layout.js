@@ -1,7 +1,14 @@
 import Link from 'next/link'
 import Head from 'next/head'
 
-export default ({ children, title = 'This is the default title', showNav = true }) => (
+const linkToProjects = ownerkey => {
+  return {
+    pathname: '/projects',
+    query: { ownerkey }
+  }
+}
+
+export default ({ children, title = 'This is the default title', ownerkey, showNav = true }) => (
   <div style={{'fontFamily': 'roboto, noto'}} >
     <Head>
         <title>{ title }</title>
@@ -17,9 +24,11 @@ export default ({ children, title = 'This is the default title', showNav = true 
       showNav &&
       <nav className="mb2 pa3 shadow-1">
         <div className="nowrap overflow-x-auto">
-          <a className="link dim blue f6 f6-ns dib mr3" href="/" title="Status Overview">
-            Status
-          </a>
+          <Link href={linkToProjects(ownerkey)}>
+            <a>
+            Projects
+            </a>
+          </Link>
         </div>
       </nav>
     }

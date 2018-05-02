@@ -28,7 +28,7 @@ export default class IndexPage extends React.Component {
   }
 
   render () {
-    const attrs = {title: `Test Projects (${this.props.numberOfProjects})`}
+    const attrs = {title: `Test Projects (${this.props.numberOfProjects})`, ownerkey: this.props.ownerkey}
 
     return (
       <Layout {...attrs}>
@@ -48,9 +48,11 @@ export default class IndexPage extends React.Component {
                   <ProjectIcon/>
                 </List.Icon>
                 <List.Content>
-                  <List.Header as='a'>
+                  <List.Header>
                     <Link href={this.linkToProject(this.props.ownerkey, project.Name)}>
-                    {project.Name}
+                      <a>
+                        {project.Name}
+                      </a>
                     </Link>
                   </List.Header>
                   <List.Description>

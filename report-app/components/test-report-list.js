@@ -1,7 +1,7 @@
 import TestReportGroup from '../components/test-report-group'
 import DeploymentEvent from '../components/deployment-event'
 
-export default ({reports, deployments}) => {
+export default ({ownerkey, project, reports, deployments}) => {
   const bySortKey = (a, b) => {
     return a.SortKey - b.SortKey
   }
@@ -16,7 +16,7 @@ export default ({reports, deployments}) => {
       if (event.Type === 'deployment-event') {
         return <DeploymentEvent key={i} event={event} />
       } else {
-        return <TestReportGroup key={i} reportGroup={event} deployments={deployments} />
+        return <TestReportGroup key={i} ownerkey={ownerkey} project={project} reportGroup={event} deployments={deployments} />
       }
     })
   }

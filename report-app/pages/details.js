@@ -18,11 +18,11 @@ import FailIcon from 'react-icons/lib/md/close'
 
 const MAX_RECENT_FAILURES = 4
 
-const mapToSuccessAndFailure = historicReports => historicReports.map(r => Object.assign({}, {
+const mapToSuccessAndFailure = (historicReports, ownerkey, project) => historicReports.map(r => Object.assign({}, {
   t: r.StartedAt,
   value: r.Duration,
   success: r.Result === 'success',
-  href: `/details?id=${r._id}&hashcategory=${r.HashCategory}`
+  href: `/details?ownerkey=${ownerkey}&project=${project}&id=${r._id}&hashcategory=${r.HashCategory}`
 }))
 
 const AtSecond = ({shotAt, startShotAt}) =>
@@ -219,7 +219,7 @@ const Steps = ({steps, errorMessage}) =>
     </div>
 
 
-const Meta = ({report, history}) =>
+const Meta = ({ownerkey, project, report, history}) =>
   <div className="Headline-details black-60 cf">
     <strong>
       {moment(report.StartedAt).format("ddd, hA")} ({moment(report.StartedAt).fromNow()})
@@ -234,7 +234,7 @@ const Meta = ({report, history}) =>
     <span className="Headline-successesAndFailures fr">
       <SuccessesAndFailuresBars
         selectedBar={indexOfReport(report, history)}
-        data={mapToSuccessAndFailure(history)}
+        data={mapToSuccessAndFailure(history, ownerkey, project)}
         maxBars={50}
       />
     </span>
@@ -242,7 +242,9 @@ const Meta = ({report, history}) =>
 
 
 export default class extends React.Component {
-  static async getInitialProps ({ query: { id, hashcategory } }) {
+  static async getInitialProps ({ query: { ownerkey, project, id, hashcategory } }) {
+    if (!ownerkey) throw new Error('Please provide your owner key in the query parameters')
+
     // TODO: To optimize could pass in hashcategory instead of id
     const report = await getReportById(id)
 
@@ -265,14 +267,20 @@ export default class extends React.Component {
       .filter(r => r.DeviceSettings.Type === report.DeviceSettings.Type)
       .slice(0, MAX_RECENT_FAILURES)
 
-    return { report, historicReports, failedReports, lastSuccessScreenshotOfReport }
+    return { ownerkey, project, report, historicReports, failedReports, lastSuccessScreenshotOfReport }
   }
 
   render () {
+    const attrs = {title: `${this.props.report.Title}`, ownerkey: this.props.ownerkey}
+
     return (
-      <Layout title="Test Report">
+      <Layout {...attrs}>
         <div className="mt4">
-          <Meta report={this.props.report} history={this.props.historicReports} />
+          <Meta
+            ownerkey={this.props.ownerkey}
+            project={this.props.project}
+            report={this.props.report}
+            history={this.props.historicReports} />
 
           <Header as='h2' dividing>
             <TestResultDeviceIcon result={this.props.report.Result} deviceSettings={this.props.report.DeviceSettings} />

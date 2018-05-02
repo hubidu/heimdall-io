@@ -1,4 +1,6 @@
 import moment from 'moment'
+import Link from 'next/link'
+
 import TestDetailPopover from '../components/test-detail-popover'
 import TestBrowserlogPopover from '../components/test-browserlog-popover'
 import TestOutlinePopover from '../components/test-outline-popover'
@@ -30,18 +32,27 @@ const trunc = (msg, MaxLen = 80) => {
 const mapToSuccessAndFailure = runs => runs.map(run => ({ t: run.StartedAt, value: run.Duration, success: run.Result === 'success'}))
 const mapDeploymentsToMarkers = deployments => deployments.map(d => Object.assign({}, { t: d.FinishedAt }))
 
-export default({reportGroup, deployments = []}) =>
+const linkToReportDetails = (ownerkey, project, id, hashcategory) => {
+  return {
+    pathname: '/details',
+    query: { ownerkey, project, id, hashcategory }
+  }
+}
+
+export default({ownerkey, project, reportGroup, deployments = []}) =>
 <div className="shadow-4 pa1">
   <div className="cf cf-ns nl2 nr2 pv1">
     <div className="fl-ns w-10-ns ph2">
       <TestResultDeviceIcon result={reportGroup.LastReport.Result} deviceSettings={reportGroup.LastReport.DeviceSettings} />
     </div>
     <div className="fl-ns w-60-ns ph2">
-      <a href={`/details?id=${reportGroup.LastReport._id}&hashcategory=${reportGroup.HashCategory}`} className="black-80" >
-        <h4 className="ma0 pa1 f5">
-          {reportGroup.Title}
-        </h4>
-      </a>
+      <Link href={linkToReportDetails(ownerkey, project, reportGroup.LastReport._id, reportGroup.HashCategory)}>
+        <a>
+          <h4 className="ma0 pa1 f5">
+            {reportGroup.Title}
+          </h4>
+        </a>
+      </Link>
         {
           reportGroup.LastReport.Result === 'error' && reportGroup.LastReport.Outline.Steps.length > 0 ?
         <div className="f5">
