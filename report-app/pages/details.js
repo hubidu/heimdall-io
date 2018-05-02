@@ -22,7 +22,7 @@ const mapToSuccessAndFailure = (historicReports, ownerkey, project) => historicR
   t: r.StartedAt,
   value: r.Duration,
   success: r.Result === 'success',
-  href: `/details?ownerkey=${ownerkey}&project=${project}&id=${r._id}&hashcategory=${r.HashCategory}`
+  href: `/details?ownerkey=${ownerkey}&project=${encodeURIComponent(project)}&id=${r._id}&hashcategory=${r.HashCategory}`
 }))
 
 const AtSecond = ({shotAt, startShotAt}) =>
