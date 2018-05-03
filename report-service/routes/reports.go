@@ -27,7 +27,7 @@ func buildQuery(c *gin.Context) bson.M {
 
 	ownerKey := c.Query("ownerkey")
 	if ownerKey != "" {
-		m["ownerKey"] = ownerKey
+		m["ownerkey"] = ownerKey
 	}
 	return m
 }
