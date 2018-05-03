@@ -114,11 +114,13 @@ type LogEntry struct {
 }
 
 type DeviceSettings struct {
-	Name    string
-	Type    string
-	Browser string
-	Width   int32
-	Height  int32
+	Name           string
+	Type           string
+	Browser        string
+	BrowserVersion string
+	Os             string
+	Width          int32
+	Height         int32
 }
 
 func hash(s string) uint32 {

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/hubidu/e2e-backend/report-lib/db"
 	"github.com/hubidu/e2e-backend/report-lib/middlewares"
@@ -25,6 +26,7 @@ func main() {
 	r.RedirectFixedPath = true
 
 	// Middlewares
+	r.Use(gzip.Gzip(gzip.DefaultCompression))
 	r.Use(middlewares.Connect)
 	r.Use(middlewares.ErrorHandler)
 	// TODO Use production config
