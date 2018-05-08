@@ -16,6 +16,8 @@ const getFailedStepName = steps => {
 
 const getFailedCommand = screenshot => {
   const codeStack = screenshot.CodeStack
+  if (codeStack.length === 0) return
+
   const line = codeStack[0].Location.Line
   return codeStack[0].Source.find(sourceLine => sourceLine.Line === line)
     .Value.replace('await', '').replace('(', ' (').trim()
@@ -43,7 +45,9 @@ export default({ownerkey, project, reportGroup, deployments = []}) =>
 <div className="shadow-4 pa1">
   <div className="cf cf-ns nl2 nr2 pv1">
     <div className="fl-ns w-10-ns ph2">
-      <TestResultDeviceIcon result={reportGroup.LastReport.Result} deviceSettings={reportGroup.LastReport.DeviceSettings} />
+      <TestResultDeviceIcon
+        result={reportGroup.LastReport.Result}
+        deviceSettings={reportGroup.LastReport.DeviceSettings} />
     </div>
     <div className="fl-ns w-60-ns ph2">
       <Link href={linkToReportDetails(ownerkey, project, reportGroup.LastReport._id, reportGroup.HashCategory)}>

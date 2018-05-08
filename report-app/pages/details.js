@@ -40,6 +40,17 @@ const CommandName = ({screenshot, steps}) => {
       </span>
     )
   }
+
+  console.log(screenshot)
+
+  if (screenshot.CodeStack.Cmd) {
+    return (
+      <span>
+        {screenshot.Cmd.Name}
+      </span>
+    )
+  }
+
   return (
       <span>
         {
@@ -76,7 +87,9 @@ const Timeline = ({reportDir, steps, startTimeline, lastSuccessScreenshotOfRepor
                   {
                     i === 0 && lastSuccessScreenshotOfReport &&
                       <small>
-                        <a target="_blank" href={getScreenshotUrl(lastSuccessScreenshotOfReport.ReportDir, lastSuccessScreenshotOfReport.Screenshot.Screenshot)}>
+                        <a
+                          target="_blank"
+                          href={getScreenshotUrl(lastSuccessScreenshotOfReport.ReportDir, lastSuccessScreenshotOfReport.Screenshot.Screenshot)}>
                           Compare to success...
                         </a>
                       </small>
@@ -88,12 +101,15 @@ const Timeline = ({reportDir, steps, startTimeline, lastSuccessScreenshotOfRepor
                   <a href={s.Page.Url}>{s.Page.Title}</a>
                 </Card.Meta>
 
-
                 <div className="f6 h3">
                   <CommandName screenshot={s} steps={steps} />
                 </div>
 
-                <Image as='a' size='large' target='_blank' href={getScreenshotUrl(reportDir, s.Screenshot)} src={getScreenshotUrl(reportDir, s.Screenshot)} />
+                <Image
+                  as='a'
+                  size='large'
+                  target='_blank'
+                  href={getScreenshotUrl(reportDir, s.Screenshot)} src={getScreenshotUrl(reportDir, s.Screenshot)} />
 
                 <Card.Content className="mt3">
                   {s.Message &&
@@ -102,24 +118,26 @@ const Timeline = ({reportDir, steps, startTimeline, lastSuccessScreenshotOfRepor
                     </Label>
                   }
                 </Card.Content>
-
-                <Card.Content extra>
-                  <div className="mt1">
-                  <Collapsible className="mt2" label="Source">
-                    <small>
-                      { s.CodeStack[1] &&
-                        <SourceCodeSnippet code={s.CodeStack[1].Source} location={s.CodeStack[1].Location} />
-                      }
-                        <SourceCodeSnippet code={s.CodeStack[0].Source} location={s.CodeStack[0].Location} />
-                      <pre>
-                      <code>
-                        {s.OrgStack}
-                      </code>
-                    </pre>
-                    </small>
-                  </Collapsible>
-                  </div>
+                {
+                  s.CodeStack.length > 0 &&
+                    <Card.Content extra>
+                    <div className="mt1">
+                    <Collapsible className="mt2" label="Source">
+                      <small>
+                        { s.CodeStack[1] &&
+                          <SourceCodeSnippet code={s.CodeStack[1].Source} location={s.CodeStack[1].Location} />
+                        }
+                          <SourceCodeSnippet code={s.CodeStack[0].Source} location={s.CodeStack[0].Location} />
+                        <pre>
+                        <code>
+                          {s.OrgStack}
+                        </code>
+                      </pre>
+                      </small>
+                    </Collapsible>
+                    </div>
                   </Card.Content>
+                }
               </Card.Content>
             </Card>
       )
@@ -283,14 +301,18 @@ export default class extends React.Component {
             history={this.props.historicReports} />
 
           <Header as='h2' dividing>
-            <TestResultDeviceIcon result={this.props.report.Result} deviceSettings={this.props.report.DeviceSettings} />
+            <TestResultDeviceIcon
+              result={this.props.report.Result}
+              deviceSettings={this.props.report.DeviceSettings} />
             &nbsp;
-           {this.props.report.Title}
+            {this.props.report.Title}
           </Header>
 
           {
             this.props.report.Outline.Steps.length > 0 &&
-              <Steps steps={this.props.report.Outline.Steps} errorMessage={this.props.report.Screenshots[0] && this.props.report.Screenshots[0].Message} />
+              <Steps
+                steps={this.props.report.Outline.Steps}
+                errorMessage={this.props.report.Screenshots[0] && this.props.report.Screenshots[0].Message} />
           }
 
 

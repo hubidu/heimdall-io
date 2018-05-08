@@ -14,7 +14,7 @@ func main() {
 	// router.MaxMultipartMemory = 8 << 20 // 8 MiB
 
 	router.POST("/upload", uploads.ReceiveZippedReportData)
-	router.GET("/dashboard-url/:ownerkey/:project", dashboard.CreateUrl)
+	router.GET("/dashboard-url/:ownerkey/:project/:runid", dashboard.CreateUrl)
 	router.GET("/tokens/create/:user", tokens.CreateToken)
 
 	router.Run("0.0.0.0:8000")

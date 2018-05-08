@@ -33,7 +33,7 @@ type ReportSlim struct {
 type Report struct {
 	Id             bson.ObjectId `json:"_id,omitempty" bson:"_id,omitempty"`
 	OwnerKey       string        // api key of report creator/owner
-	RunID          string        // id which identifies the test run
+	Runid          string        // id which identifies the test run
 	Project        string        // name/id of the test project
 	HashCategory   uint32
 	ReportFileName string
@@ -68,10 +68,21 @@ type Screenshot struct {
 	ShotAt     int
 	Success    bool
 	Message    string
+	Actual     string
+	Expected   string
 	OrgStack   string
 	Screenshot string
 	Page       Page
+	Cmd        Command
 	CodeStack  []CodeStack
+}
+
+func (s *Screenshot) ComputeHashID() uint32 {
+	if len(s.CodeStack) == 0 {
+		return 0
+	}
+
+	return hash(s.Message + s.CodeStack[0].Location.File + s.CodeStack[0].GetExecutedCommand())
 }
 
 type CodeStack struct {
@@ -89,6 +100,11 @@ func (m *CodeStack) GetExecutedCommand() string {
 	}
 
 	return ret
+}
+
+type Command struct {
+	Name string
+	Args []string
 }
 
 type Page struct {
@@ -110,7 +126,7 @@ type LogEntry struct {
 	Level     string
 	Message   string
 	Source    string
-	Timestamp int32
+	Timestamp int64
 }
 
 type DeviceSettings struct {
@@ -141,11 +157,17 @@ func GetReportFiles(baseDir string) []Report {
 		raw, err := ioutil.ReadFile(path)
 
 		if err != nil {
+			log.Println("Failed to read report file ", path)
 			return nil
 		}
 
 		r := Report{}
-		json.Unmarshal(raw, &r)
+		err = json.Unmarshal(raw, &r)
+
+		if err != nil {
+			log.Println("Failed to parse report file ", path, err)
+			return nil
+		}
 
 		r.ReportFileName = filepath.Base(path)
 		r.ReportDir = strings.Replace(filepath.Dir(path), baseDir, "", -1)
@@ -154,8 +176,7 @@ func GetReportFiles(baseDir string) []Report {
 
 		// Add hashid to all screenshots to find them faster
 		for i, s := range r.Screenshots {
-			screenshotHashID := hash(s.Message + s.CodeStack[0].Location.File + s.CodeStack[0].GetExecutedCommand())
-			r.Screenshots[i].HashID = screenshotHashID
+			r.Screenshots[i].HashID = s.ComputeHashID()
 		}
 
 		fileList = append(fileList, r)

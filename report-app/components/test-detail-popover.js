@@ -17,7 +17,10 @@ export default ({ testPath, lastScreenshot }) =>
       </div>
       <img className="db" src={getScreenshotUrl(testPath, lastScreenshot.Screenshot)} alt={lastScreenshot.Screenshot} />
 
-      <SourceCodeSnippet code={lastScreenshot.CodeStack[0].Source} location={lastScreenshot.CodeStack[0].Location} />
+      {
+        lastScreenshot.CodeStack.length > 0 &&
+          <SourceCodeSnippet code={lastScreenshot.CodeStack[0].Source} location={lastScreenshot.CodeStack[0].Location} />
+      }
 
       <code className="f7 mb3">
         {lastScreenshot.OrgStack}

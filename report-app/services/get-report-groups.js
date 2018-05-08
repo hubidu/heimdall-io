@@ -1,14 +1,14 @@
 import 'isomorphic-fetch'
 import config from './config'
 
-const buildUrl = (opts = {}) => `http://${config.ReportServiceHost}/report-categories?limit=400&ownerkey=${opts.ownerkey}&project=${opts.project || ''}`
+const buildUrl = (opts = {}) => `http://${config.ReportServiceHost}/report-categories?limit=400&ownerkey=${opts.ownerkey}&project=${opts.project || ''}&runid=${opts.runid || ''}`
 
-export default async (ownerkey, project) => {
+export default async (ownerkey, project, runid) => {
     if (!ownerkey) throw new Error('You must provide an ownerkey')
 
     // eslint-disable-next-line no-undef
     const res = await fetch(buildUrl({
-      ownerkey, project
+      ownerkey, project, runid
     }))
     const json = await res.json()
 
