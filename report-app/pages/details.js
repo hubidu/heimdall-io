@@ -30,7 +30,51 @@ const AtSecond = ({shotAt, startShotAt}) =>
     {(shotAt - startShotAt) / 1000}
   </span>
 
+const toString = v => {
+  if (typeof v === 'object') return JSON.stringify(v)
+  return v.toString()
+}
+
 const CommandName = ({screenshot, steps}) => {
+  const getSourceLine = ss => ss.CodeStack[0].Source.find(src => src.Line === ss.CodeStack[0].Location.Line)
+      .Value
+      .replace('await', '')
+      .replace('(', ' (')
+      .trim()
+
+  const FormattedCmdArgs = ({screenshot: ss}) => {
+    const zip = (a1, a2) => {
+      const ret = []
+      return a1.map((item, i) => [a1[i], a2[i]])
+    }
+    const fnValues = ss.Cmd.Args.map(toString)
+
+    if (ss.CodeStack.length > 0) {
+      const sourceLine = getSourceLine(ss)
+      const fnParamsStr = sourceLine.match(/\(\s*([^)]+?)\s*\)/)
+      const fnParams = fnParamsStr[1].split(/\s*,\s*/)
+      const fnParamsAndValues = zip(fnParams, fnValues)
+
+      // TODO Add back the fn param names
+      return (
+        fnParamsAndValues.map((pv, i) =>
+          <span>
+            <strong className="blue">'{pv[1]}'</strong>
+            {i < fnParamsAndValues.length - 1 ? ', ': ''}
+          </span>
+        )
+      )
+    }
+    return (
+      fnValues.map((v, i) =>
+        <span>
+          <strong className="blue">'{v}'</strong>
+          {i < v.length - 1 ? ', ': ''}
+        </span>
+      )
+    )
+}
+
   const correspondingStep = steps.find(step => step.ReachedAt === screenshot.ShotAt)
   if (correspondingStep) {
     return (
@@ -41,24 +85,18 @@ const CommandName = ({screenshot, steps}) => {
     )
   }
 
-  console.log(screenshot)
-
-  if (screenshot.CodeStack.Cmd) {
+  if (screenshot.Cmd.Name) {
     return (
       <span>
-        {screenshot.Cmd.Name}
+        <strong>I {screenshot.Cmd.Name}</strong> <FormattedCmdArgs screenshot={screenshot} />
       </span>
     )
   }
-
+  // Fallback: No cmd
   return (
       <span>
-        {
-          screenshot.CodeStack[0].Source.find(src => src.Line === screenshot.CodeStack[0].Location.Line)
-            .Value
-            .replace('await', '')
-            .replace('(', ' (')
-            .trim()
+        { screenshot.CodeStack.length > 0 &&
+            getSourceLine(screenshot)
         }
       </span>
     )
@@ -98,10 +136,14 @@ const Timeline = ({reportDir, steps, startTimeline, lastSuccessScreenshotOfRepor
                 </Card.Meta>
 
                 <Card.Meta>
-                  <a href={s.Page.Url}>{s.Page.Title}</a>
+                  <a className="f6" href={s.Page.Url}>{s.Page.Title}</a>
                 </Card.Meta>
 
-                <div className="f6 h3">
+                <div className="blue f7">
+                  <a href={s.Page.Url}>{s.Page.Url.slice(0, 80)}</a>
+                </div>
+
+                <div className="mt2 f6 h3">
                   <CommandName screenshot={s} steps={steps} />
                 </div>
 
@@ -121,21 +163,22 @@ const Timeline = ({reportDir, steps, startTimeline, lastSuccessScreenshotOfRepor
                 {
                   s.CodeStack.length > 0 &&
                     <Card.Content extra>
-                    <div className="mt1">
-                    <Collapsible className="mt2" label="Source">
-                      <small>
-                        { s.CodeStack[1] &&
-                          <SourceCodeSnippet code={s.CodeStack[1].Source} location={s.CodeStack[1].Location} />
-                        }
-                          <SourceCodeSnippet code={s.CodeStack[0].Source} location={s.CodeStack[0].Location} />
-                        <pre>
-                        <code>
-                          {s.OrgStack}
-                        </code>
-                      </pre>
-                      </small>
-                    </Collapsible>
-                    </div>
+                      <div className="mt1">
+                        <Collapsible className="mt2" label="Source">
+                          <small>
+                            {
+                              s.CodeStack.map((cs, i) =>
+                                <SourceCodeSnippet key={i} code={cs.Source} location={cs.Location} />
+                              )
+                            }
+                            <pre>
+                              <code>
+                                {s.OrgStack}
+                              </code>
+                            </pre>
+                          </small>
+                        </Collapsible>
+                      </div>
                   </Card.Content>
                 }
               </Card.Content>
@@ -266,7 +309,7 @@ export default class extends React.Component {
     // TODO: To optimize could pass in hashcategory instead of id
     const report = await getReportById(id)
 
-    let historicReports = await getReportsByCategory(hashcategory, {limit: 10, since: report.StartedAt})
+    let historicReports = await getReportsByCategory(hashcategory, {limit: 10, since: report.StartedAt, ownerkey, project})
 
     let lastSuccessScreenshotOfReport
     // TODO Rethink that feature
@@ -300,7 +343,7 @@ export default class extends React.Component {
             report={this.props.report}
             history={this.props.historicReports} />
 
-          <Header as='h2' dividing>
+          <Header as='h2'>
             <TestResultDeviceIcon
               result={this.props.report.Result}
               deviceSettings={this.props.report.DeviceSettings} />
