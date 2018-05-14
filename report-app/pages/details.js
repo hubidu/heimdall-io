@@ -189,9 +189,9 @@ const Timeline = ({reportDir, steps, startTimeline, lastSuccessScreenshotOfRepor
   </div>
 
 
-const RecentFailures = ({failedReports}) =>
+const RecentFailures = ({ownerkey, hashcategory, failedReports}) =>
   <div className="RecentFailures mt4">
-    <h3>Failures on same device ({failedReports.length})</h3>
+    <h3>Other failures on this device ({failedReports.length})</h3>
     <Card.Group itemsPerRow={MAX_RECENT_FAILURES}>
     {
       failedReports.map((r, i) =>
@@ -201,7 +201,7 @@ const RecentFailures = ({failedReports}) =>
               as='a'
               size='tiny'
               floated='right'
-              href={`/details?id=${r._id}`}
+              href={`/details?ownerkey=${ownerkey}&hashcategory=${hashcategory}&id=${r._id}`}
               target='_blank'
               src={getScreenshotUrl(r.ReportDir, r.Screenshots[0].Screenshot)} />
             <Card.Meta>
@@ -216,8 +216,10 @@ const RecentFailures = ({failedReports}) =>
               </small>
             </Card.Meta>
             <Card.Description>
-              <strong>
-                <CommandName screenshot={r.Screenshots[0]} steps={r.Outline.Steps} />
+              <strong className="f6">
+                <CommandName
+                  screenshot={r.Screenshots[0]}
+                  steps={r.Outline.Steps} />
               </strong>
 
               { r.Screenshots[0].Message &&
@@ -309,17 +311,11 @@ export default class extends React.Component {
     // TODO: To optimize could pass in hashcategory instead of id
     const report = await getReportById(id)
 
-    let historicReports = await getReportsByCategory(hashcategory, {limit: 10, since: report.StartedAt, ownerkey, project})
+    // TODO Fix project when project is #All
+    let historicReports = await getReportsByCategory(hashcategory, {limit: 10, since: report.StartedAt, ownerkey})
 
+    // TODO Rethink this
     let lastSuccessScreenshotOfReport
-    // TODO Rethink that feature
-    // if (report.Result === 'error' && report.Screenshots[0].HashID > 0) {
-    //   const res = await getLastSuccessScreenshot(report.DeviceSettings.Type, report.Screenshots[0].HashID)
-    //   if (res) {
-    //     lastSuccessScreenshotOfReport = res[0]
-    //   }
-    //   console.log(lastSuccessScreenshotOfReport)
-    // }
 
     if (historicReports === null) historicReports = []
 
@@ -361,7 +357,11 @@ export default class extends React.Component {
 
           {
             this.props.failedReports.length > 0 &&
-              <RecentFailures reportDir={this.props.report.ReportDir} failedReports={this.props.failedReports} />
+              <RecentFailures
+                ownerkey={this.props.ownerkey}
+                hashcategory={this.props.report.Hashcategory}
+                reportDir={this.props.report.ReportDir}
+                failedReports={this.props.failedReports} />
           }
 
           <Timeline

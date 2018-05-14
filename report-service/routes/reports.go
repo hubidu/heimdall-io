@@ -82,6 +82,7 @@ func GetReportsByCategory(c *gin.Context) {
 	query["startedat"] = bson.M{
 		"$lt": since,
 	}
+
 	// query := bson.M{
 	// 	"hashcategory": hashcategory,
 	// 	"startedat": bson.M{

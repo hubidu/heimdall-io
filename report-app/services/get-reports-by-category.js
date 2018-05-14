@@ -17,7 +17,8 @@ export default async (hashCategory, params = {}) => {
     return {}
   }
   const actualParams = Object.assign({limit: 100}, params)
-  const res = await fetch(`http://${config.ReportServiceHost}/report-categories/${hashCategory}?${serialize(actualParams)}`)
+  const url = `http://${config.ReportServiceHost}/report-categories/${hashCategory}?${serialize(actualParams)}`
+  const res = await fetch(url)
   const json = await res.json()
   return json
 }
