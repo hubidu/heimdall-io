@@ -52,7 +52,7 @@ const CommandName = ({screenshot, steps}) => {
     if (ss.CodeStack.length > 0) {
       const sourceLine = getSourceLine(ss)
       const fnParamsStr = sourceLine.match(/\(\s*([^)]+?)\s*\)/)
-      const fnParams = fnParamsStr[1].split(/\s*,\s*/)
+      const fnParams = fnParamsStr ? fnParamsStr[1].split(/\s*,\s*/) : []
       const fnParamsAndValues = zip(fnParams, fnValues)
 
       // TODO Add back the fn param names
