@@ -136,11 +136,11 @@ const Timeline = ({reportDir, steps, startTimeline, lastSuccessScreenshotOfRepor
                 </Card.Meta>
 
                 <Card.Meta>
-                  <a className="f6" href={s.Page.Url}>{s.Page.Title}</a>
+                  <a className="f6" href={s.Page.Url} target="_blank">{s.Page.Title}</a>
                 </Card.Meta>
 
                 <div className="blue f7">
-                  <a href={s.Page.Url}>{s.Page.Url.slice(0, 80)}</a>
+                  <a href={s.Page.Url} target="_blank">{s.Page.Url.slice(0, 80)}</a>
                 </div>
 
                 <div className="mt2 f6 h3">
