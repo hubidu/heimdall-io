@@ -58,7 +58,7 @@ const CommandName = ({screenshot, steps}) => {
       // TODO Add back the fn param names
       return (
         fnParamsAndValues.map((pv, i) =>
-          <span>
+          <span key={i}>
             <strong className="blue">'{pv[1]}'</strong>
             {i < fnParamsAndValues.length - 1 ? ', ': ''}
           </span>
@@ -67,7 +67,7 @@ const CommandName = ({screenshot, steps}) => {
     }
     return (
       fnValues.map((v, i) =>
-        <span>
+        <span key={i}>
           <strong className="blue">'{v}'</strong>
           {i < v.length - 1 ? ', ': ''}
         </span>
@@ -85,7 +85,7 @@ const CommandName = ({screenshot, steps}) => {
     )
   }
 
-  if (screenshot.Cmd.Name) {
+  if (screenshot.Cmd && screenshot.Cmd.Name) {
     return (
       <span>
         <strong>I {screenshot.Cmd.Name}</strong> <FormattedCmdArgs screenshot={screenshot} />
@@ -123,7 +123,7 @@ const Timeline = ({reportDir, steps, startTimeline, lastSuccessScreenshotOfRepor
                     after <AtSecond shotAt={s.ShotAt} startShotAt={startTimeline} />s
                   </small>
                   {
-                    i === 0 && lastSuccessScreenshotOfReport &&
+                    i === 0 && lastSuccessScreenshotOfReport && lastSuccessScreenshotOfReport.Screenshot &&
                       <small>
                         <a
                           target="_blank"
@@ -132,16 +132,19 @@ const Timeline = ({reportDir, steps, startTimeline, lastSuccessScreenshotOfRepor
                         </a>
                       </small>
                   }
-
                 </Card.Meta>
 
-                <Card.Meta>
-                  <a className="f6" href={s.Page.Url} target="_blank">{s.Page.Title}</a>
-                </Card.Meta>
+                { s.Page &&
+                  <Card.Meta>
+                    <a className="f6" href={s.Page.Url} target="_blank">{s.Page.Title}</a>
+                  </Card.Meta>
+                }
 
-                <div className="blue f7">
-                  <a href={s.Page.Url} target="_blank">{s.Page.Url.slice(0, 80)}</a>
-                </div>
+                { s.Page &&
+                  <div className="blue f7">
+                    <a href={s.Page.Url} target="_blank">{s.Page.Url.slice(0, 80)}</a>
+                  </div>
+                }
 
                 <div className="mt2 f6 h3">
                   <CommandName screenshot={s} steps={steps} />
@@ -197,44 +200,55 @@ const RecentFailures = ({ownerkey, hashcategory, failedReports}) =>
       failedReports.map((r, i) =>
         <Card key={i} color='orange'>
           <Card.Content>
-            <Image
+            { r.Screenshots && r.Screenshots.length > 0 &&
+              <Image
               as='a'
               size='tiny'
               floated='right'
               href={`/details?ownerkey=${ownerkey}&hashcategory=${hashcategory}&id=${r._id}`}
               target='_blank'
               src={getScreenshotUrl(r.ReportDir, r.Screenshots[0].Screenshot)} />
+
+            }
             <Card.Meta>
-              <div>
-                {r.Screenshots[0].Page.Title}
-              </div>
-              <small className='date'>
-                {moment(r.Screenshots[0].ShotAt).fromNow()}
-              </small>
+              { r.Screenshots && r.Screenshots.length > 0 &&
+                <div>
+                  {r.Screenshots[0].Page.Title}
+                </div>
+              }
+              { r.Screenshots && r.Screenshots.length > 0 &&
+                <small className='date'>
+                  {moment(r.Screenshots[0].ShotAt).fromNow()}
+                </small>
+              }
               <small className='date'>
                 {r.Duration}s
               </small>
             </Card.Meta>
             <Card.Description>
               <strong className="f6">
-                <CommandName
-                  screenshot={r.Screenshots[0]}
-                  steps={r.Outline.Steps} />
-              </strong>
+                { r.Screenshots && r.Screenshots.length > 0 && r.Screenshots[0].Message &&
+                  <CommandName
+                    screenshot={r.Screenshots[0]}
+                    steps={r.Outline.Steps} />
+                }
+                </strong>
 
-              { r.Screenshots[0].Message &&
+              { r.Screenshots && r.Screenshots.length > 0 && r.Screenshots[0].Message &&
                 <Label size='medium' basic color="orange" title={r.Screenshots[0].Message}>
                   {trunc(r.Screenshots[0].Message)}
                 </Label>
               }
 
-              <div className="mt1">
-                <Collapsible className="mt2" label="Details">
-                  <small>
-                    <SourceCodeSnippet code={r.Screenshots[0].CodeStack[0].Source} location={r.Screenshots[0].CodeStack[0].Location} />
-                  </small>
-                </Collapsible>
-              </div>
+              { r.Screenshots && r.Screenshots.length > 0 && r.Screenshots[0].CodeStack.length > 0 &&
+                <div className="mt1">
+                  <Collapsible className="mt2" label="Details">
+                    <small>
+                      <SourceCodeSnippet code={r.Screenshots[0].CodeStack[0].Source} location={r.Screenshots[0].CodeStack[0].Location} />
+                    </small>
+                  </Collapsible>
+                </div>
+              }
 
               </Card.Description>
           </Card.Content>

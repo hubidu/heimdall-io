@@ -77,12 +77,34 @@ func sendToDeployerIfRecentDeployment(newAlerts []model.Report, fixedAlerts []mo
 	}
 }
 
+func containsStr(arr []string, str string) bool {
+	for _, item := range arr {
+		if str == item {
+			return true
+		}
+	}
+	return false
+}
+
+func selectConfiguredOwnerkeys(ownerkeys []string, alertableReports []model.Report) []model.Report {
+	result := []model.Report{}
+
+	for _, report := range alertableReports {
+		if containsStr(ownerkeys, report.OwnerKey) {
+			result = append(result, report)
+		}
+	}
+	return result
+}
+
 func AlertTask() {
 	fmt.Println("Checking alerts...")
 	resp, err := service.GetReportCategories()
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	alertConfig := config.NewAlertConfig()
 
 	groupedReports := make(map[uint32]*model.ReportGroup)
 	json.Unmarshal(resp.Body(), &groupedReports)
@@ -97,15 +119,16 @@ func AlertTask() {
 
 	newAlerts, fixedAlerts := UpdateAlertedReports(failedReports, successfulReports)
 
-	if len(newAlerts) > 0 {
-		alertConfig := config.NewAlertConfig()
+	newAlertsForOwnerkeys := selectConfiguredOwnerkeys(alertConfig.Ownerkeys, newAlerts)
+	fixedAlertsForOwnerkeys := selectConfiguredOwnerkeys(alertConfig.Ownerkeys, fixedAlerts)
 
-		fmt.Println("Finishing with new alerts", len(newAlerts))
+	if len(newAlertsForOwnerkeys) > 0 {
+		fmt.Println("Finishing with new alerts", len(newAlertsForOwnerkeys))
 
-		newAlertScreenshots := getScreenshots(newAlerts)
-		email.SendAlert(alertConfig.Recipients, newAlerts, fixedAlerts, newAlertScreenshots)
+		newAlertScreenshots := getScreenshots(newAlertsForOwnerkeys)
+		email.SendAlert(alertConfig.Recipients, newAlertsForOwnerkeys, fixedAlertsForOwnerkeys, newAlertScreenshots)
 
-		sendToDeployerIfRecentDeployment(newAlerts, fixedAlerts, newAlertScreenshots)
+		sendToDeployerIfRecentDeployment(newAlertsForOwnerkeys, fixedAlertsForOwnerkeys, newAlertScreenshots)
 	} else {
 		fmt.Println("Finishing with no new alerts (nothing to do)")
 	}

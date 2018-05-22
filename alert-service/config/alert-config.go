@@ -6,12 +6,17 @@ import (
 )
 
 type AlertConfig struct {
+	Ownerkeys  []string
 	From       string
 	Recipients []string
 }
 
 func NewAlertConfig() *AlertConfig {
-	cfg := AlertConfig{From: os.Getenv("ALERT_FROM"), Recipients: strings.Split(os.Getenv("ALERT_RECIPIENTS"), ",")}
+	cfg := AlertConfig{
+		Ownerkeys:  strings.Split(os.Getenv("ALERT_OWNERKEYS"), ","),
+		From:       os.Getenv("ALERT_FROM"),
+		Recipients: strings.Split(os.Getenv("ALERT_RECIPIENTS"), ","),
+	}
 
 	return &cfg
 }

@@ -12,7 +12,10 @@ export default class IndexPage extends React.Component {
   static async getInitialProps ({ query: { ownerkey, project, runid } }) {
     if (!ownerkey) throw new Error('Please provide your owner key in the query parameters')
 
-    const [tests, deployments] = await Promise.all([getReportGroups(ownerkey, project, runid), getDeployments()])
+    const [tests, deployments] = await Promise.all([
+        getReportGroups(ownerkey, project, runid),
+        // getDeployments()
+    ])
 
     return { ownerkey, project, tests, deployments }
   }
