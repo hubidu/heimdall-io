@@ -3,6 +3,9 @@ import config from './config'
 
 export default async () => {
     // eslint-disable-next-line no-undef
+    if (!config.DeploymentServiceHost) {
+        return [];
+    }
     const res = await fetch(`http://${config.DeploymentServiceHost}/deployments`)
     const json = await res.json() || []
 
