@@ -57,9 +57,9 @@ services:
     links:
       - mongodb
     environment:
-      - BAMBOO_HOST=${BAMBOO_HOST}
-      - BAMBOO_USER=${BAMBOO_USER}
-      - BAMBOO_PASSWORD=${BAMBOO_PASSWORD}
+      - NOTIFICATION_RECIPIENTS=${NOTIFICATION_RECIPIENTS}
+      - HIPCHAT_URL=${HIPCHAT_URL}
+      - HIPCHAT_API_TOKEN=${HIPCHAT_API_TOKEN}
     volumes:
       - /etc/timezone:/etc/timezone
       - /etc/localtime:/etc/localtime

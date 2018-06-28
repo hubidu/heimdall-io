@@ -1,8 +1,6 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	deployments "github.com/hubidu/e2e-backend/deployment-service/routes"
@@ -27,11 +25,7 @@ func main() {
 	r.Use(cors.Default())
 
 	// Routes
-	r.GET("/", func(c *gin.Context) {
-		c.Redirect(http.StatusMovedPermanently, "/deployments")
-	})
-
-	r.GET("/deployments", deployments.List)
+	r.POST("/:api_token/deployments", deployments.Report)
 
 	r.Run("0.0.0.0:8000")
 }

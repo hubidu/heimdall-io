@@ -2,9 +2,6 @@
 - Filter by project and ownerKey in url
 - Show browser name in reports
 - Be able to use the reporter for local test runs (i. e. use a personalized key when running the tests, tag the test results with the key, transfer the test results to the server)
-
-## In Progress
-
 - report-service: go panic
   runtime error: index out of range
   report-service_1      | C:/Go/src/runtime/panic.go:489 (0x42877f)
@@ -13,6 +10,9 @@
   report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/context.go:107 (0x8f2bba)
   report-service_1      | C:/Users/stefan.huber/go/src/github.com/hubidu/e2e-backend/report-lib/middlewares/middlewares.go:23 (0x97ffef)
   report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/context.go:107 (0x8f2bba)
+
+## In Progress
+
 - replace highlight component
 - report list: Show error message even if there are no steps
 - report list: Group failed tests by prefix
