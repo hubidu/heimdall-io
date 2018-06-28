@@ -33,6 +33,8 @@ func Report(c *gin.Context) {
 	var deployment Deployment
 
 	if err := c.ShouldBindJSON(&deployment); err == nil {
+		// TODO Persist deployments
+		// TODO Read notification rules from config
 		msg := fmt.Sprintf("<i>%s</i> just deployed <strong>%s</strong> to <b>%s</b>",
 			deployment.DeployedBy, deployment.Project, deployment.Environment)
 

@@ -4,12 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/hubidu/e2e-backend/alert-service/config"
 	"github.com/hubidu/e2e-backend/alert-service/email"
 	"github.com/hubidu/e2e-backend/alert-service/service"
-	"github.com/hubidu/e2e-backend/report-lib/deployments"
 	"github.com/hubidu/e2e-backend/report-lib/model"
 )
 
@@ -59,23 +57,23 @@ func getScreenshots(reports []model.Report) []service.DownloadedScreenshot {
 	return downloadedScreenshots
 }
 
-func sendToDeployerIfRecentDeployment(newAlerts []model.Report, fixedAlerts []model.Report, newAlertScreenshots []service.DownloadedScreenshot) {
-	recentDeployments := deployments.GetRecentBambooDeployments()
-	if len(recentDeployments) == 0 {
-		return
-	}
+// func sendToDeployerIfRecentDeployment(newAlerts []model.Report, fixedAlerts []model.Report, newAlertScreenshots []service.DownloadedScreenshot) {
+// 	recentDeployments := deployments.GetRecentBambooDeployments()
+// 	if len(recentDeployments) == 0 {
+// 		return
+// 	}
 
-	for _, deployment := range recentDeployments {
-		duration := time.Since(deployment.Finished)
-		if duration.Hours() < 1 {
-			recipients := []string{deployment.Description}
+// 	for _, deployment := range recentDeployments {
+// 		duration := time.Since(deployment.Finished)
+// 		if duration.Hours() < 1 {
+// 			recipients := []string{deployment.Description}
 
-			fmt.Println("There has been a deployment recently. Sending alert also to ", recipients)
+// 			fmt.Println("There has been a deployment recently. Sending alert also to ", recipients)
 
-			email.SendAlert(recipients, newAlerts, fixedAlerts, newAlertScreenshots)
-		}
-	}
-}
+// 			email.SendAlert(recipients, newAlerts, fixedAlerts, newAlertScreenshots)
+// 		}
+// 	}
+// }
 
 func containsStr(arr []string, str string) bool {
 	for _, item := range arr {
@@ -97,6 +95,7 @@ func selectConfiguredOwnerkeys(ownerkeys []string, alertableReports []model.Repo
 	return result
 }
 
+// AlertTask sends out alerts when tests failed
 func AlertTask() {
 	fmt.Println("Checking alerts...")
 	resp, err := service.GetReportCategories()
@@ -127,8 +126,6 @@ func AlertTask() {
 
 		newAlertScreenshots := getScreenshots(newAlertsForOwnerkeys)
 		email.SendAlert(alertConfig.Recipients, newAlertsForOwnerkeys, fixedAlertsForOwnerkeys, newAlertScreenshots)
-
-		sendToDeployerIfRecentDeployment(newAlertsForOwnerkeys, fixedAlertsForOwnerkeys, newAlertScreenshots)
 	} else {
 		fmt.Println("Finishing with no new alerts (nothing to do)")
 	}
