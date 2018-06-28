@@ -16,6 +16,7 @@ type projectInfo struct {
 	Report model.Report
 }
 
+// Build a list of projects with the last executed test
 func buildProjectInfo(projects []string, reports []model.Report) []projectInfo {
 	var ret []projectInfo
 
@@ -44,6 +45,7 @@ func GetByOwnerkey(c *gin.Context) {
 
 	projects = append([]string{"#All"}, projects...)
 
+	// For each project find the last executed test
 	var reports []model.Report
 	for i := range projects {
 		var tmpReports []model.Report
@@ -59,7 +61,14 @@ func GetByOwnerkey(c *gin.Context) {
 				c.AbortWithError(400, err)
 			}
 		}
-		reports = append(reports, tmpReports[0])
+
+		// Don't really understand how this can happen (no test report for a project), but it does
+		if len(tmpReports) > 0 {
+			reports = append(reports, tmpReports[0])
+		} else {
+			// Create a dummy report
+			reports = append(reports, model.Report{Project: projects[i], Title: "Dummy"})
+		}
 	}
 
 	if err != nil {

@@ -5,7 +5,24 @@
 
 ## In Progress
 
+- report-service: go panic
+  runtime error: index out of range
+  report-service_1      | C:/Go/src/runtime/panic.go:489 (0x42877f)
+  report-service_1      | C:/Go/src/runtime/panic.go:28 (0x4273fe)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/hubidu/e2e-backend/report-service/routes/projects.go:62 (0x981c90)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/context.go:107 (0x8f2bba)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/hubidu/e2e-backend/report-lib/middlewares/middlewares.go:23 (0x97ffef)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/context.go:107 (0x8f2bba)
+- replace highlight component
+- report list: Show error message even if there are no steps
+- report list: Group failed tests by prefix
+- report list: Show tags
+- report details: Show browser log entries
+
+
 ## Backlog
+- projects: Add environments
+- report details: Show time of last successful test
 - Add and show time delta between screenshots (in red if time > 5s)
 - Improve time travel detail view: Highlight selected step
 - Detail View: Filter by device
