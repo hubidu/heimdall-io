@@ -35,8 +35,12 @@ type RoomResponse struct {
 
 func ListRooms() []Room {
 	url := fmt.Sprintf("%s/v2/room?auth_token=%s", HipchatURL, APIToken)
-	fmt.Println(url)
-	res, _ := httpclient.Get(url)
+	res, err := httpclient.Get(url)
+
+	if err != nil {
+		fmt.Println("Error in ListRooms", err)
+		return []Room{}
+	}
 
 	roomResponse := RoomResponse{}
 	bodyBytes, _ := res.ReadAll()
@@ -53,9 +57,12 @@ func sendMessage(idOrEmail string, message string) {
 		MessageFormat: "html",
 	}
 
-	fmt.Println("Sending message to ", url, msg)
+	fmt.Println("Sending message to", url, msg)
 
-	httpclient.PostJson(url, msg)
+	_, err := httpclient.PostJson(url, msg)
+	if err != nil {
+		fmt.Println("Error in sendMessage", err)
+	}
 }
 
 func SendMessages(ids []string, message string) {
@@ -71,12 +78,4 @@ func GetRoom(id int) string {
 
 	body, _ := res.ToString()
 	return body
-}
-
-func main() {
-	// rooms := listRooms()
-	// room := getRoom(482)
-	// fmt.Println(room)
-
-	SendMessages([]string{"stefan.huber@check24.de", "foo@bar.de"}, "<strong>Hello</strong> stefan: <ul><li>one</li><li>two</li></ul>")
 }

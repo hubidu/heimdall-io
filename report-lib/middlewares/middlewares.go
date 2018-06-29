@@ -20,7 +20,7 @@ func Connect(c *gin.Context) {
 
 // ErrorHandler is a middleware to handle errors encountered during requests
 func ErrorHandler(c *gin.Context) {
-	c.Next()
+	c.Next() // execute all the handlers
 
 	// TODO: Handle it in a better way
 	if len(c.Errors) > 0 {

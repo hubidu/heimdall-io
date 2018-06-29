@@ -61,6 +61,7 @@ services:
       - HIPCHAT_URL=${HIPCHAT_URL}
       - HIPCHAT_API_TOKEN=${HIPCHAT_API_TOKEN}
     volumes:
+      - /etc/ssl/certs:/etc/ssl/certs
       - /etc/timezone:/etc/timezone
       - /etc/localtime:/etc/localtime
 
