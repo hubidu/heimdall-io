@@ -68,4 +68,14 @@ func InitializeIndexes() {
 		panic(err)
 	}
 
+	index = mgo.Index{
+		Key:        []string{"startedat: 1"},
+		Background: true,
+	}
+
+	err = c.EnsureIndex(index)
+	if err != nil {
+		panic(err)
+	}
+
 }
