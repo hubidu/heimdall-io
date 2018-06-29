@@ -13,6 +13,30 @@
 
 ## In Progress
 
+- report-categories can be quite slow
+  report-service_1      | [GIN] 2018/06/29 - 09:01:40 | 200 |  4.060424067s |    172.30.23.32 | GET      /report-categories/3913910824?limit=10&since=1530198485638&ownerkey=6u55aqpDX5
+- another go panic
+  runtime error: invalid memory address or nil pointer dereference
+  report-service_1      | C:/Go/src/runtime/panic.go:489 (0x42877f)
+  report-service_1      | C:/Go/src/runtime/panic.go:63 (0x42762e)
+  report-service_1      | C:/Go/src/runtime/signal_unix.go:290 (0x43d7bf)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/context.go:654 (0x8f5abe)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/hubidu/e2e-backend/report-lib/middlewares/middlewares.go:29 (0x980113)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/context.go:107 (0x8f2bba)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/hubidu/e2e-backend/report-lib/middlewares/middlewares.go:18 (0x97fec7)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/context.go:107 (0x8f2bba)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-contrib/gzip/gzip.go:47 (0x90a451)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/context.go:107 (0x8f2bba)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/recovery.go:47 (0x9056ba)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/context.go:107 (0x8f2bba)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/logger.go:83 (0x9047de)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/context.go:107 (0x8f2bba)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/gin.go:359 (0x8fbf05)
+  report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/gin.go:326 (0x8fb62b)
+  report-service_1      | C:/Go/src/net/http/server.go:2568 (0x6604f2)
+  report-service_1      | C:/Go/src/net/http/server.go:1825 (0x65c6f2)
+  report-service_1      | C:/Go/src/runtime/asm_amd64.s:2197 (0x4548f1)
+
 - replace highlight component
 - report list: Show error message even if there are no steps
 - report list: Group failed tests by prefix

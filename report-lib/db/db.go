@@ -49,10 +49,21 @@ func InitializeIndexes() {
 	c := Session.DB("e2e").C("reports")
 
 	index := mgo.Index{
-		Key: []string{"hashcategory: 1"},
+		Key:        []string{"hashcategory: 1"},
+		Background: true,
 	}
 
 	err := c.EnsureIndex(index)
+	if err != nil {
+		panic(err)
+	}
+
+	index = mgo.Index{
+		Key:        []string{"ownerkey: 1"},
+		Background: true,
+	}
+
+	err = c.EnsureIndex(index)
 	if err != nil {
 		panic(err)
 	}
