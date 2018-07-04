@@ -24,7 +24,7 @@ type Room struct {
 // Message is a hipchat message
 type Message struct {
 	Message       string `json:"message"`
-	Notify        string `json:"notify"`
+	Notify        bool   `json:"notify"`
 	MessageFormat string `json:"message_format"`
 }
 
@@ -34,7 +34,7 @@ type RoomResponse struct {
 }
 
 func ListRooms() []Room {
-	url := fmt.Sprintf("%s/v2/room?auth_token=%s", HipchatURL, APIToken)
+	url := fmt.Sprintf("%s/v2/room?auth_token=%s&max-results=1000", HipchatURL, APIToken)
 	res, err := httpclient.Get(url)
 
 	if err != nil {
@@ -49,11 +49,27 @@ func ListRooms() []Room {
 	return roomResponse.Items
 }
 
+func SendMessageToRoom(roomIdOrName string, message string) {
+	url := fmt.Sprintf("%s/v2/room/%s/notification?auth_token=%s", HipchatURL, roomIdOrName, APIToken)
+	msg := Message{
+		Message:       message,
+		Notify:        true,
+		MessageFormat: "html",
+	}
+
+	fmt.Println("Sending message to room", url, msg)
+
+	_, err := httpclient.PostJson(url, msg)
+	if err != nil {
+		fmt.Println("Error in SendMessageToRoom", err)
+	}
+}
+
 func sendMessage(idOrEmail string, message string) {
 	url := fmt.Sprintf("%s/v2/user/%s/message?auth_token=%s", HipchatURL, idOrEmail, APIToken)
 	msg := Message{
 		Message:       message,
-		Notify:        "true",
+		Notify:        true,
 		MessageFormat: "html",
 	}
 
