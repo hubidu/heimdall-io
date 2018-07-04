@@ -83,13 +83,6 @@ func GetReportsByCategory(c *gin.Context) {
 		"$lt": since,
 	}
 
-	// query := bson.M{
-	// 	"hashcategory": hashcategory,
-	// 	"startedat": bson.M{
-	// 		"$lt": since,
-	// 	},
-	// }
-
 	err := db.C(ReportsCollection).Find(query).Sort("-_id").Limit(limit).All(&reports)
 	if err != nil {
 		c.Error(err)

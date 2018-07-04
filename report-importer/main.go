@@ -16,6 +16,10 @@ func init() {
 	db.Connect()
 }
 
+func deleteOldReports() {
+	CleanupOldReports(7)
+}
+
 func importJob(baseDir string, removeReportFiles bool) {
 	reports := model.GetReportFiles(baseDir)
 
@@ -23,12 +27,12 @@ func importJob(baseDir string, removeReportFiles bool) {
 		fmt.Println("Importing reports from directory " + baseDir + " ...")
 
 		// TODO Should not insert duplicate reports
-		insertReportsIntoDB(reports)
+		InsertReportsIntoDB(reports)
 
 		fmt.Println("Inserted " + strconv.Itoa(len(reports)) + " report files into database ...")
 
 		if removeReportFiles {
-			fmt.Println("Renaming report files ...")
+			// fmt.Println("Renaming report files ...")
 			for _, report := range reports {
 				reportFileName := path.Join(baseDir, report.ReportDir, report.ReportFileName)
 				os.Rename(reportFileName, path.Join(baseDir, report.ReportDir, "report_imported.json"))
@@ -62,6 +66,7 @@ func main() {
 	}
 
 	gocron.Every(intervalInSeconds).Seconds().Do(importJobTask)
+	gocron.Every(1).Sunday().At("05:00").Do(deleteOldReports)
 
 	<-gocron.Start()
 }
