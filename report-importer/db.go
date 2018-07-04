@@ -41,7 +41,7 @@ func CleanupOldReports(daysAgo int) {
 
 	_, err := coll.RemoveAll(bson.M{
 		"startedat": bson.M{
-			"$lt": time.Now().AddDate(0, 0, -daysAgo),
+			"$lt": time.Now().AddDate(0, 0, -daysAgo).Unix() * 1000,
 		},
 	})
 

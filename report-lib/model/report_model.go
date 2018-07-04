@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/json"
+	"fmt"
 	"hash/fnv"
 	"io/ioutil"
 	"log"
@@ -32,6 +33,7 @@ type ReportSlim struct {
 
 type Report struct {
 	Id             bson.ObjectId `json:"_id,omitempty" bson:"_id,omitempty"`
+	Environment    string        // test environment: dev, int, staging, production
 	OwnerKey       string        // api key of report creator/owner
 	Runid          string        // id which identifies the test run
 	Project        string        // name/id of the test project
@@ -47,6 +49,7 @@ type Report struct {
 	Result         string
 	Duration       float32
 	Outline        Outline
+	Tags           []string // Test tags extracted from title and prefix
 	Screenshots    []Screenshot
 	Logs           []LogEntry
 	DeviceSettings DeviceSettings
@@ -171,7 +174,8 @@ func GetReportFiles(baseDir string) []Report {
 
 		r.ReportFileName = filepath.Base(path)
 		r.ReportDir = strings.Replace(filepath.Dir(path), baseDir, "", -1)
-		r.HashCategory = hash(r.FullTitle)
+		// Compute a hash so same test on different envs and projects can be grouped together
+		r.HashCategory = hash(fmt.Sprintf("%s_%s", r.Prefix, r.Title))
 		r.Started = time.Unix(r.StartedAt/1000, 0)
 
 		// Add hashid to all screenshots to find them faster
