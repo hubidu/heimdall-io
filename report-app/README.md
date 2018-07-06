@@ -15,7 +15,9 @@
 
 - report-categories can be quite slow
   report-service_1      | [GIN] 2018/06/29 - 09:01:40 | 200 |  4.060424067s |    172.30.23.32 | GET      /report-categories/3913910824?limit=10&since=1530198485638&ownerkey=6u55aqpDX5
-
+- Mark corresponding part of the test in the code
+- Show success/failure bars per device
+- Make success/failure bars smaller/narrower
 - replace highlight component
 - report list: Show error message even if there are no steps
 - report list: Group failed tests by prefix

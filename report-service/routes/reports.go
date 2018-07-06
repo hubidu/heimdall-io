@@ -3,6 +3,7 @@ package routes
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/hubidu/e2e-backend/report-lib/model"
 
@@ -33,6 +34,11 @@ func buildQuery(c *gin.Context) bson.M {
 	runid := c.Query("runid")
 	if runid != "" {
 		m["runid"] = runid
+	}
+
+	maxAgeDays, _ := strconv.Atoi(c.DefaultQuery("max-age-days", "30"))
+	m["startedat"] = bson.M{
+		"$gt": time.Now().AddDate(0, 0, -maxAgeDays).Unix() * 1000,
 	}
 
 	return m

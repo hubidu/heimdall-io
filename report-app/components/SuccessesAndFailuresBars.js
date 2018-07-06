@@ -8,7 +8,7 @@ const BarWidth = 10
 const BarGap = 2
 const Height = 20
 
-const color = success => success ? '#19a974' : '#ff6300'
+const color = success => success ? '#23d160' : '#ff3860'
 const selectedColor = selected => selected ? 'blue' : '#eee'
 const byDate = (a, b) => {
   return a.t - b.t
@@ -34,7 +34,7 @@ export default ({ data, markers = [], selectedBar = -1, labelFormatFn = defaultL
       {
         mappedData.map((d, i) =>
           <a href={d.href} key={i}
-            style={{'position': 'relative', display: 'inline-block', width: `${BarWidth}px`, 'height': `100%`, 'marginRight': `${BarGap}px`, 'backgroundColor': `#eee`, 'borderBottom': `2px solid ${selectedColor(selectedBar === i)}`}}
+            style={{'position': 'relative', display: 'inline-block', width: `${BarWidth}px`, 'height': `100%`, 'marginRight': `${BarGap}px`, 'backgroundColor': `#fff`, 'borderBottom': `2px solid ${selectedColor(selectedBar === i)}`}}
             title={labelFormatFn(d)}
             onClick={ev => onBarClicked(i)}
             >
