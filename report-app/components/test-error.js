@@ -10,7 +10,7 @@ const trunc = (msg, MaxLen = 80) => {
 export default ({screenshot}) =>
   screenshot &&
   <div className="TestError">
-    <p className="TestError-title has-text-danger is-size-6">
+    <p className="TestError-title has-text-danger">
       '
       {
         trunc(screenshot.Message)

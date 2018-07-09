@@ -9,11 +9,13 @@ import ScreenshotView from '../components/screenshot-view'
 import getReportById from '../services/get-report-by-id'
 import getTestSource from '../services/get-test-source'
 
+const lastOf = arr => arr && arr.length > 0 ? arr[arr.length - 1] : undefined
+
 const annotateSource = (source, screenshots) => {
   const sourceLines = source.split('\n')
 
   const getMeta = (l, i) => {
-    const screenshot = screenshots.find(screenshot => screenshot.CodeStack[0].Location.Line === i)
+    const screenshot = screenshots.find(screenshot => lastOf(screenshot.CodeStack).Location.Line === i)
     if(screenshot) return screenshot
     return
   }
@@ -27,8 +29,8 @@ const annotateSource = (source, screenshots) => {
 }
 
 const getEditorState = screenshots => {
-  const maxLine = screenshots[0].CodeStack[0].Location.Line
-  const minLine = screenshots[screenshots.length-1].CodeStack[0].Source[0].Line
+  const maxLine = lastOf(screenshots[0].CodeStack).Location.Line // test stackframe of last screenshot
+  const minLine = lastOf(lastOf(screenshots).CodeStack).Source[0].Line // test stackframe of first screenshot
   const filepath = screenshots[0].CodeStack[0].Location.File
 
   return {
@@ -37,6 +39,8 @@ const getEditorState = screenshots => {
     filepath,
   }
 }
+
+const defaultSelectScreenshot = report => report.Screenshots && report.Screenshots.length > 0 && report.Screenshots[0]
 
 export default class extends React.Component {
   static async getInitialProps ({ query: { ownerkey, project, id, hashcategory } }) {
@@ -66,7 +70,7 @@ export default class extends React.Component {
 
   componentDidMount() {
     this.setState({
-      selectedScreenshot: this.props.report.Screenshots[0],
+      selectedScreenshot: defaultSelectScreenshot(this.props.report),
       selectedLine: this.props.editorState.selectedLine,
     })
   }
@@ -94,7 +98,7 @@ export default class extends React.Component {
             </div>
 
             <div className="column">
-              <TestTitle report={this.props.report} />
+              <TestTitle report={this.props.report} isListView={false}/>
             </div>
 
           </div>
@@ -113,7 +117,7 @@ export default class extends React.Component {
               />
             </div>
 
-            <div className="column">
+            <div className="column ScreenshotViewContainer">
               <ScreenshotView
                 reportDir={this.props.report.ReportDir}
 
@@ -124,6 +128,12 @@ export default class extends React.Component {
           </div>
 
         </div>
+        <style jsx>{`
+        .ScreenshotViewContainer {
+          position: relative;
+        }
+        `}</style>
+
       </Layout>
     )
   }

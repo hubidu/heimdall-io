@@ -18,31 +18,39 @@ const hasData = title => title.indexOf('|') > -1
 const extractTitle = title => title.indexOf('|') >= 0 ? title.split('|')[0] : title
 const extractTitleData = title => title.indexOf('|') >= 0 ? title.split('|')[1] : undefined
 
-export default ({ownerkey, project, hashcategory, report}) =>
+export default ({ownerkey, project, hashcategory, report, isListView = true}) =>
   <div className="TestTitle">
     <div className="has-text-grey is-size-7">
       {report.Prefix.replace(/--/gi, '/')}
     </div>
 
-    <div>
-      <Link href={linkToReportDetails(ownerkey, project, report._id, hashcategory)}>
-        <a>
-          <b className="hast-text-dark">{extractTitle(report.Title)}</b>
-        </a>
-      </Link>
+    <div className="TestTitle-title">
+    {
+      isListView ?
+        <Link href={linkToReportDetails(ownerkey, project, report._id, hashcategory)}>
+          <a>
+            <b className="hast-text-dark">{extractTitle(report.Title)}</b>
+          </a>
+        </Link>
+        :
+        <strong>{extractTitle(report.Title)}</strong>
+    }
     </div>
 
-    { report.Tags && report.Tags.length > 0 &&
-      <div>
+    <div>
+      { report.Environment &&
+        <small className="tag is-info">
+          {report.Environment}
+        </small>
+      }
       {
-        report.Tags.map((tag, i) =>
+          report.Tags && report.Tags.length > 0 && report.Tags.map((tag, i) =>
           <small key={i} className="tag is-light has-text-link">
             {tag}
           </small>
         )
       }
-     </div>
-    }
+    </div>
 
     {
       hasData(report.Title) &&
@@ -52,6 +60,10 @@ export default ({ownerkey, project, hashcategory, report}) =>
     }
     <style jsx>{`
     .TestTitle {
+    }
+
+    .TestTitle-title {
+      font-size: 0.9rem;
     }
     `}</style>
   </div>

@@ -17,6 +17,10 @@ import Highlight from 'react-highlight'
     </span></div>
  */
 
+const truncLeft = (str, max = 80) => {
+  if (str.length <= max) return str
+  return '...' + str.slice(str.length - max)
+}
 
 const sourceCode = (code, location) => code
     .map(entry => {
@@ -26,11 +30,18 @@ const sourceCode = (code, location) => code
     }).join('\n')
 
 export default ({ code, location }) =>
-    <div className="ma1">
-        <div className={'black-50'}>
-            {location.File}
-        </div>
+    <div className="SourceCodeSnippet">
+        <p>
+            {truncLeft(location.File)}
+        </p>
         <Highlight className="javascript">
             {sourceCode(code, location)}
         </Highlight>
+        <style jsx>{`
+        .SourceCodeSnippet {
+        }
+        .SourceCodeSnippet > pre {
+          padding: 0 !important;
+        }
+        `}</style>
     </div>

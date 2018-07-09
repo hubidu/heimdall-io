@@ -10,22 +10,24 @@
   report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/context.go:107 (0x8f2bba)
   report-service_1      | C:/Users/stefan.huber/go/src/github.com/hubidu/e2e-backend/report-lib/middlewares/middlewares.go:23 (0x97ffef)
   report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/context.go:107 (0x8f2bba)
+- report list: Show error message even if there are no steps
+- report list: Show tags
+- Show label for environment
+- Mark corresponding part of the test in the code
+- Link Page url and title
 
 ## In Progress
 
-- report-categories can be quite slow
-  report-service_1      | [GIN] 2018/06/29 - 09:01:40 | 200 |  4.060424067s |    172.30.23.32 | GET      /report-categories/3913910824?limit=10&since=1530198485638&ownerkey=6u55aqpDX5
-- Mark corresponding part of the test in the code
+- Crop test code
+- Need a magnifying glass or open screenshot in separate tab
 - Show success/failure bars per device
 - Make success/failure bars smaller/narrower
-- replace highlight component
-- report list: Show error message even if there are no steps
 - report list: Group failed tests by prefix
-- report list: Show tags
 - report details: Show browser log entries
-
+- Format filepath as <filename> - <path>
 
 ## Backlog
+- Source Code view: Show all stackframes except that of test
 - report not showing ALL reports (http://veve-dev-test-01.intern.v.check24.de:4000/tests?ownerkey=sIzM3ZEHRb&project=%23All)
 - codeceptjs: report not grouping same test in different projects correctly
 - projects: Add environments

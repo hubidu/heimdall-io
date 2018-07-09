@@ -1,4 +1,5 @@
 import TestError from '../components/test-error'
+import TestSourceStacktrace from '../components/test-source-stacktrace'
 
 const truncLeft = (str, max = 80) => {
   if (str.length <= max) return str
@@ -13,18 +14,30 @@ const backgroundColor = meta => {
   return ''
 }
 
+function round(value, precision) {
+  var multiplier = Math.pow(10, precision || 0);
+  return Math.round(value * multiplier) / multiplier;
+}
+const formatRelTime = (startedAt, meta) => round((meta.ShotAt - startedAt) / 1000, 1)
+
+const hasMetaInfo = line => line.meta
+const hasMoreThanOneStackframe = line => line.meta.CodeStack && line.meta.CodeStack.length > 1
+
+
 const TestSourceLine = ({startedAt, selected, isInRange, lineNo, line, onClick}) =>
   <div
-    className={`TestSourceLine ${line.meta ? 'TestSourceLine--selectable' : ''}`}
+    className={`TestSourceLine ${hasMetaInfo(line) ? 'TestSourceLine--selectable' : ''} ${selected ? 'TestSourceLine--selected' : ''}`}
     key={lineNo}
-    onClick={(e) => onClick && line.meta && onClick({
+    onClick={(e) => onClick &&
+       hasMetaInfo(line) &&
+       onClick({
       lineNo,
       line
     })}>
 
     <div className={`${isInRange ? 'has-text-dark' : ''}`}>
       <span className="TestSourceLine-relTime has-text-grey">
-        {`${line.meta ? (line.meta.ShotAt - startedAt) / 1000 : '' }`}
+        {`${line.meta ? formatRelTime(startedAt, line.meta) : '' }`}
       </span>
 
       <span className={`TestSourceLine-indicator ${backgroundColor(line.meta)}`}>&nbsp;</span>
@@ -38,14 +51,15 @@ const TestSourceLine = ({startedAt, selected, isInRange, lineNo, line, onClick})
       </span>
     </div>
     {
-      selected && line.meta && line.meta.Success === true &&
-        <div className="is-clipped">
-        TODO Nothing to show when there is just the test stackframe <br/>
-        {line.meta.CodeStack[line.meta.CodeStack.length - 1].Location.File}
-        </div>
+      selected &&
+      hasMetaInfo(line) &&
+      hasMoreThanOneStackframe(line) &&
+      line.meta.Success === true &&
+        <TestSourceStacktrace stack={line.meta.CodeStack} />
     }
     {
-      line.meta && line.meta.Success === false &&
+      hasMetaInfo(line) &&
+      line.meta.Success === false &&
         <div className="TestSourceLine-errorBox is-clipped">
           <TestError screenshot={line.meta} />
         </div>
@@ -62,10 +76,13 @@ const TestSourceLine = ({startedAt, selected, isInRange, lineNo, line, onClick})
     }
     .TestSourceLine--selectable {
       font-weight: bold;
+      background-color: #eee;
     }
     .TestSourceLine--selectable:hover {
       cursor: pointer;
-      background-color: #eee;
+      background-color: #ccc;
+    }
+    .TestSourceLine--selected {
     }
     .TestSourceLine-indicator {
       display: inline-block;
@@ -97,19 +114,21 @@ export default ({startedAt, filepath, source, selectedLine, lineRange, onClickLi
       {truncLeft(filepath)}
     </p>
     <pre className="TestSourceView-content has-text-grey-light has-background-white is-size-7">
-    {
-      source.map((l, i) =>
-        <TestSourceLine
-          key={i}
-          startedAt={startedAt}
-          selected={selectedLine === i + 1}
-          isInRange={isInRange(lineRange, i)}
-          lineNo={i + 1}
-          line={l}
-          onClick={(e) => onClickLine && onClickLine(e)}
-        />
-      )
-    }
+      <code>
+      {
+        source.map((l, i) =>
+          <TestSourceLine
+            key={i}
+            startedAt={startedAt}
+            selected={selectedLine === i + 1}
+            isInRange={isInRange(lineRange, i)}
+            lineNo={i + 1}
+            line={l}
+            onClick={(e) => onClickLine && onClickLine(e)}
+          />
+        )
+      }
+      </code>
     </pre>
     <style jsx>{`
     .TestSourceView-content {

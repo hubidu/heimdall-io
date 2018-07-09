@@ -25,7 +25,7 @@ export default ({ children, title = '', ownerkey, showNav = true }) => (
       <nav className="navbar is-transparent">
       <div className="navbar-brand">
         <strong className="navbar-item has-text-black is-size-5" href="https://bulma.io">
-          heimdall.io
+          heimdal.io
         </strong>
         <div className="navbar-burger burger" data-target="navbarExampleTransparentExample">
           <span></span>
