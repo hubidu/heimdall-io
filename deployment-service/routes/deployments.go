@@ -65,7 +65,11 @@ func Report(c *gin.Context) {
 		// TODO Read notification rules from config
 		msg, _ := FormatMessage(&deployment)
 
-		hipchat.SendMessageToRoom(NotificationRecipients, msg)
+		err := hipchat.SendMessageToRoom(NotificationRecipients, msg)
+		if err != nil {
+			// Hacky retry
+			hipchat.SendMessageToRoom(NotificationRecipients, msg)
+		}
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}

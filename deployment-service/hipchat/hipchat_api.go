@@ -33,6 +33,7 @@ type RoomResponse struct {
 	Items []Room `json:"items"`
 }
 
+// ListRooms lists hipchat rooms
 func ListRooms() []Room {
 	url := fmt.Sprintf("%s/v2/room?auth_token=%s&max-results=1000", HipchatURL, APIToken)
 	res, err := httpclient.Get(url)
@@ -49,7 +50,8 @@ func ListRooms() []Room {
 	return roomResponse.Items
 }
 
-func SendMessageToRoom(roomIdOrName string, message string) {
+// SendMessageToRoom sends a hipchat message to the specified room
+func SendMessageToRoom(roomIdOrName string, message string) error {
 	url := fmt.Sprintf("%s/v2/room/%s/notification?auth_token=%s", HipchatURL, roomIdOrName, APIToken)
 	msg := Message{
 		Message:       message,
@@ -63,6 +65,8 @@ func SendMessageToRoom(roomIdOrName string, message string) {
 	if err != nil {
 		fmt.Println("Error in SendMessageToRoom", err)
 	}
+
+	return err
 }
 
 func sendMessage(idOrEmail string, message string) {
@@ -81,12 +85,14 @@ func sendMessage(idOrEmail string, message string) {
 	}
 }
 
+// SendMessages sends a message to multiple recipients
 func SendMessages(ids []string, message string) {
 	for _, id := range ids {
 		sendMessage(id, message)
 	}
 }
 
+// GetRoom gets information for a hipchat room
 func GetRoom(id int) string {
 	url := fmt.Sprintf("%s/v2/room/%d?auth_token=%s", HipchatURL, id, APIToken)
 	fmt.Println(url)
