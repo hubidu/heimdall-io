@@ -1,9 +1,9 @@
 import React from 'react'
-import { Header, Icon } from 'semantic-ui-react'
 import Layout from '../components/layout'
 
 import FileIcon from 'react-icons/lib/fa/file-text'
 import TestReportList from '../components/test-report-list'
+import TestResultMeter from '../components/test-result-meter'
 
 import getReportGroups from '../services/get-report-groups'
 
@@ -32,9 +32,7 @@ export default class IndexPage extends React.Component {
             Owner: {this.props.ownerkey}. Your recent test results.
           </h2>
 
-          <progress className="progress is-success" value={this.props.tests.succeeded.length} max={this.props.tests.succeeded.length + this.props.tests.failed.length}>
-            {this.props.tests.succeeded.length} of {this.props.tests.succeeded.length + this.props.tests.failed.length}
-          </progress>
+          <TestResultMeter errorPct={this.props.tests.failed.length / this.props.tests.succeeded.length + this.props.tests.failed.length} />
 
           {
             this.props.tests.failed.length > 0 ?

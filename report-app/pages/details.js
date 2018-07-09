@@ -8,6 +8,7 @@ import ScreenshotView from '../components/screenshot-view'
 
 import getReportById from '../services/get-report-by-id'
 import getTestSource from '../services/get-test-source'
+import getBrowserlogs from '../services/get-browserlogs'
 
 const lastOf = arr => arr && arr.length > 0 ? arr[arr.length - 1] : undefined
 
@@ -47,10 +48,13 @@ export default class extends React.Component {
     if (!ownerkey) throw new Error('Please provide your owner key in the query parameters')
 
     const report = await getReportById(id)
-    const source = await getTestSource(report.ReportDir)
+    const [source, browserlogs] = await Promise.all([
+      await getTestSource(report.ReportDir),
+      await getBrowserlogs(report.ReportDir),
+    ])
 
     const editorState = getEditorState(report.Screenshots)
-    console.log(editorState)
+    console.log(browserlogs)
 
     return {
       ownerkey,
