@@ -21,6 +21,15 @@ const truncLeft = (str, max = 80) => {
   if (str.length <= max) return str
   return '...' + str.slice(str.length - max)
 }
+const filePathSplit = filepath => {
+  let parts = filepath.split('\\')
+  if (parts.length === 0) parts = filepath.split('/')
+
+  return {
+    file: parts[parts.length - 1],
+    path: parts.slice(1, parts.length - 1).join('/')
+  }
+}
 
 const sourceCode = (code, location) => code
     .map(entry => {
@@ -31,9 +40,11 @@ const sourceCode = (code, location) => code
 
 export default ({ code, location }) =>
     <div className="SourceCodeSnippet">
-        <p>
-            {truncLeft(location.File)}
+        <p className="has-text-grey is-size-7">
+        {filePathSplit(location.File).file}
+          <span className="has-text-grey-light"> - {filePathSplit(location.File).path}</span>
         </p>
+
         <Highlight className="javascript">
             {sourceCode(code, location)}
         </Highlight>

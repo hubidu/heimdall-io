@@ -1,7 +1,6 @@
 import React from 'react'
 import Layout from '../components/layout'
 
-import FileIcon from 'react-icons/lib/fa/file-text'
 import TestReportList from '../components/test-report-list'
 import TestResultMeter from '../components/test-result-meter'
 
@@ -25,7 +24,6 @@ export default class IndexPage extends React.Component {
       <Layout {...attrs}>
         <div className="container is-fluid">
           <h1 className="title">
-            <FileIcon />
             Project {this.props.project}
           </h1>
           <h2 className="subtitle">
@@ -36,11 +34,11 @@ export default class IndexPage extends React.Component {
 
           {
             this.props.tests.failed.length > 0 ?
-            <h5 className="is-spaced has-text-grey-light">
-              <span className="tag is-danger">
-              {Object.keys(this.props.tests.failed).length}
+            <h5 className="title is-5">
+            Tests that failed recently&nbsp;
+             <span className="tag is-danger">
+                {Object.keys(this.props.tests.failed).length}
               </span>
-              &nbsp;tests failed recently
             </h5>
             : null
           }
@@ -56,11 +54,11 @@ export default class IndexPage extends React.Component {
 
           {
             this.props.tests.succeeded.length > 0 ?
-            <h5 className="is-spaced has-text-grey-light">
+            <h5 className="title is-5" style={{'marginTop': '10px'}}>
+              All tests&nbsp;
               <span className="tag is-dark">
                 {Object.keys(this.props.tests.succeeded).length}
               </span>
-              &nbsp; total tests
             </h5>
             : null
           }

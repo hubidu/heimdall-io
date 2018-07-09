@@ -1,9 +1,14 @@
 import TestError from '../components/test-error'
 import TestSourceStacktrace from '../components/test-source-stacktrace'
 
-const truncLeft = (str, max = 80) => {
-  if (str.length <= max) return str
-  return '...' + str.slice(str.length - max)
+const filePathSplit = filepath => {
+  let parts = filepath.split('\\')
+  if (parts.length === 0) parts = filepath.split('/')
+
+  return {
+    file: parts[parts.length - 1],
+    path: parts.slice(1, parts.length - 1).join('/')
+  }
 }
 
 const backgroundColor = meta => {
@@ -51,18 +56,17 @@ const TestSourceLine = ({startedAt, selected, isInRange, lineNo, line, onClick})
       </span>
     </div>
     {
-      selected &&
-      hasMetaInfo(line) &&
-      hasMoreThanOneStackframe(line) &&
-      line.meta.Success === true &&
-        <TestSourceStacktrace stack={line.meta.CodeStack} />
-    }
-    {
       hasMetaInfo(line) &&
       line.meta.Success === false &&
         <div className="TestSourceLine-errorBox is-clipped">
           <TestError screenshot={line.meta} />
         </div>
+    }
+    {
+      selected &&
+      hasMetaInfo(line) &&
+      hasMoreThanOneStackframe(line) &&
+        <TestSourceStacktrace stack={line.meta.CodeStack} />
     }
 
     <style jsx>{`
@@ -110,8 +114,9 @@ const isInRange = (range, lineNo) => range && (lineNo >= range[0] && lineNo <= r
 
 export default ({startedAt, filepath, source, selectedLine, lineRange, onClickLine}) =>
   <div>
-    <p className="has-text-grey-light is-size-7">
-      {truncLeft(filepath)}
+    <p className="has-text-grey is-size-7">
+      {filePathSplit(filepath).file}
+      <span className="has-text-grey-light"> - {filePathSplit(filepath).path}</span>
     </p>
     <pre className="TestSourceView-content has-text-grey-light has-background-white is-size-7">
       <code>
