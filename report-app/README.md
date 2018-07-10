@@ -19,17 +19,19 @@
 - Make a nice progress bar
 - Format filepath as <filename> - <path>
 - source code file name is incorrect
+- Show user name
 
 ## In Progress
 
-- Show user name
+- Show success/failure bars per device
+- Show text when source code is not available anymore
 - report details: Show browser log entries (webdriverio and puppeteer are different)
 - Crop test code
-- Show success/failure bars per device
 - Make success/failure bars smaller/narrower
 - report list: Group failed tests by prefix
 - report list: Make expected/actual expandable
 - details: when test failed: Provide a link to the last successful run
+- Use bulma also on projects page
 
 ## Backlog
 - Source Code view: Show all stackframes except that of test

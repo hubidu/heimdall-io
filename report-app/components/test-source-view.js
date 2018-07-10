@@ -1,6 +1,8 @@
 import TestError from '../components/test-error'
 import TestSourceStacktrace from '../components/test-source-stacktrace'
 
+import round from '../services/utils/round'
+
 const filePathSplit = filepath => {
   let parts = filepath.split('\\')
   if (parts.length === 0) parts = filepath.split('/')
@@ -19,10 +21,6 @@ const backgroundColor = meta => {
   return ''
 }
 
-function round(value, precision) {
-  var multiplier = Math.pow(10, precision || 0);
-  return Math.round(value * multiplier) / multiplier;
-}
 const formatRelTime = (startedAt, meta) => round((meta.ShotAt - startedAt) / 1000, 1)
 
 const hasMetaInfo = line => line.meta

@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 import TestResultDeviceIcon from '../components/test-result-device-icon'
-import SuccessesAndFailuresBars from '../components/SuccessesAndFailuresBars'
+import TestHistoryBars from '../components/test-history-bars'
 import TestError from '../components/test-error'
 import TestTitle from '../components/test-title'
 
@@ -29,7 +29,7 @@ export default({ownerkey, project, reportGroup = [], showErrors = false}) =>
       }
     </div>
     <div className="column is-hidden-mobile">
-      <SuccessesAndFailuresBars
+      <TestHistoryBars
         data={mapToSuccessAndFailure(reportGroup.Items)}
         maxBars={10}
       />
