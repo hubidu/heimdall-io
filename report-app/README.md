@@ -17,11 +17,11 @@
 - Link Page url and title
 - Need a magnifying glass or open screenshot in separate tab
 - Make a nice progress bar
+- Format filepath as <filename> - <path>
 
 ## In Progress
 
 - report details: Show browser log entries (webdriverio and puppeteer are different)
-- Format filepath as <filename> - <path>
 - Crop test code
 - Show success/failure bars per device
 - Make success/failure bars smaller/narrower

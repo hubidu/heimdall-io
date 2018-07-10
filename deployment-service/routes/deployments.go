@@ -2,9 +2,11 @@ package routes
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/hubidu/e2e-backend/deployment-service/hipchat"
@@ -68,7 +70,15 @@ func Report(c *gin.Context) {
 		err := hipchat.SendMessageToRoom(NotificationRecipients, msg)
 		if err != nil {
 			// Hacky retry
-			hipchat.SendMessageToRoom(NotificationRecipients, msg)
+			time.Sleep(1000 * time.Millisecond)
+			err = hipchat.SendMessageToRoom(NotificationRecipients, msg)
+			if err != nil {
+				time.Sleep(1000 * time.Millisecond)
+				err = hipchat.SendMessageToRoom(NotificationRecipients, msg)
+				if err != nil {
+					fmt.Println("Finally failed to send hipchat notification", err)
+				}
+			}
 		}
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
