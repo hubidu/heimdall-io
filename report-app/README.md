@@ -21,6 +21,8 @@
 
 ## In Progress
 
+- source code file name is incorrect
+- Show user name
 - report details: Show browser log entries (webdriverio and puppeteer are different)
 - Crop test code
 - Show success/failure bars per device

@@ -32,7 +32,7 @@ const annotateSource = (source, screenshots) => {
 const getEditorState = screenshots => {
   const maxLine = lastOf(screenshots[0].CodeStack).Location.Line // test stackframe of last screenshot
   const minLine = lastOf(lastOf(screenshots).CodeStack).Source[0].Line // test stackframe of first screenshot
-  const filepath = screenshots[0].CodeStack[0].Location.File
+  const filepath = lastOf(lastOf(screenshots).CodeStack).Location.File
 
   return {
     lineRange: [minLine, maxLine],
