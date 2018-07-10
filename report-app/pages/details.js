@@ -54,7 +54,7 @@ export default class extends React.Component {
     ])
 
     const editorState = getEditorState(report.Screenshots)
-    console.log(browserlogs)
+    // console.log(browserlogs)
 
     return {
       ownerkey,

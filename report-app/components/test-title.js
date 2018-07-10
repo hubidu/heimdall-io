@@ -1,3 +1,4 @@
+import moment from 'moment'
 import Link from 'next/link'
 
 const trunc = (msg, MaxLen = 80) => {
@@ -20,8 +21,19 @@ const extractTitleData = title => title.indexOf('|') >= 0 ? title.split('|')[1] 
 
 export default ({ownerkey, project, hashcategory, report, isListView = true}) =>
   <div className="TestTitle">
-    <div className="has-text-grey is-size-7">
+    <div className="TestTitle-prefix has-text-grey is-size-7">
       {report.Prefix.replace(/--/gi, '/')}
+
+      {
+        isListView === false &&
+          <span className="is-pulled-right">
+            <span>at</span>&nbsp;<strong>{moment(report.StartedAt).format('ddd, h:m')}</strong>
+            &nbsp;&middot;&nbsp;
+            <span>in</span>&nbsp;<strong>{report.Duration}s</strong>
+            &nbsp;&middot;&nbsp;
+            <span>run by</span>&nbsp;<strong>{report.User.Email}</strong>
+          </span>
+      }
     </div>
 
     <div className="TestTitle-title">
@@ -37,7 +49,7 @@ export default ({ownerkey, project, hashcategory, report, isListView = true}) =>
     }
     </div>
 
-    <div>
+    <div className="TestTitle-tags">
       { report.Environment &&
         <small className="tag is-info">
           {report.Environment}

@@ -18,10 +18,10 @@
 - Need a magnifying glass or open screenshot in separate tab
 - Make a nice progress bar
 - Format filepath as <filename> - <path>
+- source code file name is incorrect
 
 ## In Progress
 
-- source code file name is incorrect
 - Show user name
 - report details: Show browser log entries (webdriverio and puppeteer are different)
 - Crop test code
