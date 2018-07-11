@@ -117,6 +117,7 @@ const getEditorState = (annotatedSource, screenshots) => {
 
 const defaultSelectScreenshot = report => report.Screenshots && report.Screenshots.length > 0 && report.Screenshots[0]
 const createTestDetailLink = (id, ownerkey, project, hashcategory) => `/details?ownerkey=${ownerkey}&project=${encodeURIComponent(project)}&id=${id}&hashcategory=${hashcategory}`
+const createBrowserlogsDetailLink = (id) => `/logs?id=${id}`
 const mapToSuccessAndFailure = (historicReports, ownerkey, project) => historicReports ? historicReports.map(r => Object.assign({}, {
   t: r.StartedAt,
   value: r.Duration,
@@ -125,7 +126,7 @@ const mapToSuccessAndFailure = (historicReports, ownerkey, project) => historicR
 })) : undefined
 
 export default class extends React.Component {
-  static async getInitialProps ({ query: { ownerkey, project, id, hashcategory } }) {
+  static async getInitialProps ({ query: { ownerkey, project, id } }) {
     if (!ownerkey) throw new Error('Please provide your owner key in the query parameters')
 
     const report = await getReportById(id)
@@ -235,7 +236,7 @@ export default class extends React.Component {
           </div>
 
           { this.state.history && this.state.consoleErrors &&
-          <div className="level">
+          <div className="level has-background-light">
             <div className="level-item has-text-centered">
               <div>
                 <p className="heading">
@@ -252,7 +253,11 @@ export default class extends React.Component {
             <div className="level-item has-text-centered">
               <div>
                 <p className="heading">Console Messages</p>
-                <p className="title">{this.state.consoleErrors.length}</p>
+                <p className="title">
+                  <a href={createBrowserlogsDetailLink(this.props.report._id)} >
+                    {this.state.consoleErrors.length}
+                  </a>
+                </p>
               </div>
             </div>
             <div className="level-item has-text-centered">
