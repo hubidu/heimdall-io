@@ -1,8 +1,12 @@
 import SourceCodeSnippet from '../components/SourceCodeSnippet'
 
-export default ({stack}) =>
+export default ({stack, cmd}) =>
   <div className="TestSourceStacktrace box">
-    <SourceCodeSnippet location={stack[0].Location} code={stack[0].Source} />
+    <SourceCodeSnippet
+      location={stack[0].Location}
+      code={stack[0].Source}
+      actual={`  ==> I.${cmd.Name} (${cmd.Args.map(arg => `'${arg}'`).join(',')})`}
+    />
 
     <style jsx>{`
     .TestSourceStacktrace {

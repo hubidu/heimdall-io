@@ -20,18 +20,26 @@
 - Format filepath as <filename> - <path>
 - source code file name is incorrect
 - Show user name
+- Show success/failure bars per device
+- Show text when source code is not available anymore
+- Make success/failure bars smaller/narrower
+- Make sure that stackframe is really in test when annotating source
+- Crop test code
+- Show the actual command parameters when source line is selected
 
 ## In Progress
 
-- Show success/failure bars per device
-- Show text when source code is not available anymore
+- Redesign project page with bulma
+- Delete a test project
+- Show all line groups which are fully contained in the line Range
+- PRB There might be a stacktrace without a test stackframe (see "When I login with city missing Then I see my data in best sso view")
 - report details: Show browser log entries (webdriverio and puppeteer are different)
-- Crop test code
-- Make success/failure bars smaller/narrower
+- report details: Show number of tracking requests
 - report list: Group failed tests by prefix
 - report list: Make expected/actual expandable
 - details: when test failed: Provide a link to the last successful run
-- Use bulma also on projects page
+- Should see the step outline from the list view
+- Test with ava-codeceptjs project
 
 ## Backlog
 - Source Code view: Show all stackframes except that of test

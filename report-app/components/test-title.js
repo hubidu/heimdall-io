@@ -27,11 +27,16 @@ export default ({ownerkey, project, hashcategory, report, isListView = true}) =>
       {
         isListView === false &&
           <span className="is-pulled-right">
-            <span>at</span>&nbsp;<strong>{moment(report.StartedAt).format('ddd, h:m')}</strong>
+            <span>at</span>&nbsp;<strong>{moment(report.StartedAt).format('ddd, H:mm')}</strong>
             &nbsp;&middot;&nbsp;
             <span>in</span>&nbsp;<strong>{report.Duration}s</strong>
             &nbsp;&middot;&nbsp;
-            <span>run by</span>&nbsp;<strong>{report.User.Email}</strong>
+            {
+              report.User &&
+              <span>
+                <span>run by</span>&nbsp;<strong>{report.User.Email}</strong>
+              </span>
+            }
           </span>
       }
     </div>

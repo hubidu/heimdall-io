@@ -1,6 +1,6 @@
 import Highlight from 'react-highlight'
 
-/**
+/** NICE SIMPLE
  * <div><div>App.render</div>
 <div style="font-size: 0.9em; margin-bottom: 0.9em;">
     <a tabindex="0" style="text-decoration: none; color: rgb(135, 142, 145); cursor: pointer;">C:/Users/stefan.huber/projects/react-starter/src/App.jsx:24</a>
@@ -31,22 +31,22 @@ const filePathSplit = filepath => {
   }
 }
 
-const sourceCode = (code, location) => code
+const sourceCode = (code, location, actual) => code
     .map(entry => {
         return entry.Line === location.Line ?
-            entry.Line + ' ==>' + entry.Value
+            entry.Line + ' -->' + entry.Value + `\n ${actual}`
             : entry.Line + '    ' + entry.Value
     }).join('\n')
 
-export default ({ code, location }) =>
+export default ({ code, location, actual }) =>
     <div className="SourceCodeSnippet">
         <p className="has-text-grey is-size-7">
-        {filePathSplit(location.File).file}
+          {filePathSplit(location.File).file}
           <span className="has-text-grey-light"> - {filePathSplit(location.File).path}</span>
         </p>
 
         <Highlight className="javascript">
-            {sourceCode(code, location)}
+            {sourceCode(code, location, actual)}
         </Highlight>
         <style jsx>{`
         .SourceCodeSnippet {

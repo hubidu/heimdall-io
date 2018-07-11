@@ -7,6 +7,5 @@ export default async (path, filename = 'browserlogs.json') => {
 
   const res = await fetch(url)
   const source = await res.text()
-
-  return source
+  return source ? JSON.parse(source) : []
 }

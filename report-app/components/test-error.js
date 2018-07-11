@@ -1,11 +1,4 @@
-const trunc = (msg, MaxLen = 80) => {
-  if (!msg) return msg
-  let res = msg
-  if (msg.length > MaxLen) {
-    res = msg.substring(0, MaxLen) + '...'
-  }
-  return res
-}
+import trunc from '../services/utils/trunc'
 
 export default ({screenshot}) =>
   screenshot &&
@@ -13,7 +6,7 @@ export default ({screenshot}) =>
     <p className="TestError-title has-text-danger">
       '
       {
-        trunc(screenshot.Message)
+        trunc(screenshot.Message, 120)
       }
       '
     </p>

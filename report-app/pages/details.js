@@ -8,36 +8,105 @@ import ScreenshotView from '../components/screenshot-view'
 import TestHistoryBars from '../components/test-history-bars'
 
 import round from '../services/utils/round'
+import lastOf from '../services/utils/last-of'
 
 import getReportById from '../services/get-report-by-id'
 import getTestSource from '../services/get-test-source'
 import getBrowserlogs from '../services/get-browserlogs'
 import getReportsByCategory from '../services/get-reports-by-category'
 
-const lastOf = arr => arr && arr.length > 0 ? arr[arr.length - 1] : undefined
+const getPathToTestSourceFile = screenshots => lastOf(lastOf(screenshots).CodeStack).Location.File
 
+/**
+ * Annotate lines in the test source where we have a screenshot
+ */
 const annotateSource = (source, screenshots) => {
   if (!source) return []
-  const sourceLines = source.split('\n')
 
-  const getMeta = (i) => {
-    const screenshot = screenshots.find(screenshot => lastOf(screenshot.CodeStack).Location.Line === i)
-    if(screenshot) return screenshot
-    return
+  const sourceLines = source.split('\n')
+  const PathToTestSourceFile = getPathToTestSourceFile(screenshots)
+
+  const getMetadataForLine = lineNo => {
+    const screenshotWithATestStackframe = screenshot => {
+      const presumedTestStackframe = lastOf(screenshot.CodeStack)
+      return presumedTestStackframe.Location.Line === lineNo &&
+        presumedTestStackframe.Location.File === PathToTestSourceFile
+    }
+
+    const screenshot = screenshots.find(screenshotWithATestStackframe)
+    return screenshot ? screenshot : undefined
   }
 
   return sourceLines.map((l, i) => {
     return Object.assign({}, {
+      lineNo: i + 1,
       source: l,
-      meta: getMeta(i + 1)
+      meta: getMetadataForLine(i + 1)
     })
   })
 }
 
-const getEditorState = screenshots => {
-  const maxLine = lastOf(screenshots[0].CodeStack).Location.Line // test stackframe of last screenshot
-  const minLine = lastOf(lastOf(screenshots).CodeStack).Source[0].Line // test stackframe of first screenshot
-  const filepath = lastOf(lastOf(screenshots).CodeStack).Location.File
+/**
+ * FInd group ranges of annotated and not annotated lines
+ */
+const getLineGroupRanges = annotatedSourceLines => {
+  if (annotatedSourceLines.length === 0) return []
+
+  const result = []
+  const lineFlags = annotatedSourceLines.map(l => l.meta ? 1 : 0)
+
+  let currentValue = lastOf(lineFlags)
+  while(currentValue !== undefined) {
+    let c = 0
+
+    while(currentValue === lastOf(lineFlags)) {
+      c++
+      lineFlags.pop()
+    }
+    result.push(c)
+
+    currentValue = lastOf(lineFlags)
+  }
+
+  return result.reverse()
+}
+
+/**
+ * Group individual lines using the ranges
+ */
+const groupSourceLines = (annotatedSourceLines, lineGroupRanges) => {
+  if (annotatedSourceLines.length === 0) return []
+
+  const lineGroups = []
+  let first = 0
+  for (let lgRange of lineGroupRanges) {
+    let len = lgRange
+    const lines  = annotatedSourceLines.slice(first, first + len)
+
+    lineGroups.push({
+      first,
+      len,
+      lines,
+      isAnnotated: lines[0].meta !== undefined
+    })
+
+    first = first + lgRange
+  }
+
+  return lineGroups
+}
+
+const getEditorState = (annotatedSource, screenshots) => {
+  const getMaxLine = lines => {
+    for (let i = lines.length - 1; i >= 0; i--) {
+      if (lines[i].meta) return i +1
+    }
+    return -1
+  }
+  const getMinLine = lines => lines.findIndex(l => l.meta)
+  const maxLine = getMaxLine(annotatedSource)
+  const minLine = getMinLine(annotatedSource)
+  const filepath = getPathToTestSourceFile(screenshots)
 
   return {
     lineRange: [minLine, maxLine],
@@ -47,11 +116,12 @@ const getEditorState = screenshots => {
 }
 
 const defaultSelectScreenshot = report => report.Screenshots && report.Screenshots.length > 0 && report.Screenshots[0]
+const createTestDetailLink = (id, ownerkey, project, hashcategory) => `/details?ownerkey=${ownerkey}&project=${encodeURIComponent(project)}&id=${id}&hashcategory=${hashcategory}`
 const mapToSuccessAndFailure = (historicReports, ownerkey, project) => historicReports ? historicReports.map(r => Object.assign({}, {
   t: r.StartedAt,
   value: r.Duration,
   success: r.Result === 'success',
-  href: `/details?ownerkey=${ownerkey}&project=${encodeURIComponent(project)}&id=${r._id}&hashcategory=${r.HashCategory}`
+  href: createTestDetailLink(r._id, ownerkey, project, r.HashCategory)
 })) : undefined
 
 export default class extends React.Component {
@@ -64,13 +134,18 @@ export default class extends React.Component {
       await getBrowserlogs(report.ReportDir),
     ])
 
-    const editorState = getEditorState(report.Screenshots)
+    const annotatedSource = annotateSource(source, report.Screenshots)
+    const lineGroupRanges = getLineGroupRanges(annotatedSource)
+    const groupedAnnotatedSource = groupSourceLines(annotatedSource, lineGroupRanges)
+
+    const editorState = getEditorState(annotatedSource, report.Screenshots)
 
     return {
       ownerkey,
       project,
       report,
-      annotatedSource: annotateSource(source, report.Screenshots),
+      annotatedSource,
+      groupedAnnotatedSource,
       editorState,
       browserlogs
     }
@@ -96,13 +171,24 @@ export default class extends React.Component {
         stability: 0,
       }
     }
-    const history = mapToSuccessAndFailure(historicReports, this.props.ownerkey, this.props.project)
-    const successfulRuns = historicReports.concat([Object.assign(this.props.report)]).filter(r => r.Result === 'success')
-    const stability = round(successfulRuns.length * 100.0 / historicReports.length)
+
+    // Show only reports for same device
+    let historicReportsForSameDevice = historicReports.filter(r => r.DeviceSettings.Type === this.props.report.DeviceSettings.Type)
+
+    const history = mapToSuccessAndFailure(historicReportsForSameDevice, this.props.ownerkey, this.props.project)
+    historicReportsForSameDevice = historicReportsForSameDevice.concat([Object.assign(this.props.report)])
+    const successfulRuns = historicReportsForSameDevice.filter(r => r.Result === 'success')
+    const stability = round(successfulRuns.length * 100.0 / historicReportsForSameDevice.length)
     return {
       history,
       stability
     }
+  }
+
+  getConsoleErrors() {
+    if (!this.props.browserlogs) return []
+    console.log(this.props.browserlogs)
+    return this.props.browserlogs
   }
 
   async componentDidMount() {
@@ -113,6 +199,11 @@ export default class extends React.Component {
 
     const historicReportData = await this.getHistoricReportData()
     this.setState(historicReportData)
+
+    const consoleErrors = this.getConsoleErrors()
+    this.setState({
+      consoleErrors,
+    })
   }
 
   handleLineClick({lineNo, line}) {
@@ -143,7 +234,7 @@ export default class extends React.Component {
 
           </div>
 
-          { this.state.history &&
+          { this.state.history && this.state.consoleErrors &&
           <div className="level">
             <div className="level-item has-text-centered">
               <div>
@@ -156,6 +247,12 @@ export default class extends React.Component {
                     maxBars={20}
                     />
                 </div>
+              </div>
+            </div>
+            <div className="level-item has-text-centered">
+              <div>
+                <p className="heading">Console Messages</p>
+                <p className="title">{this.state.consoleErrors.length}</p>
               </div>
             </div>
             <div className="level-item has-text-centered">
@@ -173,7 +270,7 @@ export default class extends React.Component {
               { this.props.annotatedSource.length > 0 ?
                   <TestSourceView
                   startedAt={this.props.report.StartedAt}
-                  source={this.props.annotatedSource}
+                  source={this.props.groupedAnnotatedSource}
                   lineRange={this.props.editorState.lineRange}
                   filepath={this.props.editorState.filepath}
                   onClickLine={this.handleLineClick}
@@ -182,13 +279,13 @@ export default class extends React.Component {
                   />
                   :
                   <div className="has-text-centered has-text-grey">
-                  Test Source not available
+                  Test Source not available (probably archived?)
                   </div>
 
               }
             </div>
 
-            <div className="column TestDetails-screenshotViewContainer">
+            <div className="column is-6 TestDetails-screenshotViewContainer">
               <ScreenshotView
                 reportDir={this.props.report.ReportDir}
 

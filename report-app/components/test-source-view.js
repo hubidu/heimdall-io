@@ -2,16 +2,9 @@ import TestError from '../components/test-error'
 import TestSourceStacktrace from '../components/test-source-stacktrace'
 
 import round from '../services/utils/round'
-
-const filePathSplit = filepath => {
-  let parts = filepath.split('\\')
-  if (parts.length === 0) parts = filepath.split('/')
-
-  return {
-    file: parts[parts.length - 1],
-    path: parts.slice(1, parts.length - 1).join('/')
-  }
-}
+import filePathSplit from '../services/utils/filepath-split'
+import lastOf from '../services/utils/last-of'
+import firstOf from '../services/utils/first-of'
 
 const backgroundColor = meta => {
   if (!meta) return
@@ -26,8 +19,56 @@ const formatRelTime = (startedAt, meta) => round((meta.ShotAt - startedAt) / 100
 const hasMetaInfo = line => line.meta
 const hasMoreThanOneStackframe = line => line.meta.CodeStack && line.meta.CodeStack.length > 1
 
+const TestSourceLineGroup = ({group, startedAt, selectedLine, lineRange, onClickLine}) =>
+  <div className={`TestSourceLineGroup`}>
+    { group.isAnnotated === false &&
 
-const TestSourceLine = ({startedAt, selected, isInRange, lineNo, line, onClick}) =>
+      <div className="">
+        <TestSourceLine
+          selected={false}
+          isInRange={isInRange(lineRange, firstOf(group.lines).lineNo)}
+          lineNo={firstOf(group.lines).lineNo}
+          line={firstOf(group.lines)}
+        />
+
+        <div className="TestSourceLineGroup--hidden">~~~</div>
+        <div className="TestSourceLineGroup--hidden">{group.lines.length} lines are hidden</div>
+        <div className="TestSourceLineGroup--hidden">~~~</div>
+
+        <TestSourceLine
+          selected={false}
+          isInRange={isInRange(lineRange, lastOf(group.lines).lineNo)}
+          lineNo={lastOf(group.lines).lineNo}
+          line={lastOf(group.lines)}
+        />
+      </div>
+    }
+
+    {
+      (group.isAnnotated) && group.lines.map((l, i) =>
+        <TestSourceLine
+        key={i}
+        startedAt={startedAt}
+        selected={selectedLine === l.lineNo}
+        isInRange={isInRange(lineRange, l.lineNo)}
+        lineNo={l.lineNo}
+        line={l}
+        onClick={(e) => onClickLine && onClickLine(e)}
+        />
+      )
+    }
+  <style jsx>{`
+  .TestSourceLineGroup {}
+  .TestSourceLineGroup--hidden {
+    padding-left: 6em;
+    margin: 1em 0;
+    color: #ddd;
+  }
+  `}</style>
+  </div>
+
+
+const TestSourceLine = ({startedAt, selected = false, isInRange = false, lineNo, line, onClick}) =>
   <div
     className={`TestSourceLine ${hasMetaInfo(line) ? 'TestSourceLine--selectable' : ''} ${selected ? 'TestSourceLine--selected' : ''}`}
     key={lineNo}
@@ -64,7 +105,7 @@ const TestSourceLine = ({startedAt, selected, isInRange, lineNo, line, onClick})
       selected &&
       hasMetaInfo(line) &&
       hasMoreThanOneStackframe(line) &&
-        <TestSourceStacktrace stack={line.meta.CodeStack} />
+        <TestSourceStacktrace stack={line.meta.CodeStack} cmd={line.meta.Cmd} />
     }
 
     <style jsx>{`
@@ -112,23 +153,21 @@ const isInRange = (range, lineNo) => range && (lineNo >= range[0] && lineNo <= r
 
 export default ({startedAt, filepath, source, selectedLine, lineRange, onClickLine}) =>
   <div>
-    <p className="has-text-grey is-size-7">
+    <p className="has-text-dark is-size-7">
       {filePathSplit(filepath).file}
-      <span className="has-text-grey-light"> - {filePathSplit(filepath).path}</span>
+      <span className="has-text-grey-light"> {filePathSplit(filepath).path}</span>
     </p>
     <pre className="TestSourceView-content has-text-grey-light has-background-white is-size-7">
       <code>
       {
-        source.map((l, i) =>
-          <TestSourceLine
+        source.map((lg, i) =>
+          <TestSourceLineGroup
             key={i}
+            group={lg}
             startedAt={startedAt}
-            selected={selectedLine === i + 1}
-            isInRange={isInRange(lineRange, i)}
-            lineNo={i + 1}
-            line={l}
-            onClick={(e) => onClickLine && onClickLine(e)}
-          />
+            selectedLine={selectedLine}
+            lineRange={lineRange}
+            onClickLine={onClickLine} />
         )
       }
       </code>
