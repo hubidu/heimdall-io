@@ -47,7 +47,7 @@ const annotateSource = (source, screenshots) => {
 }
 
 /**
- * FInd group ranges of annotated and not annotated lines
+ * FInd contiguous sets of annotated and not annotated lines
  */
 const getLineGroupRanges = annotatedSourceLines => {
   if (annotatedSourceLines.length === 0) return []

@@ -6,6 +6,12 @@ import filePathSplit from '../services/utils/filepath-split'
 import lastOf from '../services/utils/last-of'
 import firstOf from '../services/utils/first-of'
 
+const firstN = (arr, n = 5) => {
+  if (arr.length - n <= n) return firstN(arr, n - 1)
+
+  return arr.slice(0, n)
+}
+
 const backgroundColor = meta => {
   if (!meta) return
 
@@ -18,22 +24,23 @@ const formatRelTime = (startedAt, meta) => round((meta.ShotAt - startedAt) / 100
 
 const hasMetaInfo = line => line.meta
 const hasMoreThanOneStackframe = line => line.meta.CodeStack && line.meta.CodeStack.length > 1
+const isInRange = (lineRange, lineNo) => lineRange && (lineNo >= lineRange[0] && lineNo <= lineRange[1])
+const isFullyInRange = (lineRange, group) => isInRange(lineRange, group.first) && isInRange(lineRange, group.first + group.len)
 
 const TestSourceLineGroup = ({group, startedAt, selectedLine, lineRange, onClickLine}) =>
   <div className={`TestSourceLineGroup`}>
-    { group.isAnnotated === false &&
+    { group.isAnnotated === false && !isFullyInRange(lineRange, group) &&
+      <div className="TestSourceLineGroup-hiddenPart">
+        {firstN(group.lines).map((l, i) =>
+          <TestSourceLine
+            selected={false}
+            isInRange={isInRange(lineRange, l.lineNo)}
+            lineNo={l.lineNo}
+            line={l}
+          />
+        )}
 
-      <div className="">
-        <TestSourceLine
-          selected={false}
-          isInRange={isInRange(lineRange, firstOf(group.lines).lineNo)}
-          lineNo={firstOf(group.lines).lineNo}
-          line={firstOf(group.lines)}
-        />
-
-        <div className="TestSourceLineGroup--hidden">~~~</div>
-        <div className="TestSourceLineGroup--hidden">{group.lines.length} lines are hidden</div>
-        <div className="TestSourceLineGroup--hidden">~~~</div>
+        <div className="TestSourceLineGroup--hidden">{group.lines.length} lines hidden</div>
 
         <TestSourceLine
           selected={false}
@@ -45,7 +52,7 @@ const TestSourceLineGroup = ({group, startedAt, selectedLine, lineRange, onClick
     }
 
     {
-      (group.isAnnotated) && group.lines.map((l, i) =>
+      (group.isAnnotated || isFullyInRange(lineRange, group)) && group.lines.map((l, i) =>
         <TestSourceLine
         key={i}
         startedAt={startedAt}
@@ -149,12 +156,11 @@ const TestSourceLine = ({startedAt, selected = false, isInRange = false, lineNo,
     `}</style>
   </div>
 
-const isInRange = (range, lineNo) => range && (lineNo >= range[0] && lineNo <= range[1])
 
 export default ({startedAt, filepath, source, selectedLine, lineRange, onClickLine}) =>
   <div>
     <p className="has-text-dark is-size-7">
-      {filePathSplit(filepath).file}
+      <strong>{filePathSplit(filepath).file}</strong>
       <span className="has-text-grey-light"> {filePathSplit(filepath).path}</span>
     </p>
     <pre className="TestSourceView-content has-text-grey-light has-background-white is-size-7">
