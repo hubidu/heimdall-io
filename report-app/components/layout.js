@@ -37,13 +37,9 @@ export default ({ children, title = '', ownerkey, showNav = true }) => (
 
       <div id="navbarExampleTransparentExample" className="navbar-menu">
         <div className="navbar-start">
-          <div className="navbar-item has-dropdown is-hoverable">
-              <Link href={linkToProjects(ownerkey)}>
-                <a className="navbar-link">
-                  Projects
-                </a>
-              </Link>
-          </div>
+          <a className="navbar-item" href={linkToProjects(ownerkey)}>
+            Projects
+          </a>
         </div>
 
         <div className="navbar-end">
