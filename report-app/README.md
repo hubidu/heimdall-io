@@ -30,19 +30,20 @@
 
 ## In Progress
 
-- Delete a test project
+- Delete a test project: Implement the delete routes
 - Show all line groups which are fully contained in the line Range
 - Switch to https://github.com/conorhastings/react-syntax-highlighter
 - PRB There might be a stacktrace without a test stackframe (see "When I login with city missing Then I see my data in best sso view")
-- report details: Show browser log entries (webdriverio and puppeteer are different)
-- report details: Show number of tracking requests
+- report details: Show browser log entries also for puppeteer
 - report list: Group failed tests by prefix
 - report list: Make expected/actual expandable
 - details: when test failed: Provide a link to the last successful run
+- Diff a failed test with the last successful one
 - Should see the step outline from the list view
 - Test with ava-codeceptjs project
 
 ## Backlog
+- report details: Show list of tracking requests made during test run
 - Source Code view: Show all stackframes except that of test
 - report not showing ALL reports (http://veve-dev-test-01.intern.v.check24.de:4000/tests?ownerkey=sIzM3ZEHRb&project=%23All)
 - codeceptjs: report not grouping same test in different projects correctly
