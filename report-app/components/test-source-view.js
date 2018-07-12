@@ -6,11 +6,7 @@ import filePathSplit from '../services/utils/filepath-split'
 import lastOf from '../services/utils/last-of'
 import firstOf from '../services/utils/first-of'
 
-const firstN = (arr, n = 5) => {
-  if (arr.length - n <= n) return firstN(arr, n - 1)
-
-  return arr.slice(0, n)
-}
+const firstN = (arr, n = 5) => arr.slice(0, n)
 
 const backgroundColor = meta => {
   if (!meta) return
@@ -133,6 +129,7 @@ const TestSourceLine = ({startedAt, selected = false, isInRange = false, lineNo,
       background-color: #ccc;
     }
     .TestSourceLine--selected {
+      background-color: #FFFFE0;
     }
     .TestSourceLine-indicator {
       display: inline-block;
