@@ -1,7 +1,7 @@
 {
   "name": "ava-codeceptjs-reporter",
   "version": "1.0.0",
-  "description": "Web based E2E Test reporter for ava-codeceptjs",
+  "description": "Frontend for heimdal.io (the End-to-End Test Reporter)",
   "main": "server.js",
   "directories": {
     "lib": "lib"
@@ -25,8 +25,7 @@
     "react-highlight": "^0.12.0",
     "react-icons": "^2.2.7",
     "react-magnifier": "^1.0.6",
-    "recompose": "^0.27.0",
-    "semantic-ui-react": "^0.80.0"
+    "recompose": "^0.27.0"
   },
   "dependencies": {
     "express": "^4.16.3",

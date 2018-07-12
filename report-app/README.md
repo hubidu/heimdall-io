@@ -26,12 +26,13 @@
 - Make sure that stackframe is really in test when annotating source
 - Crop test code
 - Show the actual command parameters when source line is selected
+- Redesign project page with bulma
 
 ## In Progress
 
-- Redesign project page with bulma
 - Delete a test project
 - Show all line groups which are fully contained in the line Range
+- Switch to https://github.com/conorhastings/react-syntax-highlighter
 - PRB There might be a stacktrace without a test stackframe (see "When I login with city missing Then I see my data in best sso view")
 - report details: Show browser log entries (webdriverio and puppeteer are different)
 - report details: Show number of tracking requests

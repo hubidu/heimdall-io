@@ -1,13 +1,9 @@
 import moment from 'moment'
 import React from 'react'
 import Link from 'next/link'
-import { List, Header, Icon } from 'semantic-ui-react'
-
-import ProjectIcon from 'react-icons/lib/fa/archive'
-import KeyIcon from 'react-icons/lib/fa/key'
 
 import Layout from '../components/layout'
-import TestResultIcon from '../components/test-result-icon'
+import TestResultDeviceIcon from '../components/test-result-device-icon'
 
 import getProjects from '../services/get-projects'
 
@@ -32,42 +28,54 @@ export default class IndexPage extends React.Component {
 
     return (
       <Layout {...attrs}>
-        <Header as='h2'>
-          <KeyIcon/>
-          Your Test Projects
-          <Header.Subheader>
-            Listing all Projects for Owner Key {this.props.ownerkey}
-          </Header.Subheader>
-        </Header>
+        <div className="container is-fluid">
+          <h1 className="title">
+            You Projects
+          </h1>
+          <h2 className="subtitle">
+            Owner: {this.props.ownerkey}
+          </h2>
 
-        <List divided relaxed>
-          {
-            this.props.projects.map((project, i) =>
-              <List.Item key={i}>
-                <List.Icon size="large">
-                  <ProjectIcon/>
-                </List.Icon>
-                <List.Content>
-                  <List.Header>
-                    <Link href={this.linkToProject(this.props.ownerkey, project.Name)}>
-                      <a>
-                        {project.Name}
-                      </a>
-                    </Link>
-                  </List.Header>
-                  <List.Description>
-                    {moment(project.Report.StartedAt).fromNow()}
-                    &nbsp;
-                    [{project.Report.Duration} s]
-                    &nbsp;
-                    <TestResultIcon result={project.Report.Result} />
-                    {project.Report.Title}
-                  </List.Description>
-                </List.Content>
-                </List.Item>
-              )
-          }
-        </List>
+          <table className="table is-fullwidth">
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th></th>
+              <th>Last Executed Test</th>
+              <th>When</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              this.props.projects.map((project, i) =>
+              <tr>
+                <td>
+                  <Link href={this.linkToProject(this.props.ownerkey, project.Name)}>
+                    <a>
+                      {project.Name}
+                    </a>
+                  </Link>
+                </td>
+                <td>
+                  <TestResultDeviceIcon result={project.Report.Result} deviceSettings={project.Report.DeviceSettings} />
+                </td>
+                <td>
+                  {project.Report.Title}
+                </td>
+                <td>
+                  <strong>{moment(project.Report.Started).fromNow()}</strong>
+                  <br/>
+                  in {~~project.Report.Duration}s
+
+                </td>
+              </tr>
+            )
+            }
+          </tbody>
+          </table>
+
+        </div>
+
       </Layout>
     )
   }
