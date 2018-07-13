@@ -46,7 +46,6 @@
 - Test with ava-codeceptjs project
 
 
-
 ## Backlog
 - report details: Show list of tracking requests made during test run
 - Source Code view: Show all stackframes except that of test
