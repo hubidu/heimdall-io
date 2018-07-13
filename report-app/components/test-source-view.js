@@ -4,7 +4,6 @@ import TestSourceStacktrace from '../components/test-source-stacktrace'
 import round from '../services/utils/round'
 import filePathSplit from '../services/utils/filepath-split'
 import lastOf from '../services/utils/last-of'
-import firstOf from '../services/utils/first-of'
 
 const firstN = (arr, n = 5) => arr.slice(0, n)
 
@@ -29,6 +28,7 @@ const TestSourceLineGroup = ({group, startedAt, selectedLine, lineRange, onClick
       <div className="TestSourceLineGroup-hiddenPart">
         {firstN(group.lines).map((l, i) =>
           <TestSourceLine
+            key={i}
             selected={false}
             isInRange={isInRange(lineRange, l.lineNo)}
             lineNo={l.lineNo}
@@ -141,6 +141,7 @@ const TestSourceLine = ({startedAt, selected = false, isInRange = false, lineNo,
     .TestSourceLine-lineNo {
       display: inline-block;
       width: 3em;
+      color: #ccc;
     }
     .TestSourceLine-code {
 
