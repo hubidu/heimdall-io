@@ -5,6 +5,15 @@ import Layout from '../components/layout'
 import getReportById from '../services/get-report-by-id'
 import getBrowserlogs from '../services/get-browserlogs'
 
+const tagColor = l => {
+  switch (l.level) {
+    case 'SEVERE': return 'is-danger';
+    case 'INFO': return 'is-info';
+    case 'WARNING': return 'is-warning';
+    default: return 'is-light';
+  }
+}
+
 export default class IndexPage extends React.Component {
   static async getInitialProps ({ query: { id } }) {
     const report = await getReportById(id)
@@ -40,7 +49,7 @@ export default class IndexPage extends React.Component {
                 <tr key={i}>
                   <td>{moment(l.timestamp).format('ddd, H:mm')}</td>
                   <td>
-                    <span className={`tag ${l.level === 'SEVERE' ? 'is-danger' : 'is-light'}`}>
+                    <span className={`tag ${tagColor(l)}`}>
                     {l.level}
                     </span>
                   </td>

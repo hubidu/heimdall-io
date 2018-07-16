@@ -6,6 +6,7 @@ import TestResultDeviceIcon from '../components/test-result-device-icon'
 import TestSourceView from '../components/test-source-view'
 import ScreenshotView from '../components/screenshot-view'
 import TestHistoryBars from '../components/test-history-bars'
+import ConsoleMessagesCount from '../components/testrun-details/console-messages-count'
 
 import round from '../services/utils/round'
 import lastOf from '../services/utils/last-of'
@@ -117,7 +118,6 @@ const getEditorState = (annotatedSource, screenshots) => {
 
 const defaultSelectScreenshot = report => report.Screenshots && report.Screenshots.length > 0 && report.Screenshots[0]
 const createTestDetailLink = (id, ownerkey, project, hashcategory) => `/details?ownerkey=${ownerkey}&project=${encodeURIComponent(project)}&id=${id}&hashcategory=${hashcategory}`
-const createBrowserlogsDetailLink = (id) => `/logs?id=${id}`
 const mapToSuccessAndFailure = (historicReports, ownerkey, project) => historicReports ? historicReports.map(r => Object.assign({}, {
   t: r.StartedAt,
   value: r.Duration,
@@ -254,9 +254,7 @@ export default class extends React.Component {
               <div>
                 <p className="heading">Console Messages</p>
                 <p className="title">
-                  <a href={createBrowserlogsDetailLink(this.props.report._id)} >
-                    {this.state.consoleErrors.length}
-                  </a>
+                  <ConsoleMessagesCount reportId={this.props.report._id} messages={this.state.consoleErrors} />
                 </p>
               </div>
             </div>

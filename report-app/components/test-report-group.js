@@ -5,7 +5,14 @@ import TestHistoryBars from '../components/test-history-bars'
 import TestError from '../components/test-error'
 import TestTitle from '../components/test-title'
 
-const mapToSuccessAndFailure = runs => runs.map(run => ({ t: run.StartedAt, value: run.Duration, success: run.Result === 'success'}))
+// const mapToSuccessAndFailure = runs => runs.map(run => ({ t: run.StartedAt, value: run.Duration, success: run.Result === 'success'}))
+const createTestDetailLink = (id, ownerkey, project, hashcategory) => `/details?ownerkey=${ownerkey}&project=${encodeURIComponent(project)}&id=${id}&hashcategory=${hashcategory}`
+const mapToSuccessAndFailure = (historicReports, ownerkey, project) => historicReports ? historicReports.map(r => Object.assign({}, {
+  t: r.StartedAt,
+  value: r.Duration,
+  success: r.Result === 'success',
+  href: createTestDetailLink(r._id, ownerkey, project, r.HashCategory)
+})) : undefined
 
 export default({ownerkey, project, reportGroup = [], showErrors = false}) =>
   <div className="columns is-1">
@@ -30,7 +37,7 @@ export default({ownerkey, project, reportGroup = [], showErrors = false}) =>
     </div>
     <div className="column is-hidden-mobile">
       <TestHistoryBars
-        data={mapToSuccessAndFailure(reportGroup.Items)}
+        data={mapToSuccessAndFailure(reportGroup.Items, ownerkey, project)}
         maxBars={10}
       />
     </div>
