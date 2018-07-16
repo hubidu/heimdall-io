@@ -31,20 +31,20 @@
 - projects: Add environments
 - Source Code view: Show all stackframes except that of test
 - FEATURE Delete a test project: Implement the delete routes
+- FEATURE report list view: Link from bar to test details
 
 ## In Progress
 
 
 ## Backlog V 2.0
 
-- FEATURE report list view: Link from bar to test details
-- Switch to https://github.com/conorhastings/react-syntax-highlighter
+- FEATURE Diff a failed test with the last successful one
+- CHORE Switch to https://github.com/conorhastings/react-syntax-highlighter
 - PRB There might be a stacktrace without a test stackframe (see "When I login with city missing Then I see my data in best sso view")
 - report details: Show browser log entries also for puppeteer (map puppeteer logs to webdriverio format)
 - FEATURE report list: Group failed tests by prefix
 - report list: Hide expected/actual section by default
 - details: when test failed: Provide a link to the last successful run
-- FEATURE Diff a failed test with the last successful one
 - Should see the step outline from the list view
 - Test with ava-codeceptjs project
 - Loading spinner for the report list page

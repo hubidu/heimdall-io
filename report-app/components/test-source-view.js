@@ -83,6 +83,12 @@ const TestSourceLine = ({startedAt, selected = false, isInRange = false, lineNo,
     })}>
 
     <div className={`${isInRange ? 'has-text-dark' : ''}`}>
+      { line.metaDiff ?
+        <span className={`TestSourceLine-indicator ${backgroundColor(line.metaDiff)}`}>&nbsp;</span>
+        :
+        <span className={`TestSourceLine-indicator`}>&nbsp;</span>
+      }
+
       <span className="TestSourceLine-relTime has-text-grey">
         {`${line.meta ? formatRelTime(startedAt, line.meta) : '' }`}
       </span>

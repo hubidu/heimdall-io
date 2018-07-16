@@ -37,11 +37,13 @@ export default ({ children, title = '', ownerkey, showNav = true }) => (
 
       <div id="navbarExampleTransparentExample" className="navbar-menu">
         <div className="navbar-start">
-          <a  className="navbar-item">
+          <span  className="navbar-item">
             <Link href={linkToProjects(ownerkey)}>
+            <a>
               Projects
+            </a>
             </Link>
-          </a>
+          </span>
        </div>
 
         <div className="navbar-end">

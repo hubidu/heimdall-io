@@ -1,7 +1,7 @@
 import Magnifier from 'react-magnifier';
 import getScreenshotUrl from '../services/get-screenshot-url'
 
-export default ({reportDir, selectedScreenshot}) =>
+export default ({ reportDir, selectedScreenshot, selectedScreenshotDiff }) =>
   selectedScreenshot ?
   <div className="ScreenshotView">
     <h6 className="ScreenshotView-title title is-4">{selectedScreenshot.Page.Title}</h6>
@@ -17,6 +17,15 @@ export default ({reportDir, selectedScreenshot}) =>
       src={getScreenshotUrl(reportDir, selectedScreenshot.Screenshot)}
       width='100%' />
 
+      { selectedScreenshotDiff &&
+        <Magnifier
+        zoomFactor={2}
+        mgWidth={300}
+        mgHeight={200}
+        mgShape='square'
+        src={getScreenshotUrl(reportDir, selectedScreenshotDiff.Screenshot)}
+        width='100%' />
+      }
     <style jsx>{`
     // .ScreenshotView {
     //   position: fixed;

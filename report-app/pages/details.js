@@ -21,13 +21,13 @@ const getPathToTestSourceFile = screenshots => lastOf(lastOf(screenshots).CodeSt
 /**
  * Annotate lines in the test source where we have a screenshot
  */
-const annotateSource = (source, screenshots) => {
+const annotateSource = (source, screenshots, screenshotsDiff) => {
   if (!source) return []
 
   const sourceLines = source.split('\n')
   const PathToTestSourceFile = getPathToTestSourceFile(screenshots)
 
-  const getMetadataForLine = lineNo => {
+  const getMetadataForLine = (screenshots, lineNo) => {
     const screenshotWithATestStackframe = screenshot => {
       const presumedTestStackframe = lastOf(screenshot.CodeStack)
       return presumedTestStackframe.Location.Line === lineNo &&
@@ -42,7 +42,8 @@ const annotateSource = (source, screenshots) => {
     return Object.assign({}, {
       lineNo: i + 1,
       source: l,
-      meta: getMetadataForLine(i + 1)
+      meta: getMetadataForLine(screenshots, i + 1),
+      metaDiff: screenshotsDiff ? getMetadataForLine(screenshotsDiff, i + 1) : undefined
     })
   })
 }
@@ -125,6 +126,15 @@ const mapToSuccessAndFailure = (historicReports, ownerkey, project) => historicR
   href: createTestDetailLink(r._id, ownerkey, project, r.HashCategory)
 })) : undefined
 
+
+const annotateTestSource = (source, report, diffReport) => {
+  const annotatedSource = annotateSource(source, report.Screenshots, diffReport && diffReport.Screenshots)
+  const lineGroupRanges = getLineGroupRanges(annotatedSource)
+  const groupedAnnotatedSource = groupSourceLines(annotatedSource, lineGroupRanges)
+  return { lines: annotatedSource, lineGroups: groupedAnnotatedSource };
+}
+
+
 export default class extends React.Component {
   static async getInitialProps ({ query: { ownerkey, project, id } }) {
     if (!ownerkey) throw new Error('Please provide your owner key in the query parameters')
@@ -135,19 +145,11 @@ export default class extends React.Component {
       await getBrowserlogs(report.ReportDir),
     ])
 
-    const annotatedSource = annotateSource(source, report.Screenshots)
-    const lineGroupRanges = getLineGroupRanges(annotatedSource)
-    const groupedAnnotatedSource = groupSourceLines(annotatedSource, lineGroupRanges)
-
-    const editorState = getEditorState(annotatedSource, report.Screenshots)
-
     return {
       ownerkey,
       project,
       report,
-      annotatedSource,
-      groupedAnnotatedSource,
-      editorState,
+      source,
       browserlogs
     }
   }
@@ -157,6 +159,7 @@ export default class extends React.Component {
     this.state = {}
 
     this.handleLineClick = this.handleLineClick.bind(this)
+    this.handleDiffWithLastSuccessClick = this.handleDiffWithLastSuccessClick.bind(this)
   }
 
   async getHistoricReportData(limit) {
@@ -180,38 +183,72 @@ export default class extends React.Component {
     historicReportsForSameDevice = historicReportsForSameDevice.concat([Object.assign(this.props.report)])
     const successfulRuns = historicReportsForSameDevice.filter(r => r.Result === 'success')
     const stability = round(successfulRuns.length * 100.0 / historicReportsForSameDevice.length)
+    const lastSuccessfulTestrun = successfulRuns && successfulRuns[0]
     return {
       history,
-      stability
+      stability,
+      lastSuccessfulTestrun,
     }
   }
 
+  // TODO remove this
   getConsoleErrors() {
     if (!this.props.browserlogs) return []
-    console.log(this.props.browserlogs)
     return this.props.browserlogs
   }
 
   async componentDidMount() {
+    const {lines, lineGroups} = annotateTestSource(this.props.source, this.props.report)
+    const editorState = getEditorState(lines, this.props.report.Screenshots)
+
     this.setState({
+      lineGroups,
+      editorState, // TODO Not a good name
       selectedScreenshot: defaultSelectScreenshot(this.props.report),
-      selectedLine: this.props.editorState.selectedLine,
+      selectedLine: editorState.selectedLine,
     })
 
     const historicReportData = await this.getHistoricReportData()
     this.setState(historicReportData)
 
+    // TODO why set them in state at all?
     const consoleErrors = this.getConsoleErrors()
     this.setState({
       consoleErrors,
     })
   }
 
+  canDiffWithLastSuccess() {
+    return this.state.lastSuccessfulTestrun !== undefined
+  }
+
+  handleDiffWithLastSuccessClick() {
+    const showOrNotShow = !this.state.diffWithLastSuccess
+    this.setState({
+      diffWithLastSuccess: showOrNotShow,
+    })
+
+    // TODO Compute annotatedSource with diff
+    const {lines, lineGroups} = annotateTestSource(this.props.source, this.props.report, showOrNotShow ? this.state.lastSuccessfulTestrun: undefined)
+    const editorState = getEditorState(lines, this.props.report.Screenshots)
+
+    this.setState({
+      lineGroups,
+      editorState,
+    })
+  }
+
   handleLineClick({lineNo, line}) {
     this.setState({
       selectedScreenshot: line.meta,
+      selectedScreenshotDiff: line.metaDiff,
       selectedLine: lineNo
     })
+  }
+
+  isSourceAvailable() {
+    return this.state.lineGroups && this.state.lineGroups.length > 0 &&
+      this.state.editorState
   }
 
   render () {
@@ -270,19 +307,28 @@ export default class extends React.Component {
           <div className="columns">
 
             <div className="column is-6">
-              { this.props.annotatedSource.length > 0 ?
+              <div>
+                { this.canDiffWithLastSuccess() &&
+                  <button
+                    className="button is-outlined is-small is-success"
+                    onClick={e => this.handleDiffWithLastSuccessClick()}>
+                    Diff
+                  </button>
+                }
+              </div>
+              { this.isSourceAvailable() ?
                   <TestSourceView
                   startedAt={this.props.report.StartedAt}
-                  source={this.props.groupedAnnotatedSource}
-                  lineRange={this.props.editorState.lineRange}
-                  filepath={this.props.editorState.filepath}
+                  source={this.state.lineGroups}
+                  lineRange={this.state.editorState.lineRange}
+                  filepath={this.state.editorState.filepath}
                   onClickLine={this.handleLineClick}
 
                   selectedLine={this.state.selectedLine}
                   />
                   :
                   <div className="has-text-centered has-text-grey">
-                  Test Source not available (probably archived?)
+                    Test Source not available (probably archived?)
                   </div>
 
               }
@@ -293,6 +339,7 @@ export default class extends React.Component {
                 reportDir={this.props.report.ReportDir}
 
                 selectedScreenshot={this.state.selectedScreenshot}
+                selectedScreenshotDiff={this.state.selectedScreenshotDiff}
               />
             </div>
 
