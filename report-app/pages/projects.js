@@ -26,7 +26,7 @@ export default class IndexPage extends React.Component {
   async handleDeleteClick(ownerkey, projectName) {
     await deleteProject(ownerkey, projectName)
 
-    window.location.href = `/projects?ownerkey=${this.props.ownerkey}`
+    window.location.reload(true)
   }
 
   linkToProject(ownerkey, project) {

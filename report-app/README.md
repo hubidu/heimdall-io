@@ -28,13 +28,16 @@
 - Show the actual command parameters when source line is selected
 - Redesign project page with bulma
 - Show all line groups which are fully contained in the line Range
+- projects: Add environments
+- Source Code view: Show all stackframes except that of test
+- FEATURE Delete a test project: Implement the delete routes
 
 ## In Progress
 
 
 ## Backlog V 2.0
 
-- FEATURE Delete a test project: Implement the delete routes
+- FEATURE report list view: Link from bar to test details
 - Switch to https://github.com/conorhastings/react-syntax-highlighter
 - PRB There might be a stacktrace without a test stackframe (see "When I login with city missing Then I see my data in best sso view")
 - report details: Show browser log entries also for puppeteer (map puppeteer logs to webdriverio format)
@@ -44,17 +47,13 @@
 - FEATURE Diff a failed test with the last successful one
 - Should see the step outline from the list view
 - Test with ava-codeceptjs project
-
+- Loading spinner for the report list page
 
 ## Backlog
 - report details: Show list of tracking requests made during test run
-- Source Code view: Show all stackframes except that of test
 - report not showing ALL reports (http://veve-dev-test-01.intern.v.check24.de:4000/tests?ownerkey=sIzM3ZEHRb&project=%23All)
 - codeceptjs: report not grouping same test in different projects correctly
-- projects: Add environments
 - report details: Show time of last successful test
-- Add and show time delta between screenshots (in red if time > 5s)
-- Improve time travel detail view: Highlight selected step
 - Detail View: Filter by device
 - Enhance alerting: Dont send alert if last test run has been successful
 - Enhance alerting: Add all failing tests to report
@@ -70,10 +69,7 @@
 - Cleanup report database regularly
 - Mark known failures (use screenshot hashid)
 - Show compact source code snippet as <line in test> -> <line in page object>
-- Do a side by side compare of a failed and successful test run
-- Display exact date in details
 - Link to test details using hashcategory
-- Show screenshot shotAt delta
 - Filter by environment
 - Filter by device
 - exclude known problems from failures (ESOCKETTIMEOUT)
@@ -85,7 +81,6 @@
 - Rerun failing tests
 - Looks like deployment info is not always reliable (some deployments are not showing up)
 - Add label to deployment bars
-- ava-codeceptjs should also log command/function name and parameters
 - Detail View: Merge browser logs into screenshot timeline?
 - NEW Show also released tickets/stories in timeline
 - Add a hash id for errors

@@ -49,6 +49,7 @@ func main() {
 	r.GET("/attachments/:path/:file", attachments.GetAttachment)
 
 	r.GET("/projects/:ownerkey", projects.GetByOwnerkey)
+	r.POST("/projects/:ownerkey/:project/delete", projects.DeleteByOwnerkey)
 
 	r.Run("0.0.0.0:8000")
 }

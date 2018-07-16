@@ -28,6 +28,30 @@ func buildProjectInfo(projects []string, reports []model.Report) []projectInfo {
 	return ret
 }
 
+// DeleteByOwnerkey deletes a project of the given ownerkey
+func DeleteByOwnerkey(c *gin.Context) {
+	db := c.MustGet("db").(*mgo.Database)
+
+	ownerkey := c.Param("ownerkey")
+	if ownerkey == "" {
+		c.AbortWithError(400, errors.New("ownerkey must be provided"))
+		return
+	}
+
+	project := c.Param("project")
+	if project == "" {
+		c.AbortWithError(400, errors.New("project must be provided"))
+		return
+	}
+
+	_, err := db.C(ReportsCollection).RemoveAll(bson.M{"ownerkey": ownerkey, "project": project})
+	if err != nil {
+		c.Error(err)
+	}
+
+	c.Status(http.StatusOK)
+}
+
 // GetByOwnerkey retrieves available test projects for the given owner key
 func GetByOwnerkey(c *gin.Context) {
 	db := c.MustGet("db").(*mgo.Database)
