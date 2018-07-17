@@ -61,6 +61,10 @@ class SideBySideView extends React.Component {
     return this.isSourceAvailable() && this.props.reportScreenshotsDiff !== undefined
   }
 
+  isShowDiff() {
+    return this.state.showDiff
+  }
+
   handleShowDiffClick() {
     const showOrNotShow = !this.state.showDiff
 
@@ -71,8 +75,6 @@ class SideBySideView extends React.Component {
       showOrNotShow ? this.props.reportScreenshotsDiff: undefined)
 
     const editorState = getEditorState(lines, this.props.reportScreenshots)
-
-    console.log('SHOW', this.state)
 
     this.setState({
       showDiff: showOrNotShow,
@@ -102,9 +104,15 @@ class SideBySideView extends React.Component {
                 className="button is-outlined is-small is-success"
                 onClick={e => this.handleShowDiffClick()}
               >
-                <small>
-                  Toggle Diff
-                </small>
+                { this.isShowDiff() ?
+                  <small>
+                    Hide Diff
+                  </small>
+                  :
+                  <small>
+                    Show Diff
+                  </small>
+                }
               </a>
             }
             </p>

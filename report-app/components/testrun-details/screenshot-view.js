@@ -56,11 +56,11 @@ export default ({ reportDir, selectedScreenshot, selectedScreenshotDiff }) =>
     {
       selectedScreenshotDiff &&
       <Screenshot
-       title={selectedScreenshot && 'Other test run'}
-        pageTitle={selectedScreenshot.Page.Title}
-        pageUrl={selectedScreenshot.Page.Url}
+       title={'Other test run'}
+        pageTitle={selectedScreenshotDiff.Page.Title}
+        pageUrl={selectedScreenshotDiff.Page.Url}
         reportDir={reportDir}
-        imageFile={selectedScreenshot.Screenshot}
+        imageFile={selectedScreenshotDiff.Screenshot}
       />
     }
   </div>

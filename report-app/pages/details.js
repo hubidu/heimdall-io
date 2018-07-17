@@ -65,7 +65,7 @@ export default class extends React.Component {
     let historicReportsForSameDevice = historicReports.filter(r => r.DeviceSettings.Type === this.props.report.DeviceSettings.Type)
 
     const history = mapToSuccessAndFailure(historicReportsForSameDevice, this.props.ownerkey, this.props.project)
-    const lastSuccessfulReport = historicReportsForSameDevice.find(r => r.Result === 'success')
+    const lastSuccessfulReport = this.props.report.Result === 'error' ? historicReportsForSameDevice.find(r => r.Result === 'success') : undefined
 
     historicReportsForSameDevice = historicReportsForSameDevice.concat([Object.assign(this.props.report)])
     const successfulReports = historicReportsForSameDevice.filter(r => r.Result === 'success')
