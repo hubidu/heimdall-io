@@ -24,7 +24,7 @@ export default ({ownerkey, project, hashcategory, report, isListView = true}) =>
           <span className="TestTitle-time is-pulled-right">
             <span>at</span>&nbsp;<strong>{moment(report.StartedAt).format('ddd, H:mm')}</strong>
             &nbsp;&middot;&nbsp;
-            <span>in</span>&nbsp;<strong>{round(report.Duration)}s</strong>
+            <span>in</span>&nbsp;<strong>{round(report.Duration)} s</strong>
             &nbsp;&middot;&nbsp;
             {
               report.User &&

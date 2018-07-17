@@ -33,6 +33,7 @@
 - FEATURE Delete a test project: Implement the delete routes
 - FEATURE report list view: Link from bar to test details
 - FEATURE Diff a failed test with the last successful one
+- report details: Show browser log entries also for puppeteer (map puppeteer logs to webdriverio format)
 
 ## In Progress
 
@@ -41,7 +42,6 @@
 
 - Implement a loading spinner
 - CHORE Switch to https://github.com/conorhastings/react-syntax-highlighter
-- report details: Show browser log entries also for puppeteer (map puppeteer logs to webdriverio format)
 - FEATURE report list: Group failed tests by prefix
 - report list: Hide expected/actual section by default
 - details: when test failed: Provide a link to the last successful run

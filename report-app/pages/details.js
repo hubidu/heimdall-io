@@ -4,6 +4,7 @@ import Layout from '../components/layout'
 import TestTitle from '../components/test-title'
 import TestResultDeviceIcon from '../components/test-result-device-icon'
 import TestHistoryBars from '../components/test-history-bars'
+import Spinner from '../components/spinner'
 
 import ConsoleMessagesCount from '../components/testrun-details/console-messages-count'
 import SideBySideView from '../components/testrun-details/side-by-side-view'
@@ -85,6 +86,7 @@ export default class extends React.Component {
     // TODO why put them in state at all?
     const consoleErrors = this.props.browserlogs
     this.setState({
+      loaded: true,
       consoleErrors,
     })
   }
@@ -109,45 +111,51 @@ export default class extends React.Component {
 
           </div>
 
-          { this.state.history && this.state.consoleErrors &&
-          <div className="level has-background-light">
-            <div className="level-item has-text-centered">
-              <div>
-                <p className="heading">
-                  History
-                </p>
-                <div className="title">
-                    <TestHistoryBars
-                    data={this.state.history}
-                    maxBars={20}
-                    />
+          {
+            this.state.loaded === true ?
+            <div className="TestDetails-body">
+              <div className="level has-background-light">
+                <div className="level-item has-text-centered">
+                  <div>
+                    <p className="heading">
+                      History
+                    </p>
+                    <div className="title">
+                        <TestHistoryBars
+                        data={this.state.history}
+                        maxBars={20}
+                        />
+                    </div>
+                  </div>
+                </div>
+                <div className="level-item has-text-centered">
+                  <div>
+                    <p className="heading">Console Messages</p>
+                    <p className="title">
+                      <ConsoleMessagesCount reportId={this.props.report._id} messages={this.state.consoleErrors} />
+                    </p>
+                  </div>
+                </div>
+                <div className="level-item has-text-centered">
+                  <div>
+                    <p className="heading">Stability</p>
+                    <p className="title">{this.state.stability} %</p>
+                  </div>
                 </div>
               </div>
+
+              <SideBySideView
+                reportDir={this.props.report.ReportDir}
+                startedAt={this.props.report.StartedAt}
+                source={this.props.source}
+                reportScreenshots={this.props.report.Screenshots}
+                reportScreenshotsDiff={this.state.lastSuccessfulReport && this.state.lastSuccessfulReport.Screenshots}
+              />
             </div>
-            <div className="level-item has-text-centered">
-              <div>
-                <p className="heading">Console Messages</p>
-                <p className="title">
-                  <ConsoleMessagesCount reportId={this.props.report._id} messages={this.state.consoleErrors} />
-                </p>
-              </div>
-            </div>
-            <div className="level-item has-text-centered">
-              <div>
-                <p className="heading">Stability</p>
-                <p className="title">{this.state.stability} %</p>
-              </div>
-            </div>
-          </div>
+            :
+            <Spinner />
           }
 
-          <SideBySideView
-            reportDir={this.props.report.ReportDir}
-            startedAt={this.props.report.StartedAt}
-            source={this.props.source}
-            reportScreenshots={this.props.report.Screenshots}
-            reportScreenshotsDiff={this.state.lastSuccessfulReport && this.state.lastSuccessfulReport.Screenshots}
-          />
 
         </div>
         <style jsx>{`
