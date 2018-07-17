@@ -34,22 +34,23 @@
 - FEATURE report list view: Link from bar to test details
 - FEATURE Diff a failed test with the last successful one
 - report details: Show browser log entries also for puppeteer (map puppeteer logs to webdriverio format)
+- Implement a loading spinner
+- Loading spinner for the report list page
 
 ## In Progress
 
 
 ## Backlog V 2.0
 
-- Implement a loading spinner
+- Diff View: Should also diff line in source since that might be the cause for the failure
 - CHORE Switch to https://github.com/conorhastings/react-syntax-highlighter
 - FEATURE report list: Group failed tests by prefix
 - report list: Hide expected/actual section by default
 - details: when test failed: Provide a link to the last successful run
-- Should see the step outline from the list view
 - Test with ava-codeceptjs project
-- Loading spinner for the report list page
 
 ## Backlog
+- Should see the step outline from the list view
 - PRB There might be a stacktrace without a test stackframe (see "When I login with city missing Then I see my data in best sso view")
 - report details: Show list of tracking requests made during test run
 - report not showing ALL reports (http://veve-dev-test-01.intern.v.check24.de:4000/tests?ownerkey=sIzM3ZEHRb&project=%23All)

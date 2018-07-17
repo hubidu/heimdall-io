@@ -37,7 +37,7 @@ const Screenshot = ({title, pageTitle, pageUrl, reportDir, imageFile}) =>
   </div>
 
 
-export default ({ reportDir, selectedScreenshot, selectedScreenshotDiff }) =>
+export default ({ reportDir, selectedScreenshot, reportDirDiff, selectedScreenshotDiff }) =>
   <div className="ScreenshotContainer">
     {
       selectedScreenshot &&
@@ -59,7 +59,7 @@ export default ({ reportDir, selectedScreenshot, selectedScreenshotDiff }) =>
        title={'Other test run'}
         pageTitle={selectedScreenshotDiff.Page.Title}
         pageUrl={selectedScreenshotDiff.Page.Url}
-        reportDir={reportDir}
+        reportDir={reportDirDiff}
         imageFile={selectedScreenshotDiff.Screenshot}
       />
     }

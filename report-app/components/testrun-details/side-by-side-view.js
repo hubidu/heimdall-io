@@ -146,7 +146,7 @@ class SideBySideView extends React.Component {
         <div className="column is-6 TestDetails-screenshotViewContainer">
           <ScreenshotView
             reportDir={this.props.reportDir}
-
+            reportDirDiff={this.props.reportDirDiff}
             selectedScreenshot={this.state.selectedScreenshot}
             selectedScreenshotDiff={this.state.showDiff === true && this.state.selectedScreenshotDiff}
           />

@@ -21,6 +21,7 @@ const hasMetaInfo = line => line.meta
 const hasMoreThanOneStackframe = line => line.meta.CodeStack && line.meta.CodeStack.length > 1
 const isInRange = (lineRange, lineNo) => lineRange && (lineNo >= lineRange[0] && lineNo <= lineRange[1])
 const isFullyInRange = (lineRange, group) => isInRange(lineRange, group.first) && isInRange(lineRange, group.first + group.len)
+const isTooLarge = group => group.len > 10
 
 const TestSourceLineGroup = ({group, startedAt, selectedLine, lineRange, onClickLine}) =>
   <div className={`TestSourceLineGroup`}>
