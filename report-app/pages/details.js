@@ -14,6 +14,7 @@ import getBrowserlogs from '../services/get-browserlogs'
 import getReportsByCategory from '../services/get-reports-by-category'
 
 import round from '../services/utils/round'
+import mapToUnifiedLogFormat from '../services/utils/map-to-unified-log-format'
 
 const createTestDetailLink = (id, ownerkey, project, hashcategory) => `/details?ownerkey=${ownerkey}&project=${encodeURIComponent(project)}&id=${id}&hashcategory=${hashcategory}`
 const mapToSuccessAndFailure = (historicReports, ownerkey, project) => historicReports ? historicReports.map(r => Object.assign({}, {
@@ -38,7 +39,7 @@ export default class extends React.Component {
       project,
       report,
       source,
-      browserlogs
+      browserlogs: mapToUnifiedLogFormat(browserlogs),
     }
   }
 
@@ -77,18 +78,12 @@ export default class extends React.Component {
     }
   }
 
-  // TODO remove this
-  getConsoleErrors() {
-    if (!this.props.browserlogs) return []
-    return this.props.browserlogs
-  }
-
   async componentDidMount() {
     const historicReportData = await this.getHistoricReportData()
     this.setState(historicReportData)
 
     // TODO why put them in state at all?
-    const consoleErrors = this.getConsoleErrors()
+    const consoleErrors = this.props.browserlogs
     this.setState({
       consoleErrors,
     })

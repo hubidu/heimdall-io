@@ -32,6 +32,7 @@
 - Source Code view: Show all stackframes except that of test
 - FEATURE Delete a test project: Implement the delete routes
 - FEATURE report list view: Link from bar to test details
+- FEATURE Diff a failed test with the last successful one
 
 ## In Progress
 
@@ -39,9 +40,7 @@
 ## Backlog V 2.0
 
 - Implement a loading spinner
-- FEATURE Diff a failed test with the last successful one
 - CHORE Switch to https://github.com/conorhastings/react-syntax-highlighter
-- PRB There might be a stacktrace without a test stackframe (see "When I login with city missing Then I see my data in best sso view")
 - report details: Show browser log entries also for puppeteer (map puppeteer logs to webdriverio format)
 - FEATURE report list: Group failed tests by prefix
 - report list: Hide expected/actual section by default
@@ -51,6 +50,7 @@
 - Loading spinner for the report list page
 
 ## Backlog
+- PRB There might be a stacktrace without a test stackframe (see "When I login with city missing Then I see my data in best sso view")
 - report details: Show list of tracking requests made during test run
 - report not showing ALL reports (http://veve-dev-test-01.intern.v.check24.de:4000/tests?ownerkey=sIzM3ZEHRb&project=%23All)
 - codeceptjs: report not grouping same test in different projects correctly

@@ -4,6 +4,7 @@ import Layout from '../components/layout'
 
 import getReportById from '../services/get-report-by-id'
 import getBrowserlogs from '../services/get-browserlogs'
+import mapToUnifiedLogFormat from '../services/utils/map-to-unified-log-format';
 
 const tagColor = l => {
   switch (l.level) {
@@ -23,7 +24,7 @@ export default class IndexPage extends React.Component {
 
     return {
       report,
-      browserlogs
+      browserlogs: mapToUnifiedLogFormat(browserlogs)
     }
 
   }
@@ -47,7 +48,13 @@ export default class IndexPage extends React.Component {
             {
               this.props.browserlogs.map((l, i) =>
                 <tr key={i}>
-                  <td>{moment(l.timestamp).format('ddd, H:mm')}</td>
+                  <td>
+                  { l.timestamp ?
+                    moment(l.timestamp).format('ddd, H:mm')
+                    :
+                    '-'
+                  }
+                  </td>
                   <td>
                     <span className={`tag ${tagColor(l)}`}>
                     {l.level}
