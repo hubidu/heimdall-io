@@ -42,6 +42,7 @@
 
 ## Backlog V 2.0
 
+- BUG: Diff LEDs are shown incorrectly on page load
 - Diff View: Should also diff line in source since that might be the cause for the failure
 - CHORE Switch to https://github.com/conorhastings/react-syntax-highlighter
 - FEATURE report list: Group failed tests by prefix
@@ -50,6 +51,7 @@
 - Test with ava-codeceptjs project
 
 ## Backlog
+- Improve Source Code View: COllapse areas without annotations
 - Should see the step outline from the list view
 - PRB There might be a stacktrace without a test stackframe (see "When I login with city missing Then I see my data in best sso view")
 - report details: Show list of tracking requests made during test run
