@@ -38,6 +38,7 @@
 
 ## Backlog V 2.0
 
+- Implement a loading spinner
 - FEATURE Diff a failed test with the last successful one
 - CHORE Switch to https://github.com/conorhastings/react-syntax-highlighter
 - PRB There might be a stacktrace without a test stackframe (see "When I login with city missing Then I see my data in best sso view")

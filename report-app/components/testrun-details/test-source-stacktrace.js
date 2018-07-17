@@ -1,4 +1,4 @@
-import SourceCodeSnippet from '../components/SourceCodeSnippet'
+import SourceCodeSnippet from './source-code-snippet'
 
 export default ({stack, cmd}) =>
   <div className="TestSourceStacktrace box">

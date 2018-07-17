@@ -1,5 +1,8 @@
 import getScreenshotUrl from '../services/get-sceenshot-url'
 
+/**
+ * @deprecated
+ */
 export default ({ success, title, url, path, screenshot }) =>
     <div>
         <figure className={success ? `br2 ba bw2 b--light-green pa3` : `br2 ba bw2 b--light-red pa3`}>

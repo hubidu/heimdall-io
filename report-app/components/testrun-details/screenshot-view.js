@@ -1,0 +1,66 @@
+import Magnifier from 'react-magnifier';
+
+import getScreenshotUrl from '../../services/get-screenshot-url'
+
+const Screenshot = ({title, pageTitle, pageUrl, reportDir, imageFile}) =>
+  <div className="Screenshot">
+    {
+      title &&
+      <h6 className="has-text-centered has-text-grey-light">
+        {title}
+      </h6>
+    }
+    <h6 className="Screenshot-title title is-4">
+      {pageTitle}
+    </h6>
+
+    <h6 className="Screenshot-url has-text-link is-size-7">
+      <a href={pageUrl} target="_blank">{pageUrl}</a>
+    </h6>
+
+    <Magnifier
+      zoomFactor={2}
+      mgWidth={300}
+      mgHeight={200}
+      mgShape='square'
+      src={getScreenshotUrl(reportDir, imageFile)}
+      width='100%' />
+
+    <style jsx>{`
+    .Screenshot-title {
+      margin: 0;
+    }
+    .Screenshot-url {
+      margin-bottom: 1em;
+    }
+    `}</style>
+  </div>
+
+
+export default ({ reportDir, selectedScreenshot, selectedScreenshotDiff }) =>
+  <div className="ScreenshotContainer">
+    {
+      selectedScreenshot &&
+      <Screenshot
+        title={selectedScreenshotDiff && 'This test run'}
+        pageTitle={selectedScreenshot.Page.Title}
+        pageUrl={selectedScreenshot.Page.Url}
+        reportDir={reportDir}
+        imageFile={selectedScreenshot.Screenshot}
+      />
+    }
+    {
+      selectedScreenshotDiff &&
+        <hr />
+    }
+    {
+      selectedScreenshotDiff &&
+      <Screenshot
+       title={selectedScreenshot && 'Other test run'}
+        pageTitle={selectedScreenshot.Page.Title}
+        pageUrl={selectedScreenshot.Page.Url}
+        reportDir={reportDir}
+        imageFile={selectedScreenshot.Screenshot}
+      />
+    }
+  </div>

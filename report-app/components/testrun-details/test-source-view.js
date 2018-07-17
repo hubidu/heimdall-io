@@ -1,9 +1,9 @@
-import TestError from '../components/test-error'
-import TestSourceStacktrace from '../components/test-source-stacktrace'
+import TestError from '../test-error'
+import TestSourceStacktrace from './test-source-stacktrace'
 
-import round from '../services/utils/round'
-import filePathSplit from '../services/utils/filepath-split'
-import lastOf from '../services/utils/last-of'
+import round from '../../services/utils/round'
+import filePathSplit from '../../services/utils/filepath-split'
+import lastOf from '../../services/utils/last-of'
 
 const firstN = (arr, n = 5) => arr.slice(0, n)
 
@@ -123,7 +123,9 @@ const TestSourceLine = ({startedAt, selected = false, isInRange = false, lineNo,
     }
     .TestSourceLine-relTime {
       display: inline-block;
+      text-align: right;
       width: 3em;
+      padding-right: 2px;
       font-size: 0.75em;
     }
     .TestSourceLine--selectable {
