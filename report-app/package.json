@@ -20,6 +20,7 @@
     "base-64": "^0.1.0",
     "cross-env": "^5.1.4",
     "dotenv": "^5.0.1",
+    "nprogress": "^0.2.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-highlight": "^0.12.0",

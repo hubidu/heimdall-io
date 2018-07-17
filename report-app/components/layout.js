@@ -1,6 +1,16 @@
 import Link from 'next/link'
 import Head from 'next/head'
 
+import NProgress from 'nprogress'
+import Router from 'next/router'
+
+Router.onRouteChangeStart = (url) => {
+  console.log(`Loading: ${url}`)
+  NProgress.start()
+}
+Router.onRouteChangeComplete = () => NProgress.done()
+Router.onRouteChangeError = () => NProgress.done()
+
 const linkToProjects = ownerkey => {
   return {
     pathname: '/projects',
@@ -14,6 +24,9 @@ export default ({ children, title = '', ownerkey, showNav = true }) => (
         {<title>{ title }</title>}
         <meta charSet='utf-8' />
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
+
+        {/* Import CSS for nprogress */}
+        <link rel='stylesheet' type='text/css' href='/static/nprogress.css' />
 
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
 
