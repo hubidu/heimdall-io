@@ -42,6 +42,7 @@
 
 ## Backlog V 2.0
 
+- Source View: Could use this https://bitbucket.check24.de/s/-1746010450/ca3ded2/1/1.0/_/download/resources/com.atlassian.bitbucket.server.bitbucket-web:skipped-container/torn-edge.png
 - BUG: Diff LEDs are shown incorrectly on page load
 - Diff View: Should also diff line in source since that might be the cause for the failure
 - CHORE Switch to https://github.com/conorhastings/react-syntax-highlighter
@@ -49,6 +50,8 @@
 - report list: Hide expected/actual section by default
 - details: when test failed: Provide a link to the last successful run
 - Test with ava-codeceptjs project
+- IDEA Add a mini-thumbnail bar (filmstrip) to quickly navigate between screenshots
+- IDEA Add forward/backward buttons to quickly navigate between screenshots
 
 ## Backlog
 - Improve Source Code View: COllapse areas without annotations

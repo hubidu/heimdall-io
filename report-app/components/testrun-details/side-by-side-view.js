@@ -24,7 +24,7 @@ class SideBySideView extends React.Component {
     const {lines, lineGroups} = annotateTestSource(
       this.props.source,
       this.props.reportScreenshots,
-      this.props.reportScreenshotsDiff
+      this.isShowDiff() ? this.props.reportScreenshotsDiff : undefined,
     )
     const editorState = getEditorState(lines, this.props.reportScreenshots)
 
@@ -62,22 +62,22 @@ class SideBySideView extends React.Component {
   }
 
   isShowDiff() {
-    return this.state.showDiff
+    return this.state && this.state.showDiff
   }
 
   handleShowDiffClick() {
-    const showOrNotShow = !this.state.showDiff
+    const isShowDiffNow = !this.isShowDiff()
 
     // Compute annotatedSource with diff
     const {lines, lineGroups} = annotateTestSource(
       this.props.source,
       this.props.reportScreenshots,
-      showOrNotShow ? this.props.reportScreenshotsDiff: undefined)
+      isShowDiffNow ? this.props.reportScreenshotsDiff: undefined)
 
     const editorState = getEditorState(lines, this.props.reportScreenshots)
 
     this.setState({
-      showDiff: showOrNotShow,
+      showDiff: isShowDiffNow,
       lineGroups,
       editorState,
     })
