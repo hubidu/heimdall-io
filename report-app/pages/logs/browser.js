@@ -1,10 +1,10 @@
 import React from 'react'
 import moment from 'moment'
-import Layout from '../components/layout'
+import Layout from '../../components/layout'
 
-import getReportById from '../services/get-report-by-id'
-import getBrowserlogs from '../services/get-browserlogs'
-import mapToUnifiedLogFormat from '../services/utils/map-to-unified-log-format';
+import getReportById from '../../services/get-report-by-id'
+import getBrowserlogs from '../../services/get-browserlogs'
+import mapToUnifiedLogFormat from '../../services/utils/map-to-unified-log-format';
 
 const tagColor = l => {
   switch (l.level) {

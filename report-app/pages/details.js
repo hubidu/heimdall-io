@@ -7,11 +7,13 @@ import TestHistoryBars from '../components/test-history-bars'
 import Spinner from '../components/spinner'
 
 import ConsoleMessagesCount from '../components/testrun-details/console-messages-count'
+import PerformanceLogsCount from '../components/testrun-details/performance-logs-count'
 import SideBySideView from '../components/testrun-details/side-by-side-view'
 
 import getReportById from '../services/get-report-by-id'
 import getTestSource from '../services/get-test-source'
 import getBrowserlogs from '../services/get-browserlogs'
+import getPerformanceLogs from '../services/get-performance-logs'
 import getReportsByCategory from '../services/get-reports-by-category'
 
 import round from '../services/utils/round'
@@ -30,9 +32,10 @@ export default class extends React.Component {
     if (!ownerkey) throw new Error('Please provide your owner key in the query parameters')
 
     const report = await getReportById(id)
-    const [source, browserlogs] = await Promise.all([
+    const [source, browserlogs, performanceLogs] = await Promise.all([
       await getTestSource(report.ReportDir),
       await getBrowserlogs(report.ReportDir),
+      await getPerformanceLogs(report.ReportDir),
     ])
 
     return {
@@ -41,6 +44,7 @@ export default class extends React.Component {
       report,
       source,
       browserlogs: mapToUnifiedLogFormat(browserlogs),
+      performanceLogs,
     }
   }
 
@@ -130,7 +134,15 @@ export default class extends React.Component {
                 </div>
                 <div className="level-item has-text-centered">
                   <div>
-                    <p className="heading">Console Messages</p>
+                    <p className="heading">Performance Logs</p>
+                    <p className="title">
+                      <PerformanceLogsCount reportId={this.props.report._id} logs={this.props.performanceLogs} />
+                    </p>
+                  </div>
+                </div>
+                <div className="level-item has-text-centered">
+                  <div>
+                    <p className="heading">Console Logs</p>
                     <p className="title">
                       <ConsoleMessagesCount reportId={this.props.report._id} messages={this.state.consoleErrors} />
                     </p>
@@ -145,6 +157,7 @@ export default class extends React.Component {
               </div>
 
               <SideBySideView
+                reportId={this.props.report._id}
                 reportDir={this.props.report.ReportDir}
                 reportDirDiff={this.state.lastSuccessfulReport && this.state.lastSuccessfulReport.ReportDir}
                 startedAt={this.props.report.StartedAt}

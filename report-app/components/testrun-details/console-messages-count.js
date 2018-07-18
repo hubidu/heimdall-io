@@ -1,4 +1,4 @@
-const createBrowserlogsDetailLink = (id) => `/logs?id=${id}`
+const createBrowserlogsDetailLink = (id) => `/logs/browser?id=${id}`
 
 const count = (messages, level) => messages.filter(m => m.level === level).length
 

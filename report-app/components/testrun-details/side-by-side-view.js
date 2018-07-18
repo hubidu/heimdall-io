@@ -127,13 +127,14 @@ class SideBySideView extends React.Component {
 
           { this.isSourceAvailable() ?
               <TestSourceView
-              startedAt={this.props.startedAt}
-              source={this.state.lineGroups}
-              lineRange={this.state.editorState.lineRange}
-              filepath={this.state.editorState.filepath}
-              onClickLine={this.handleLineClick}
+                reportId={this.props.reportId}
+                startedAt={this.props.startedAt}
+                source={this.state.lineGroups}
+                lineRange={this.state.editorState.lineRange}
+                filepath={this.state.editorState.filepath}
+                onClickLine={this.handleLineClick}
 
-              selectedLine={this.state.selectedLine}
+                selectedLine={this.state.selectedLine}
               />
               :
               <div className="has-text-centered has-text-grey">
@@ -158,6 +159,7 @@ class SideBySideView extends React.Component {
 }
 
 SideBySideView.propTypes = {
+  reportId: PropTypes.string,
   reportDir: PropTypes.string,
   startedAt: PropTypes.number,
   source: PropTypes.string,

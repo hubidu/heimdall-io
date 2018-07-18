@@ -1,5 +1,6 @@
 import TestError from '../test-error'
 import TestSourceStacktrace from './test-source-stacktrace'
+import HtmlSourceLink from './html-source-link'
 
 import round from '../../services/utils/round'
 import filePathSplit from '../../services/utils/filepath-split'
@@ -23,12 +24,13 @@ const isInRange = (lineRange, lineNo) => lineRange && (lineNo >= lineRange[0] &&
 const isFullyInRange = (lineRange, group) => isInRange(lineRange, group.first) && isInRange(lineRange, group.first + group.len)
 const isTooLarge = group => group.len > 10
 
-const TestSourceLineGroup = ({group, startedAt, selectedLine, lineRange, onClickLine}) =>
+const TestSourceLineGroup = ({ reportId, group, startedAt, selectedLine, lineRange, onClickLine }) =>
   <div className={`TestSourceLineGroup`}>
     { group.isAnnotated === false && !isFullyInRange(lineRange, group) &&
       <div className="TestSourceLineGroup-hiddenPart">
         {firstN(group.lines).map((l, i) =>
           <TestSourceLine
+            reportId={reportId}
             key={i}
             selected={false}
             isInRange={isInRange(lineRange, l.lineNo)}
@@ -40,6 +42,7 @@ const TestSourceLineGroup = ({group, startedAt, selectedLine, lineRange, onClick
         <div className="TestSourceLineGroup--hidden">{group.lines.length} lines hidden</div>
 
         <TestSourceLine
+          reportId={reportId}
           selected={false}
           isInRange={isInRange(lineRange, lastOf(group.lines).lineNo)}
           lineNo={lastOf(group.lines).lineNo}
@@ -51,6 +54,7 @@ const TestSourceLineGroup = ({group, startedAt, selectedLine, lineRange, onClick
     {
       (group.isAnnotated || isFullyInRange(lineRange, group)) && group.lines.map((l, i) =>
         <TestSourceLine
+        reportId={reportId}
         key={i}
         startedAt={startedAt}
         selected={selectedLine === l.lineNo}
@@ -72,7 +76,7 @@ const TestSourceLineGroup = ({group, startedAt, selectedLine, lineRange, onClick
   </div>
 
 
-const TestSourceLine = ({startedAt, selected = false, isInRange = false, lineNo, line, onClick}) =>
+const TestSourceLine = ({ reportId, startedAt, selected = false, isInRange = false, lineNo, line, onClick }) =>
   <div
     className={`TestSourceLine ${hasMetaInfo(line) ? 'TestSourceLine--selectable' : ''} ${selected ? 'TestSourceLine--selected' : ''}`}
     key={lineNo}
@@ -108,6 +112,7 @@ const TestSourceLine = ({startedAt, selected = false, isInRange = false, lineNo,
       hasMetaInfo(line) &&
       line.meta.Success === false &&
         <div className="TestSourceLine-errorBox is-clipped">
+          <HtmlSourceLink reportId={reportId} />
           <TestError screenshot={line.meta} />
         </div>
     }
@@ -164,7 +169,7 @@ const TestSourceLine = ({startedAt, selected = false, isInRange = false, lineNo,
   </div>
 
 
-export default ({startedAt, filepath, source, selectedLine, lineRange, onClickLine}) =>
+export default ({ reportId, startedAt, filepath, source, selectedLine, lineRange, onClickLine }) =>
   <div>
     <p className="has-text-dark is-size-7">
       <strong>{filePathSplit(filepath).file}</strong>
@@ -175,6 +180,7 @@ export default ({startedAt, filepath, source, selectedLine, lineRange, onClickLi
       {
         source.map((lg, i) =>
           <TestSourceLineGroup
+            reportId={reportId}
             key={i}
             group={lg}
             startedAt={startedAt}
