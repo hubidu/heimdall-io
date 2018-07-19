@@ -17,7 +17,7 @@ const mapToSuccessAndFailure = (historicReports, ownerkey, project) => historicR
 })) : undefined
 
 export default({ownerkey, project, reportGroup = [], showErrors = false}) =>
-  <div className="columns is-1">
+  <div className="TestReportGroup columns is-1">
     <div className="column is-narrow is-hidden-mobile">
       <TestResultDeviceIcon
         result={reportGroup.LastReport.Result}
@@ -49,5 +49,10 @@ export default({ownerkey, project, reportGroup = [], showErrors = false}) =>
       <span className="has-text-grey-light">in </span>
       {round(reportGroup.LastReport.Duration)} s
     </div>
+    <style jsx>{`
+    .TestReportGroup .column {
+      padding: 8px; // reduce gutter
+    }
+    `}</style>
   </div>
 

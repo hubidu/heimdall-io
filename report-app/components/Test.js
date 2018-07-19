@@ -1,3 +1,6 @@
+// @deprecated
+
+
 import Highlight from 'react-highlight'
 import Ansi from 'ansi-to-react'
 import moment from 'moment'

@@ -1,3 +1,5 @@
+// @deprecated
+
 import Pie from './pie'
 import TreeLeaf from './tree-leaf'
 

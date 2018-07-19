@@ -8,7 +8,7 @@ export default ({reportId, messages}) => {
   const infoCount = count(messages, 'INFO');
 
   return (
-  <a href={createBrowserlogsDetailLink(reportId)} >
+  <a href={createBrowserlogsDetailLink(reportId)} target="_blank">
     {errorCount > 0 && <span className='has-text-danger'>
       {errorCount}
     </span>}

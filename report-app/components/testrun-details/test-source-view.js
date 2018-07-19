@@ -18,7 +18,7 @@ const backgroundColor = meta => {
 
 const formatRelTime = (startedAt, meta) => round((meta.ShotAt - startedAt) / 1000, 1)
 
-const hasMetaInfo = line => line.meta
+const hasMetaInfo = line => line.meta || line.metaDiff
 const hasMoreThanOneStackframe = line => line.meta.CodeStack && line.meta.CodeStack.length > 1
 const isInRange = (lineRange, lineNo) => lineRange && (lineNo >= lineRange[0] && lineNo <= lineRange[1])
 const isFullyInRange = (lineRange, group) => isInRange(lineRange, group.first) && isInRange(lineRange, group.first + group.len)
@@ -136,7 +136,7 @@ const TestSourceLine = ({ reportId, startedAt, selected = false, isInRange = fal
     }
     .TestSourceLine--selectable {
       font-weight: bold;
-      background-color: #eee;
+      background-color: #f5f5f5;
     }
     .TestSourceLine--selectable:hover {
       cursor: pointer;

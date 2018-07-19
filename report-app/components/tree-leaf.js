@@ -1,3 +1,5 @@
+// @deprecated
+
 import moment from 'moment'
 import Popover from './popover'
 
