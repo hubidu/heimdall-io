@@ -23,7 +23,7 @@ export default({ownerkey, project, reportGroup = [], showErrors = false}) =>
         result={reportGroup.LastReport.Result}
         deviceSettings={reportGroup.LastReport.DeviceSettings} />
     </div>
-    <div className="column is-7 is-size-6">
+    <div className="column is-7">
       <TestTitle
         ownerkey={ownerkey}
         project={project}
