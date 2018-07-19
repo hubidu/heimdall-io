@@ -12,9 +12,14 @@ const annotateSource = (source, screenshots, screenshotsDiff) => {
 
   const getMetadataForLine = (screenshots, lineNo) => {
     const screenshotWithATestStackframe = screenshot => {
-      const presumedTestStackframe = lastOf(screenshot.CodeStack)
-      return presumedTestStackframe.Location.Line === lineNo &&
-        presumedTestStackframe.Location.File === PathToTestSourceFile
+      // const presumedTestStackframe = lastOf(screenshot.CodeStack)
+      // return presumedTestStackframe.Location.Line === lineNo &&
+      //   presumedTestStackframe.Location.File === PathToTestSourceFile
+      for (let cs of screenshot.CodeStack) {
+        if (cs.Location.Line === lineNo && cs.Location.File === PathToTestSourceFile)
+          return true
+      }
+      return false
     }
 
     const screenshot = screenshots.find(screenshotWithATestStackframe)

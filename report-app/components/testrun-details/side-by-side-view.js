@@ -26,6 +26,7 @@ class SideBySideView extends React.Component {
       this.props.reportScreenshots,
       this.isShowDiff() ? this.props.reportScreenshotsDiff : undefined,
     )
+
     const editorState = getEditorState(lines, this.props.reportScreenshots)
 
     this.setState({

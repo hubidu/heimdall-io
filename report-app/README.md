@@ -48,6 +48,7 @@
 
 ## Backlog V 2.0
 
+- IDEA Use prefix title as filter for tests/navigation
 - IDEA Detect broken image links
 - IDEA Add forward/backward buttons to quickly navigate between screenshots
 - Source View: Could use this https://bitbucket.check24.de/s/-1746010450/ca3ded2/1/1.0/_/download/resources/com.atlassian.bitbucket.server.bitbucket-web:skipped-container/torn-edge.png to mark hidden text fragments
