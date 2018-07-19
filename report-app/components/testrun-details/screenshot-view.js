@@ -1,6 +1,11 @@
+import ImageIcon from 'react-icons/lib/fa/image'
 import Magnifier from 'react-magnifier';
 
 import getScreenshotUrl from '../../services/get-screenshot-url'
+
+const handleImageClick = (reportDir, imageFile) => {
+  window.location = getScreenshotUrl(reportDir, imageFile)
+}
 
 const Screenshot = ({title, pageTitle, pageUrl, reportDir, imageFile}) =>
   <div className="Screenshot">
@@ -11,6 +16,10 @@ const Screenshot = ({title, pageTitle, pageUrl, reportDir, imageFile}) =>
       </h6>
     }
     <h6 className="Screenshot-title title is-4">
+      <a className="Screenshot-openInTab has-text-grey-light" href={getScreenshotUrl(reportDir, imageFile)} target="_blank">
+        <ImageIcon />
+      </a>
+      &nbsp;
       {pageTitle}
     </h6>
 
@@ -19,6 +28,7 @@ const Screenshot = ({title, pageTitle, pageUrl, reportDir, imageFile}) =>
     </h6>
 
     <Magnifier
+      onClick={() => handleImageClick(reportDir, imageFile)}
       zoomFactor={2}
       mgWidth={300}
       mgHeight={200}
