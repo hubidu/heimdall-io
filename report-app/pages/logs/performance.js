@@ -12,6 +12,7 @@ const mapLogData = logs => logs.map(l => ({
   duration: round(l.duration),
   size: l.encodedBodySize,
   entryType: l.entryType,
+  initiatorType: l.initiatorType,
   name: l.name,
 }))
 
@@ -31,6 +32,8 @@ export default class IndexPage extends React.Component {
     const [logs] = await Promise.all([
       await getPerformanceLogs(report.ReportDir),
     ])
+
+    console.log(logs)
 
     return {
       report,
@@ -62,7 +65,7 @@ export default class IndexPage extends React.Component {
                 <tr key={i}>
                   <td>{l.startTime}</td>
                   <td className={`${tagColor(l.entryType)}`}>
-                    {l.entryType}
+                    {l.initiatorType ? l.initiatorType : l.entryType}
                   </td>
                   <td>{l.duration}</td>
                   <td>{l.size}</td>

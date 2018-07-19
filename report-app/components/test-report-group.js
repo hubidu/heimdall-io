@@ -5,6 +5,8 @@ import TestHistoryBars from '../components/test-history-bars'
 import TestError from '../components/test-error'
 import TestTitle from '../components/test-title'
 
+import round from '../services/utils/round'
+
 // const mapToSuccessAndFailure = runs => runs.map(run => ({ t: run.StartedAt, value: run.Duration, success: run.Result === 'success'}))
 const createTestDetailLink = (id, ownerkey, project, hashcategory) => `/details?ownerkey=${ownerkey}&project=${encodeURIComponent(project)}&id=${id}&hashcategory=${hashcategory}`
 const mapToSuccessAndFailure = (historicReports, ownerkey, project) => historicReports ? historicReports.map(r => Object.assign({}, {
@@ -44,7 +46,8 @@ export default({ownerkey, project, reportGroup = [], showErrors = false}) =>
     <div className="column is-narrow is-size-7">
       <strong>{moment(reportGroup.LastReport.Started).fromNow()}</strong>
       <br/>
-      in {~~reportGroup.LastReport.Duration}s
+      <span className="has-text-grey-light">in </span>
+      {round(reportGroup.LastReport.Duration)} s
     </div>
   </div>
 

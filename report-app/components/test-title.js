@@ -13,11 +13,17 @@ const linkToReportDetails = (ownerkey, project, id, hashcategory) => {
 const hasData = title => title.indexOf('|') > -1
 const extractTitle = title => title.indexOf('|') >= 0 ? title.split('|')[0] : title
 const extractTitleData = title => title.indexOf('|') >= 0 ? title.split('|')[1] : undefined
+const formatPrefix = str => str.replace(/--/gi, '/')
 
 export default ({ownerkey, project, hashcategory, report, isListView = true}) =>
   <div className="TestTitle">
     <div className="TestTitle-prefix has-text-grey is-size-7">
-      {report.Prefix.replace(/--/gi, '/')}
+      { !isListView && report.Environment &&
+        <small className="TestTitle-environment is-size-7 has-text-info">
+          {report.Environment}
+        </small>
+      }
+      {formatPrefix(report.Prefix)}
 
       {
         isListView === false &&
@@ -36,12 +42,12 @@ export default ({ownerkey, project, hashcategory, report, isListView = true}) =>
       }
     </div>
 
-    <div className="TestTitle-title">
+    <div className={`TestTitle-title ${isListView ? '' : 'is-size-6'}`}>
     {
       isListView ?
         <Link href={linkToReportDetails(ownerkey, project, report._id, hashcategory)}>
           <a>
-            <b className="hast-text-dark">{extractTitle(report.Title)}</b>
+            <b className="has-text-dark">{extractTitle(report.Title)}</b>
           </a>
         </Link>
         :
@@ -50,11 +56,6 @@ export default ({ownerkey, project, hashcategory, report, isListView = true}) =>
     </div>
 
     <div className="TestTitle-tags">
-      { report.Environment &&
-        <small className="tag is-info">
-          {report.Environment}
-        </small>
-      }
       {
           report.Tags && report.Tags.length > 0 && report.Tags.map((tag, i) =>
           <small key={i} className="tag is-light has-text-link">
@@ -73,9 +74,18 @@ export default ({ownerkey, project, hashcategory, report, isListView = true}) =>
     <style jsx>{`
     .TestTitle {
     }
-
+    .TestTitle-environment {
+      margin: 2px;
+      padding: 1px;
+      border: 1px solid #209cee;
+      border-radius: 3px;
+    }
     .TestTitle-title {
-      font-size: 0.9rem;
+      font-size: 0.8rem;
+    }
+    .TestTitle-tags .tag {
+      height: 1.5em;
+      font-size: 0.7em;
     }
     `}</style>
   </div>

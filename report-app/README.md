@@ -37,22 +37,24 @@
 - Implement a loading spinner
 - Loading spinner for the report list page
 - BUG: Diff LEDs are shown incorrectly on page load
+- Check performance logs from puppeteer
+- Make labels smaller
+- report list: Hide expected/actual section by default
 
 ## In Progress
-- Check performance logs from puppeteer
+
+- IDEA Add forward/backward buttons to quickly navigate between screenshots
 
 ## Backlog V 2.0
 
 - Source View: Could use this https://bitbucket.check24.de/s/-1746010450/ca3ded2/1/1.0/_/download/resources/com.atlassian.bitbucket.server.bitbucket-web:skipped-container/torn-edge.png to mark hidden text fragments
 - Diff View: Should also diff line in source since that might be the cause for the failure
 - CHORE Switch to https://github.com/conorhastings/react-syntax-highlighter
-- FEATURE report list: Group failed tests by prefix
-- report list: Hide expected/actual section by default
 - details: when test failed: Provide a link to the last successful run
+- Test details: Should have an indication about the test status on other devices
 - Test with ava-codeceptjs project
-- IDEA 
+- IDEA Group data driven tests: Actually it's always the same test just with variations
 - IDEA Add a mini-thumbnail bar (filmstrip) to quickly navigate between screenshots
-- IDEA Add forward/backward buttons to quickly navigate between screenshots
 
 ## Backlog
 - Improve Source Code View: COllapse areas without annotations
