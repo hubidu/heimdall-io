@@ -46,11 +46,11 @@
 ## In Progress
 
 - Fix screenshot diff view
-- Test details: Should have an indication about the test status on other devices
+- Error View: Provide link to last error of same type on same device
 
 ## Backlog V 2.0
 
-- Error View: Provide link to last error of same type on same device
+- Test details: Should have an indication about the test status on other devices
 - Source Code: Show last git commit message
 - IDEA Use prefix title as filter for tests/navigation
 - IDEA Detect broken image links
