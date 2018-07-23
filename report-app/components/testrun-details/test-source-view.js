@@ -19,6 +19,7 @@ const backgroundColor = meta => {
 const formatRelTime = (startedAt, meta) => round((meta.ShotAt - startedAt) / 1000, 1)
 
 const hasMetaInfo = line => (line.meta && line.meta.length > 0) || (line.metaDiff && line.metaDiff.length > 0)
+const getMetaInfo = line => line.meta || line.metaDiff
 const hasMoreThanOneStackframe = line => line.meta && line.meta[0].CodeStack && line.meta[0].CodeStack.length > 1
 const isInRange = (lineRange, lineNo) => lineRange && (lineNo >= lineRange[0] && lineNo <= lineRange[1])
 const isFullyInRange = (lineRange, group) => isInRange(lineRange, group.first) && isInRange(lineRange, group.first + group.len)
@@ -90,7 +91,7 @@ const TestSourceLine = ({ reportId, startedAt, selected = false, isInRange = fal
 
     <div className={`${isInRange ? 'has-text-dark' : ''}`}>
       { line.metaDiff ?
-        <span className={`TestSourceLine-indicator ${backgroundColor(line.metaDiff)}`}>&nbsp;</span>
+        <span className={`TestSourceLine-indicator ${backgroundColor(line.metaDiff && line.metaDiff[0])}`}>&nbsp;</span>
         :
         <span className={`TestSourceLine-indicator`}>&nbsp;</span>
       }
@@ -112,7 +113,7 @@ const TestSourceLine = ({ reportId, startedAt, selected = false, isInRange = fal
     {
       selected &&
       hasMetaInfo(line) &&
-      line.meta.map((screenshot, i) =>
+      getMetaInfo(line).map((screenshot, i) =>
         <div key={i}>
           { isError(screenshot) &&
             <div className="TestSourceLine-errorBox is-clipped">

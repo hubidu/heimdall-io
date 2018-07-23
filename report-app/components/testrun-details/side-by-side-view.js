@@ -87,6 +87,7 @@ class SideBySideView extends React.Component {
   }
 
   handleLineClick({lineNo, line}) {
+    console.log('Clicked line', lineNo, line)
     this.setState({
       selectedScreenshot: line.meta && line.meta[0],
       selectedScreenshotIndex: 0,

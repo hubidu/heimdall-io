@@ -1,8 +1,11 @@
 import lastOf from '../../services/utils/last-of'
 
+const _hasMeta = l => (l.meta !== undefined || l.metaDiff !== undefined)
+
 const _getPathToTestSourceFile = screenshots => lastOf(lastOf(screenshots).CodeStack).Location.File
 
 const _buildMappingBetweenLinesAndScreenshots = (sourceLines, screenshots) => {
+  if (!screenshots) return []
 
   const PathToTestSourceFile = _getPathToTestSourceFile(screenshots)
 
@@ -70,11 +73,13 @@ const annotateSource = (source, screenshots, screenshotsDiff) => {
 
   const annotatedSourceLines = sourceLines.map((l, i) => {
     const meta = linesToAllScreenshots.find(ssgroup => ssgroup.lineNo === i + 1)
+    const metaDiff = linesToAllScreenshotsDiff.find(ssgroup => ssgroup.lineNo === i + 1)
+
     return Object.assign({}, {
       lineNo: i + 1,
       source: l,
       meta: meta ? meta.screenshots : undefined,
-      // metaDiff: screenshotsDiff ? getMetadataForLine(screenshotsDiff, i + 1) : undefined
+      metaDiff: metaDiff ? metaDiff.screenshots : undefined,
     })
   })
 
@@ -90,7 +95,7 @@ const getLineGroupRanges = annotatedSourceLines => {
   if (annotatedSourceLines.length === 0) return []
 
   const result = []
-  const lineFlags = annotatedSourceLines.map(l => l.meta ? 1 : 0)
+  const lineFlags = annotatedSourceLines.map(l => _hasMeta(l) ? 1 : 0)
 
   let currentValue = lastOf(lineFlags)
   while(currentValue !== undefined) {
@@ -124,7 +129,7 @@ const groupSourceLines = (annotatedSourceLines, lineGroupRanges) => {
       first,
       len,
       lines,
-      isAnnotated: lines[0].meta !== undefined
+      isAnnotated: _hasMeta(lines[0])
     })
 
     first = first + lgRange
@@ -140,11 +145,11 @@ const groupSourceLines = (annotatedSourceLines, lineGroupRanges) => {
 export const getEditorState = (annotatedSource, screenshots) => {
   const getMaxLine = lines => {
     for (let i = lines.length - 1; i >= 0; i--) {
-      if (lines[i].meta) return i +1
+      if (_hasMeta(lines[i])) return i + 1
     }
     return -1
   }
-  const getMinLine = lines => lines.findIndex(l => l.meta)
+  const getMinLine = lines => lines.findIndex(l => _hasMeta(l))
   const maxLine = getMaxLine(annotatedSource)
   const minLine = getMinLine(annotatedSource)
   const filepath = _getPathToTestSourceFile(screenshots)
