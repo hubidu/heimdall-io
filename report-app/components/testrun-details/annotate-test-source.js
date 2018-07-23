@@ -5,35 +5,69 @@ const getPathToTestSourceFile = screenshots => lastOf(lastOf(screenshots).CodeSt
  * Annotate lines in the test source where we have a screenshot
  */
 const annotateSource = (source, screenshots, screenshotsDiff) => {
-  if (!source) return []
-
-  const sourceLines = source.split('\n')
-  const PathToTestSourceFile = getPathToTestSourceFile(screenshots)
-
-  const getMetadataForLine = (screenshots, lineNo) => {
-    const screenshotWithATestStackframe = screenshot => {
-      // const presumedTestStackframe = lastOf(screenshot.CodeStack)
-      // return presumedTestStackframe.Location.Line === lineNo &&
-      //   presumedTestStackframe.Location.File === PathToTestSourceFile
+  const isScreenshotWithTestStackframe = lineNo =>
+    screenshot => {
       for (let cs of screenshot.CodeStack) {
         if (cs.Location.Line === lineNo && cs.Location.File === PathToTestSourceFile)
           return true
       }
       return false
     }
+  const getScreenshotIndexOfLine = lineNo => screenshots.findIndex(isScreenshotWithTestStackframe(lineNo))
 
-    const screenshot = screenshots.find(screenshotWithATestStackframe)
+  if (!source) return []
+
+  const sourceLines = source.split('\n')
+  const PathToTestSourceFile = getPathToTestSourceFile(screenshots)
+
+  const getMetadataForLine = (screenshots, lineNo) => {
+    const screenshot = screenshots.find(isScreenshotWithTestStackframe(lineNo))
+
     return screenshot ? screenshot : undefined
   }
 
-  return sourceLines.map((l, i) => {
+  const linesToScreenshotIndexes = sourceLines.map((l, i) => {
+    const screenshotIndex = getScreenshotIndexOfLine(i + 1)
+    return screenshotIndex > -1 ? {
+      lineNo: i + 1,
+      idx: screenshotIndex,
+    } : undefined
+  })
+  console.log('Lines to screenshot indexes', linesToScreenshotIndexes)
+  const screenshotIndexes = linesToScreenshotIndexes.filter(index => !!index)
+  console.log('Screenshot indexes', screenshots.length, screenshotIndexes)
+
+  const linesToAllScreenshots = []
+  for (let i = 0; i < screenshotIndexes.length; i++) {
+    if (screenshotIndexes[i + 1] !== undefined && screenshotIndexes[i].idx !== screenshotIndexes[i + 1].idx)   {
+      const sl = screenshots.slice(screenshotIndexes[i + 1].idx, screenshotIndexes[i].idx)
+
+      linesToAllScreenshots.push(Object.assign(screenshotIndexes[i], {
+        screenshots: sl,
+      }))
+    } else {
+      const sl = screenshots.slice(0, screenshotIndexes[i].idx + 1)
+      linesToAllScreenshots.push(Object.assign(screenshotIndexes[i], {
+        screenshots: sl,
+      }))
+    }
+  }
+
+  console.log('Groups', linesToAllScreenshots)
+
+  const annotatedSourceLines = sourceLines.map((l, i) => {
+    const meta = linesToAllScreenshots.find(ssgroup => ssgroup.lineNo === i + 1)
     return Object.assign({}, {
       lineNo: i + 1,
       source: l,
-      meta: getMetadataForLine(screenshots, i + 1),
-      metaDiff: screenshotsDiff ? getMetadataForLine(screenshotsDiff, i + 1) : undefined
+      meta: meta ? meta.screenshots : undefined,
+      // metaDiff: screenshotsDiff ? getMetadataForLine(screenshotsDiff, i + 1) : undefined
     })
   })
+
+  console.log('Annotated', annotatedSourceLines)
+
+  return annotatedSourceLines
 }
 
 /**

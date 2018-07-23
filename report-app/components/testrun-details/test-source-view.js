@@ -18,13 +18,15 @@ const backgroundColor = meta => {
 
 const formatRelTime = (startedAt, meta) => round((meta.ShotAt - startedAt) / 1000, 1)
 
-const hasMetaInfo = line => line.meta || line.metaDiff
-const hasMoreThanOneStackframe = line => line.meta.CodeStack && line.meta.CodeStack.length > 1
+const hasMetaInfo = line => (line.meta && line.meta.length > 0) || (line.metaDiff && line.metaDiff.length > 0)
+const hasMoreThanOneStackframe = line => line.meta && line.meta[0].CodeStack && line.meta[0].CodeStack.length > 1
 const isInRange = (lineRange, lineNo) => lineRange && (lineNo >= lineRange[0] && lineNo <= lineRange[1])
 const isFullyInRange = (lineRange, group) => isInRange(lineRange, group.first) && isInRange(lineRange, group.first + group.len)
 const isTooLarge = group => group.len > 10
+const isSuccess = screenshot => screenshot.Success === true
+const isError = screenshot => !isSuccess(screenshot)
 
-const TestSourceLineGroup = ({ reportId, group, startedAt, selectedLine, lineRange, onClickLine }) =>
+const TestSourceLineGroup = ({ reportId, group, startedAt, selectedLine, selectedScreenshotIndex, lineRange, onClickLine, onClickStacktrace }) =>
   <div className={`TestSourceLineGroup`}>
     { group.isAnnotated === false && !isFullyInRange(lineRange, group) &&
       <div className="TestSourceLineGroup-hiddenPart">
@@ -58,10 +60,12 @@ const TestSourceLineGroup = ({ reportId, group, startedAt, selectedLine, lineRan
         key={i}
         startedAt={startedAt}
         selected={selectedLine === l.lineNo}
+        selectedScreenshotIndex={selectedScreenshotIndex}
         isInRange={isInRange(lineRange, l.lineNo)}
         lineNo={l.lineNo}
         line={l}
-        onClick={(e) => onClickLine && onClickLine(e)}
+        onClickLine={(e) => onClickLine && onClickLine(e)}
+        onClickStacktrace={(e) => onClickStacktrace && onClickStacktrace(e)}
         />
       )
     }
@@ -76,16 +80,13 @@ const TestSourceLineGroup = ({ reportId, group, startedAt, selectedLine, lineRan
   </div>
 
 
-const TestSourceLine = ({ reportId, startedAt, selected = false, isInRange = false, lineNo, line, onClick }) =>
+const TestSourceLine = ({ reportId, startedAt, selected = false, isInRange = false, lineNo, line, selectedScreenshotIndex, onClickLine, onClickStacktrace }) =>
   <div
     className={`TestSourceLine ${hasMetaInfo(line) ? 'TestSourceLine--selectable' : ''} ${selected ? 'TestSourceLine--selected' : ''}`}
     key={lineNo}
-    onClick={(e) => onClick &&
+    onClick={(e) => onClickLine &&
        hasMetaInfo(line) &&
-       onClick({
-      lineNo,
-      line
-    })}>
+       onClickLine({ lineNo, line })}>
 
     <div className={`${isInRange ? 'has-text-dark' : ''}`}>
       { line.metaDiff ?
@@ -95,10 +96,10 @@ const TestSourceLine = ({ reportId, startedAt, selected = false, isInRange = fal
       }
 
       <span className="TestSourceLine-relTime has-text-grey">
-        {`${line.meta ? formatRelTime(startedAt, line.meta) : '' }`}
+        {`${line.meta && line.meta.length > 0 ? formatRelTime(startedAt, line.meta[0]) : '' }`}
       </span>
 
-      <span className={`TestSourceLine-indicator ${backgroundColor(line.meta)}`}>&nbsp;</span>
+      <span className={`TestSourceLine-indicator ${backgroundColor(line.meta && line.meta[0])}`}>&nbsp;</span>
 
       <span className="TestSourceLine-lineNo">
         {lineNo}
@@ -109,18 +110,31 @@ const TestSourceLine = ({ reportId, startedAt, selected = false, isInRange = fal
       </span>
     </div>
     {
-      hasMetaInfo(line) &&
-      line.meta.Success === false &&
-        <div className="TestSourceLine-errorBox is-clipped">
-          <HtmlSourceLink reportId={reportId} />
-          <TestError screenshot={line.meta} />
-        </div>
-    }
-    {
       selected &&
       hasMetaInfo(line) &&
-      hasMoreThanOneStackframe(line) &&
-        <TestSourceStacktrace stack={line.meta.CodeStack} cmd={line.meta.Cmd} />
+      line.meta.map((screenshot, i) =>
+        <div key={i}>
+          { isError(screenshot) &&
+            <div className="TestSourceLine-errorBox is-clipped">
+              <HtmlSourceLink reportId={reportId} />
+              <TestError screenshot={screenshot} />
+            </div>
+          }
+
+          <TestSourceStacktrace
+            stack={screenshot.CodeStack}
+            cmd={screenshot.Cmd}
+            selected={i === selectedScreenshotIndex}
+            onClick={(e) => {
+              console.log('Click stacktrace', selectedScreenshotIndex, i === selectedScreenshotIndex)
+              e.stopPropagation()
+              return onClickStacktrace &&
+              hasMetaInfo(line) &&
+              onClickStacktrace({ lineNo, line, screenshot, screenshotIndex: i })}
+            }
+          />
+        </div>
+      )
     }
 
     <style jsx>{`
@@ -169,7 +183,7 @@ const TestSourceLine = ({ reportId, startedAt, selected = false, isInRange = fal
   </div>
 
 
-export default ({ reportId, startedAt, filepath, source, selectedLine, lineRange, onClickLine }) =>
+export default ({ reportId, startedAt, filepath, source, selectedLine, selectedScreenshotIndex, lineRange, onClickLine, onClickStacktrace }) =>
   <div>
     <p className="has-text-dark is-size-7">
       <strong>{filePathSplit(filepath).file}</strong>
@@ -185,8 +199,11 @@ export default ({ reportId, startedAt, filepath, source, selectedLine, lineRange
             group={lg}
             startedAt={startedAt}
             selectedLine={selectedLine}
+            selectedScreenshotIndex={selectedScreenshotIndex}
             lineRange={lineRange}
-            onClickLine={onClickLine} />
+            onClickLine={onClickLine}
+            onClickStacktrace={onClickStacktrace}
+          />
         )
       }
       </code>

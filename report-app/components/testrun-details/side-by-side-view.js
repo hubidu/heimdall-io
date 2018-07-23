@@ -18,6 +18,7 @@ class SideBySideView extends React.Component {
     this.isSourceAvailable = this.isSourceAvailable.bind(this)
     this.handleLineClick = this.handleLineClick.bind(this)
     this.handleShowDiffClick = this.handleShowDiffClick.bind(this)
+    this.handleStacktraceClick = this.handleStacktraceClick.bind(this)
   }
 
   init() {
@@ -33,6 +34,7 @@ class SideBySideView extends React.Component {
       lineGroups,
       editorState, // TODO Not a good name
       selectedScreenshot: defaultSelectScreenshot(this.props.reportScreenshots),
+      selectedScreenshotIndex: 0,
       selectedScreenshotDiff: defaultSelectScreenshot(this.props.reportScreenshotsDiff),
       selectedLine: editorState.selectedLine,
     })
@@ -86,10 +88,21 @@ class SideBySideView extends React.Component {
 
   handleLineClick({lineNo, line}) {
     this.setState({
-      selectedScreenshot: line.meta,
-      selectedScreenshotDiff: line.metaDiff,
+      selectedScreenshot: line.meta && line.meta[0],
+      selectedScreenshotIndex: 0,
+      selectedScreenshotDiff: line.metaDiff && line.metaDiff[0],
       selectedLine: lineNo
     })
+  }
+
+  handleStacktraceClick({ screenshot, screenshotIndex}) {
+    this.setState({
+      selectedScreenshot: screenshot,
+      selectedScreenshotIndex: screenshotIndex,
+      // TODO Fix this
+      // selectedScreenshotDiff: line.metaDiff[0],
+    })
+
   }
 
   render() {
@@ -99,31 +112,34 @@ class SideBySideView extends React.Component {
         <div className="column is-6">
 
           <div className="field has-addons">
-            <p className="control">
             { this.hasADiff() &&
-              <a
-                className="button is-outlined is-small is-success"
-                onClick={e => this.handleShowDiffClick()}
-              >
-                { this.isShowDiff() ?
-                  <small>
-                    Hide Diff
-                  </small>
-                  :
-                  <small>
-                    Show Diff
-                  </small>
-                }
-              </a>
+              <p className="control">
+                <a
+                  className="button is-outlined is-small is-success"
+                  onClick={e => this.handleShowDiffClick()}
+                >
+                  { this.isShowDiff() ?
+                    <small>
+                      Hide Diff
+                    </small>
+                    :
+                    <small>
+                      Show Diff
+                    </small>
+                  }
+                </a>
+              </p>
             }
-            </p>
-            <p className="control">
-              <a className="button is-outlined is-small is-danger">
-                <small>
-                  Toggle Errors
-                </small>
-            </a>
-            </p>
+            { /*
+              <p className="control">
+                <a className="button is-outlined is-small is-danger">
+                  <small>
+                    Show Errors
+                  </small>
+                </a>
+              </p>
+              */
+            }
           </div>
 
           { this.isSourceAvailable() ?
@@ -134,8 +150,10 @@ class SideBySideView extends React.Component {
                 lineRange={this.state.editorState.lineRange}
                 filepath={this.state.editorState.filepath}
                 onClickLine={this.handleLineClick}
+                onClickStacktrace={this.handleStacktraceClick}
 
                 selectedLine={this.state.selectedLine}
+                selectedScreenshotIndex={this.state.selectedScreenshotIndex}
               />
               :
               <div className="has-text-centered has-text-grey">

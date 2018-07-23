@@ -1,7 +1,11 @@
 import SourceCodeSnippet from './source-code-snippet'
 
-export default ({stack, cmd}) =>
-  <div className="TestSourceStacktrace box">
+export default ({ selected = false, stack, cmd, onClick }) => {
+  console.log('selected', selected)
+  return (<div
+    className={`TestSourceStacktrace ${selected === true ? 'TestSourceStacktrace-selected' : ''}`}
+    onClick={e => onClick && onClick(e)}
+  >
     <SourceCodeSnippet
       location={stack[0].Location}
       code={stack[0].Source}
@@ -15,5 +19,11 @@ export default ({stack, cmd}) =>
       margin 5px;
       padding: 1em 5px;
     }
+    .TestSourceStacktrace-selected {
+      border-left: 2px solid #3273dc;
+    }
+
     `}</style>
-  </div>
+  </div>)
+
+}
