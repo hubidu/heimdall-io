@@ -1,10 +1,10 @@
 import lastOf from '../../services/utils/last-of'
-const getPathToTestSourceFile = screenshots => lastOf(lastOf(screenshots).CodeStack).Location.File
 
-/**
- * Annotate lines in the test source where we have a screenshot
- */
-const annotateSource = (source, screenshots, screenshotsDiff) => {
+const _getPathToTestSourceFile = screenshots => lastOf(lastOf(screenshots).CodeStack).Location.File
+
+const _buildMappingBetweenLinesAndScreenshots = (sourceLines, screenshots) => {
+  const PathToTestSourceFile = _getPathToTestSourceFile(screenshots)
+
   const isScreenshotWithTestStackframe = lineNo =>
     screenshot => {
       for (let cs of screenshot.CodeStack) {
@@ -15,17 +15,10 @@ const annotateSource = (source, screenshots, screenshotsDiff) => {
     }
   const getScreenshotIndexOfLine = lineNo => screenshots.findIndex(isScreenshotWithTestStackframe(lineNo))
 
-  if (!source) return []
-
-  const sourceLines = source.split('\n')
-  const PathToTestSourceFile = getPathToTestSourceFile(screenshots)
-
-  const getMetadataForLine = (screenshots, lineNo) => {
-    const screenshot = screenshots.find(isScreenshotWithTestStackframe(lineNo))
-
-    return screenshot ? screenshot : undefined
-  }
-
+  /**
+   * Build a mapping of source code lines to screenshots. A screenshot is mapped to a line
+   * if one of the stacktraces in the screenshot references the source code line
+   */
   const linesToScreenshotIndexes = sourceLines.map((l, i) => {
     const screenshotIndex = getScreenshotIndexOfLine(i + 1)
     return screenshotIndex > -1 ? {
@@ -34,13 +27,18 @@ const annotateSource = (source, screenshots, screenshotsDiff) => {
     } : undefined
   })
   console.log('Lines to screenshot indexes', linesToScreenshotIndexes)
+  // Just keep the lines which actually have screenshots
   const screenshotIndexes = linesToScreenshotIndexes.filter(index => !!index)
   console.log('Screenshot indexes', screenshots.length, screenshotIndexes)
 
+  /**
+   * Finally assign screenshots to lines. Subsume all screenshots not directly associated with a line (through a stacktrace)
+   * to the first of two lines.
+   */
   const linesToAllScreenshots = []
   for (let i = 0; i < screenshotIndexes.length; i++) {
     if (screenshotIndexes[i + 1] !== undefined && screenshotIndexes[i].idx !== screenshotIndexes[i + 1].idx)   {
-      const sl = screenshots.slice(screenshotIndexes[i + 1].idx, screenshotIndexes[i].idx)
+      const sl = screenshots.slice(screenshotIndexes[i + 1].idx + 1, screenshotIndexes[i].idx + 1)
 
       linesToAllScreenshots.push(Object.assign(screenshotIndexes[i], {
         screenshots: sl,
@@ -54,6 +52,26 @@ const annotateSource = (source, screenshots, screenshotsDiff) => {
   }
 
   console.log('Groups', linesToAllScreenshots)
+  return linesToAllScreenshots
+}
+
+/**
+ * Annotate lines in the test source where we have a screenshot
+ */
+const annotateSource = (source, screenshots, screenshotsDiff) => {
+
+  if (!source) return []
+
+  const sourceLines = source.split('\n')
+  // const PathToTestSourceFile = _getPathToTestSourceFile(screenshots)
+
+  // const getMetadataForLine = (screenshots, lineNo) => {
+  //   const screenshot = screenshots.find(isScreenshotWithTestStackframe(lineNo))
+
+  //   return screenshot ? screenshot : undefined
+  // }
+
+  const linesToAllScreenshots = _buildMappingBetweenLinesAndScreenshots(sourceLines, screenshots)
 
   const annotatedSourceLines = sourceLines.map((l, i) => {
     const meta = linesToAllScreenshots.find(ssgroup => ssgroup.lineNo === i + 1)
@@ -134,7 +152,7 @@ export const getEditorState = (annotatedSource, screenshots) => {
   const getMinLine = lines => lines.findIndex(l => l.meta)
   const maxLine = getMaxLine(annotatedSource)
   const minLine = getMinLine(annotatedSource)
-  const filepath = getPathToTestSourceFile(screenshots)
+  const filepath = _getPathToTestSourceFile(screenshots)
 
   return {
     lineRange: [minLine, maxLine],
