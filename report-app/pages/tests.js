@@ -30,7 +30,9 @@ export default class IndexPage extends React.Component {
             Owner: {this.props.ownerkey}. Your recent test results.
           </h2>
 
-          <TestResultMeter errorPct={this.props.tests.failed.length / this.props.tests.succeeded.length + this.props.tests.failed.length} />
+          <TestResultMeter
+            errorPct={this.props.tests.failed.length * 100.0 / (this.props.tests.succeeded.length)}
+          />
 
           {
             this.props.tests.failed.length > 0 ?

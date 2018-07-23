@@ -41,6 +41,7 @@
 - Make labels smaller
 - report list: Hide expected/actual section by default
 - Open screenshots in new tab on click
+- Fix: List view: Fix result bar
 
 ## In Progress
 

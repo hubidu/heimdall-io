@@ -3,6 +3,7 @@ import lastOf from '../../services/utils/last-of'
 const _getPathToTestSourceFile = screenshots => lastOf(lastOf(screenshots).CodeStack).Location.File
 
 const _buildMappingBetweenLinesAndScreenshots = (sourceLines, screenshots) => {
+
   const PathToTestSourceFile = _getPathToTestSourceFile(screenshots)
 
   const isScreenshotWithTestStackframe = lineNo =>
@@ -63,15 +64,9 @@ const annotateSource = (source, screenshots, screenshotsDiff) => {
   if (!source) return []
 
   const sourceLines = source.split('\n')
-  // const PathToTestSourceFile = _getPathToTestSourceFile(screenshots)
-
-  // const getMetadataForLine = (screenshots, lineNo) => {
-  //   const screenshot = screenshots.find(isScreenshotWithTestStackframe(lineNo))
-
-  //   return screenshot ? screenshot : undefined
-  // }
 
   const linesToAllScreenshots = _buildMappingBetweenLinesAndScreenshots(sourceLines, screenshots)
+  const linesToAllScreenshotsDiff = _buildMappingBetweenLinesAndScreenshots(sourceLines, screenshotsDiff)
 
   const annotatedSourceLines = sourceLines.map((l, i) => {
     const meta = linesToAllScreenshots.find(ssgroup => ssgroup.lineNo === i + 1)
