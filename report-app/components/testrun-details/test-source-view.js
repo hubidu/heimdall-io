@@ -118,6 +118,7 @@ const TestSourceLine = ({ reportId, startedAt, selected = false, isInRange = fal
           { isError(screenshot) &&
             <div className="TestSourceLine-errorBox is-clipped">
               <HtmlSourceLink reportId={reportId} />
+
               <TestError screenshot={screenshot} />
             </div>
           }
