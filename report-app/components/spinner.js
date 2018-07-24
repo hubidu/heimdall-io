@@ -3,9 +3,15 @@ export default () =>
 
     <style jsx>{`
     .spinner {
+      position: fixed; /* or absolute */
+      top: 50%;
+      left: 50%;
+      margin-top: -20px;
+      margin-left: -20px;
+
       width: 40px;
       height: 40px;
-      margin: 100px auto;
+      // margin: 100px auto;
       background-color: #333;
 
       border-radius: 100%;

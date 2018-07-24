@@ -42,10 +42,11 @@
 - report list: Hide expected/actual section by default
 - Open screenshots in new tab on click
 - Fix: List view: Fix result bar
+- Fix screenshot diff view
 
 ## In Progress
 
-- Fix screenshot diff view
+- Test Details: Browser back triggers /report-categories ajax call
 - Error View: Provide link to last error of same type on same device
 
 ## Backlog V 2.0

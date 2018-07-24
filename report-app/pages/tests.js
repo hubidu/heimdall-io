@@ -1,6 +1,7 @@
 import React from 'react'
 import Layout from '../components/layout'
 
+import Spinner from '../components/spinner'
 import TestReportList from '../components/test-report-list'
 import TestResultMeter from '../components/test-result-meter'
 
@@ -10,12 +11,27 @@ export default class IndexPage extends React.Component {
   static async getInitialProps ({ query: { ownerkey, project, runid } }) {
     if (!ownerkey) throw new Error('Please provide your owner key in the query parameters')
 
-    const [tests] = await Promise.all([
-        getReportGroups(ownerkey, project, runid),
-    ])
+    // const [tests] = await Promise.all([
+    //     getReportGroups(ownerkey, project, runid),
+    // ])
 
-    return { ownerkey, project, tests }
+    return { ownerkey, project, runid }
   }
+
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+
+  async componentDidMount() {
+    const tests = await getReportGroups(this.props.ownerkey, this.props.project, this.props.runid)
+
+    this.setState({
+      isLoaded: true,
+      tests,
+    })
+  }
+
 
   render () {
     const attrs = {title: `Project ${this.props.project}`, ownerkey: this.props.ownerkey}
@@ -30,16 +46,19 @@ export default class IndexPage extends React.Component {
             Owner: {this.props.ownerkey}. Your recent test results.
           </h2>
 
+          { this.state.isLoaded ?
+          <div>
+
           <TestResultMeter
-            errorPct={this.props.tests.failed.length * 100.0 / (this.props.tests.succeeded.length)}
+            errorPct={this.state.tests.failed.length * 100.0 / (this.state.tests.succeeded.length)}
           />
 
           {
-            this.props.tests.failed.length > 0 ?
+            this.state.tests.failed.length > 0 ?
             <h5 className="title is-5">
             Tests that failed recently&nbsp;
              <span className="tag is-danger">
-                {Object.keys(this.props.tests.failed).length}
+                {Object.keys(this.state.tests.failed).length}
               </span>
             </h5>
             : null
@@ -50,16 +69,16 @@ export default class IndexPage extends React.Component {
           <TestReportList
             ownerkey={this.props.ownerkey}
             project={this.props.project}
-            reports={this.props.tests.failed}
+            reports={this.state.tests.failed}
             showErrors={true}
           />
 
           {
-            this.props.tests.succeeded.length > 0 ?
+            this.state.tests.succeeded.length > 0 ?
             <h5 className="title is-5" style={{'marginTop': '10px'}}>
               All tests&nbsp;
               <span className="tag is-dark">
-                {Object.keys(this.props.tests.succeeded).length}
+                {Object.keys(this.state.tests.succeeded).length}
               </span>
             </h5>
             : null
@@ -70,9 +89,21 @@ export default class IndexPage extends React.Component {
           <TestReportList
             ownerkey={this.props.ownerkey}
             project={this.props.project}
-            reports={this.props.tests.succeeded} />
+            reports={this.state.tests.succeeded} />
 
           </div>
+          :
+          <div className="SpinnerContainer">
+            <Spinner />
+          </div>
+          }
+        </div>
+
+        <style jsx>{`
+          .SpinnerContainer {
+            height: 100000px; // make it very heigh to enable jumping back to the original position using browser back
+          }
+        `}</style>
 
       </Layout>
     )
