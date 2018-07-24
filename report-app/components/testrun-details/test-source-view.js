@@ -155,7 +155,7 @@ const TestSourceLine = ({ reportId, startedAt, selected = false, isInRange = fal
     }
     .TestSourceLine--selectable:hover {
       cursor: pointer;
-      background-color: #ccc;
+      background-color: #ffffef;
     }
     .TestSourceLine--selected {
       background-color: #FFFFE0;
