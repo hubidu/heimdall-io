@@ -32,28 +32,42 @@ type ReportSlim struct {
 }
 
 type Report struct {
-	Id             bson.ObjectId `json:"_id,omitempty" bson:"_id,omitempty"`
-	Environment    string        // test environment: dev, int, staging, production
-	OwnerKey       string        // api key of report creator/owner
-	Runid          string        // id which identifies the test run
-	Project        string        // name/id of the test project
-	HashCategory   uint32        // hash of test title and test prefix to generate an id for a test case
-	ReportFileName string        // name of the report metadata file
-	ReportDir      string
-	Started        time.Time
-	StartedAt      int64   // timestamp when the report has been generated
-	Type           string  // ???
-	Prefix         string  // Prefix/namespace/directory folder of test case
-	Title          string  // test/scenario title
-	FullTitle      string  // Prefix + title
-	Result         string  // test result "success" | "error"
-	Duration       float32 // duration of test run in ms
-	Outline        Outline
-	Tags           []string       // Test tags extracted from title and prefix
-	Screenshots    []Screenshot   // a list of screenshots taken during test execution
-	Logs           []LogEntry     // @deprecated
-	DeviceSettings DeviceSettings // info about browser/device type and resolution
-	User           UserInfo
+	Id               bson.ObjectId `json:"_id,omitempty" bson:"_id,omitempty"`
+	Environment      string        // test environment: dev, int, staging, production
+	OwnerKey         string        // api key of report creator/owner
+	Runid            string        // id which identifies the test run
+	Project          string        // name/id of the test project
+	HashCategory     uint32        // hash of test title and test prefix to generate an id for a test case
+	ReportFileName   string        // name of the report metadata file
+	ReportDir        string
+	Started          time.Time
+	StartedAt        int64   // timestamp when the report has been generated
+	Type             string  // ???
+	Prefix           string  // Prefix/namespace/directory folder of test case
+	Title            string  // test/scenario title
+	FullTitle        string  // Prefix + title
+	Result           string  // test result "success" | "error"
+	Duration         float32 // duration of test run in ms
+	Outline          Outline
+	Tags             []string       // Test tags extracted from title and prefix
+	Screenshots      []Screenshot   // a list of screenshots taken during test execution
+	Logs             []LogEntry     // @deprecated
+	DeviceSettings   DeviceSettings // info about browser/device type and resolution
+	User             UserInfo
+	LastSourceCommit LastSourceCommit
+}
+
+type LastSourceCommit struct {
+	Hash        string
+	Subject     string
+	CommittedOn int64
+	Branch      string
+	Committer   GitPerson
+}
+
+type GitPerson struct {
+	Name  string
+	Email string
 }
 
 type UserInfo struct {

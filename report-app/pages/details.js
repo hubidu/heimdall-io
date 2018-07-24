@@ -157,6 +157,7 @@ export default class extends React.Component {
               </div>
 
               <SideBySideView
+                lastSourceCommit={this.props.report.LastSourceCommit}
                 reportId={this.props.report._id}
                 reportDir={this.props.report.ReportDir}
                 reportDirDiff={this.state.lastSuccessfulReport && this.state.lastSuccessfulReport.ReportDir}

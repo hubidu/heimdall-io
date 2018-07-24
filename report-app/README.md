@@ -44,12 +44,12 @@
 - Fix: List view: Fix result bar
 - Fix screenshot diff view
 - Test Details: Browser back triggers /report-categories ajax call
+- FIX Html source view (I think I need to prevent script execution on the page)
+- Source Code: Show last git commit message
 
 ## In Progress
 
 - Error View: Provide link to last error of same type on same device
-- Source Code: Show last git commit message
-- FIX Html source view (I think I need to prevent script execution on the page)
 
 ## Backlog Release V 2.0
 
@@ -57,6 +57,7 @@
 
 ## Backlog V 2.0
 
+- Last source commit: Actually would like to see last change of the test file
 - Test details: Should have an indication about the test status on other devices
 - IDEA Use prefix title as filter for tests/navigation
 - IDEA Detect broken image links

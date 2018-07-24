@@ -1,3 +1,4 @@
+import moment from 'moment'
 import React from 'react'
 import PropTypes from 'prop-types'
 
@@ -142,7 +143,15 @@ class SideBySideView extends React.Component {
               */
             }
           </div>
-
+          {
+            this.props.lastSourceCommit && this.props.lastSourceCommit.Subject &&
+            <div className="has-text-grey is-size-7">
+              "{this.props.lastSourceCommit.Subject}"
+              <span className="has-text-grey-light">
+              on {moment(this.props.lastSourceCommit.CommittedOn * 1000).format('MMMM Do YYYY, h:mm:ss a')} by {this.props.lastSourceCommit.Committer.Email}
+              </span>
+            </div>
+          }
           { this.isSourceAvailable() ?
               <TestSourceView
                 reportId={this.props.reportId}
@@ -182,6 +191,7 @@ SideBySideView.propTypes = {
   reportId: PropTypes.string,
   reportDir: PropTypes.string,
   startedAt: PropTypes.number,
+  lastSourceCommit: PropTypes.object,
   source: PropTypes.string,
   reportScreenshots: PropTypes.array,
   reportScreenshotsDiff: PropTypes.array,
