@@ -109,9 +109,9 @@ class SideBySideView extends React.Component {
 
   render() {
     return (
-      <div className="columns">
+      <div className="SideBySideView columns">
 
-        <div className="column is-6">
+        <div className="SideBySideView-firstColumn column is-6">
 
           <div className="field has-addons">
             { this.hasADiff() &&
@@ -181,6 +181,13 @@ class SideBySideView extends React.Component {
             selectedScreenshotDiff={this.state.showDiff === true && this.state.selectedScreenshotDiff}
           />
         </div>
+
+        <style jsx>{`
+          .SideBySideView-firstColumn {
+            height: 100vh;
+            overflow: auto;
+          }
+        `}</style>
 
       </div>
     )

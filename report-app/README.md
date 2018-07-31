@@ -49,11 +49,19 @@
 
 ## In Progress
 
+- BUG: Confusing (and probably incorrect) stacktraces
+- BUG: Diffing: Show only one screenshot if there is only one on a line
+- BUG: Stacktraces: Dont drill down into the test source itself
 - Error View: Provide link to last error of same type on same device
+- IDEA Add forward/backward buttons to quickly navigate between screenshots
 
 ## Backlog Release V 2.0
 
 - Test with ava-codeceptjs project
+- Report list: Filter by device
+- Report list: Filter by prefix
+- Testrun history: Navigate quicker through the test history
+- Testrun history: See better where in the history I am
 
 ## Backlog V 2.0
 
@@ -61,7 +69,6 @@
 - Test details: Should have an indication about the test status on other devices
 - IDEA Use prefix title as filter for tests/navigation
 - IDEA Detect broken image links
-- IDEA Add forward/backward buttons to quickly navigate between screenshots
 - Source View: Could use this https://bitbucket.check24.de/s/-1746010450/ca3ded2/1/1.0/_/download/resources/com.atlassian.bitbucket.server.bitbucket-web:skipped-container/torn-edge.png to mark hidden text fragments
 - Diff View: Should also diff line in source since that might be the cause for the failure
 - CHORE Switch to https://github.com/conorhastings/react-syntax-highlighter
