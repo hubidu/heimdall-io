@@ -52,14 +52,15 @@
 
 ## In Progress
 
+- BUG: No error message on bu: http://localhost:4000/details?ownerkey=sIzM3ZEHRb&project=&id=5b61c5ff0021f164f1a30b05&hashcategory=3027453662
 - BUG: Diffing: Show only one screenshot if there is only one on a line
-- Error View: Provide link to last error of same type on same device
-- IDEA Add forward/backward buttons to quickly navigate between screenshots
 - ava-codeceptjs: Try long stacktraces
 - Test with ava-codeceptjs project
 
 ## Backlog Release V 2.0
 
+- Error View: Provide link to last error of same type on same device
+- IDEA Add forward/backward buttons to quickly navigate between screenshots
 
 ## Backlog V 2.0
 
