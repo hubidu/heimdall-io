@@ -49,7 +49,8 @@
 
 ## In Progress
 
-- BUG: Confusing (and probably incorrect) stacktraces
+- BUG: Confusing (and probably incorrect) stacktraces (check success and failure)
+- BUG: Show code snippets only if location is other than test file
 - BUG: Diffing: Show only one screenshot if there is only one on a line
 - BUG: Stacktraces: Dont drill down into the test source itself
 - Error View: Provide link to last error of same type on same device

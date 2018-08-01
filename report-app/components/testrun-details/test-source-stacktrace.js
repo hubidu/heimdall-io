@@ -1,7 +1,6 @@
 import SourceCodeSnippet from './source-code-snippet'
 
 export default ({ selected = false, stack, cmd, onClick }) => {
-  console.log('selected', selected)
   return (<div
     className={`TestSourceStacktrace ${selected === true ? 'TestSourceStacktrace-selected' : ''}`}
     onClick={e => onClick && onClick(e)}

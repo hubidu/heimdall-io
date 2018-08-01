@@ -20,21 +20,31 @@ const formatRelTime = (startedAt, meta) => round((meta.ShotAt - startedAt) / 100
 
 const hasMetaInfo = line => (line.meta && line.meta.length > 0) || (line.metaDiff && line.metaDiff.length > 0)
 const getMetaInfo = line => line.meta || line.metaDiff
-const hasMoreThanOneStackframe = line => line.meta && line.meta[0].CodeStack && line.meta[0].CodeStack.length > 1
+const hasScreenshotsWithNotOnlyTeststackframe = (line, testFilePath) => {
+  const meta = line.meta || line.metaDiff
+  // NOTE this will prevent cases where there is one screenshot with one stackframe (that of a test)
+  // from showing. However there might also be cases where there is one screenshot with multiple stackframes (not in test)
+  return meta.some(s => s.CodeStack.find(cs => cs.Location.File !== testFilePath))
+}
+
+// const hasMoreThanOneStackframe = line => line.meta && line.meta[0].CodeStack && line.meta[0].CodeStack.length > 1
 const isInRange = (lineRange, lineNo) => lineRange && (lineNo >= lineRange[0] && lineNo <= lineRange[1])
 const isFullyInRange = (lineRange, group) => isInRange(lineRange, group.first) && isInRange(lineRange, group.first + group.len)
-const isTooLarge = group => group.len > 10
+// const isTooLarge = group => group.len > 10
 const isSuccess = screenshot => screenshot.Success === true
 const isError = screenshot => !isSuccess(screenshot)
 
-const TestSourceLineGroup = ({ reportId, group, startedAt, selectedLine, selectedScreenshotIndex, lineRange, onClickLine, onClickStacktrace }) =>
+const TestSourceLineGroup = ({
+  reportId, testFilePath, group, startedAt, selectedLine, selectedScreenshotIndex, lineRange, onClickLine, onClickStacktrace
+}) =>
   <div className={`TestSourceLineGroup`}>
     { group.isAnnotated === false && !isFullyInRange(lineRange, group) &&
       <div className="TestSourceLineGroup-hiddenPart">
         {firstN(group.lines).map((l, i) =>
           <TestSourceLine
-            reportId={reportId}
             key={i}
+            reportId={reportId}
+            testFilePath={testFilePath}
             selected={false}
             isInRange={isInRange(lineRange, l.lineNo)}
             lineNo={l.lineNo}
@@ -46,6 +56,7 @@ const TestSourceLineGroup = ({ reportId, group, startedAt, selectedLine, selecte
 
         <TestSourceLine
           reportId={reportId}
+          testFilePath={testFilePath}
           selected={false}
           isInRange={isInRange(lineRange, lastOf(group.lines).lineNo)}
           lineNo={lastOf(group.lines).lineNo}
@@ -57,9 +68,10 @@ const TestSourceLineGroup = ({ reportId, group, startedAt, selectedLine, selecte
     {
       (group.isAnnotated || isFullyInRange(lineRange, group)) && group.lines.map((l, i) =>
         <TestSourceLine
-        reportId={reportId}
         key={i}
+        reportId={reportId}
         startedAt={startedAt}
+        testFilePath={testFilePath}
         selected={selectedLine === l.lineNo}
         selectedScreenshotIndex={selectedScreenshotIndex}
         isInRange={isInRange(lineRange, l.lineNo)}
@@ -81,7 +93,7 @@ const TestSourceLineGroup = ({ reportId, group, startedAt, selectedLine, selecte
   </div>
 
 
-const TestSourceLine = ({ reportId, startedAt, selected = false, isInRange = false, lineNo, line, selectedScreenshotIndex, onClickLine, onClickStacktrace }) =>
+const TestSourceLine = ({ reportId, startedAt, testFilePath, selected = false, isInRange = false, lineNo, line, selectedScreenshotIndex, onClickLine, onClickStacktrace }) =>
   <div
     className={`TestSourceLine ${hasMetaInfo(line) ? 'TestSourceLine--selectable' : ''} ${selected ? 'TestSourceLine--selected' : ''}`}
     key={lineNo}
@@ -113,6 +125,7 @@ const TestSourceLine = ({ reportId, startedAt, selected = false, isInRange = fal
     {
       selected &&
       hasMetaInfo(line) &&
+      hasScreenshotsWithNotOnlyTeststackframe(line, testFilePath) &&
       getMetaInfo(line).map((screenshot, i) =>
         <div key={i}>
           { isError(screenshot) &&
@@ -128,11 +141,10 @@ const TestSourceLine = ({ reportId, startedAt, selected = false, isInRange = fal
             cmd={screenshot.Cmd}
             selected={i === selectedScreenshotIndex}
             onClick={(e) => {
-              console.log('Click stacktrace', selectedScreenshotIndex, i === selectedScreenshotIndex)
               e.stopPropagation()
               return onClickStacktrace &&
-              hasMetaInfo(line) &&
-              onClickStacktrace({ lineNo, line, screenshot, screenshotIndex: i })}
+                hasMetaInfo(line) &&
+                onClickStacktrace({ lineNo, line, screenshot, screenshotIndex: i })}
             }
           />
         </div>
@@ -201,6 +213,7 @@ export default ({ reportId, startedAt, filepath, source, selectedLine, selectedS
             group={lg}
             startedAt={startedAt}
             selectedLine={selectedLine}
+            testFilePath={filepath}
             selectedScreenshotIndex={selectedScreenshotIndex}
             lineRange={lineRange}
             onClickLine={onClickLine}
