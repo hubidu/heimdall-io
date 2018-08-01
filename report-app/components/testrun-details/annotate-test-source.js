@@ -9,7 +9,7 @@ const _buildMappingBetweenLinesAndScreenshots = (sourceLines, screenshots) => {
 
   const PathToTestSourceFile = _getPathToTestSourceFile(screenshots)
 
-  const isScreenshotWithTestStackframe = lineNo =>
+  const isScreenshotWhichHasAStackframeInTheTestSource = lineNo =>
     screenshot => {
       for (let cs of screenshot.CodeStack) {
         if (cs.Location.Line === lineNo && cs.Location.File === PathToTestSourceFile)
@@ -17,7 +17,7 @@ const _buildMappingBetweenLinesAndScreenshots = (sourceLines, screenshots) => {
       }
       return false
     }
-  const getScreenshotIndexOfLine = lineNo => screenshots.findIndex(isScreenshotWithTestStackframe(lineNo))
+  const getScreenshotIndexOfLine = lineNo => screenshots.findIndex(isScreenshotWhichHasAStackframeInTheTestSource(lineNo))
 
   /**
    * Build a mapping of source code lines to screenshots. A screenshot is mapped to a line
@@ -30,7 +30,7 @@ const _buildMappingBetweenLinesAndScreenshots = (sourceLines, screenshots) => {
       idx: screenshotIndex,
     } : undefined
   })
-  console.log('Lines to screenshot indexes', linesToScreenshotIndexes)
+  // console.log('Lines to screenshot indexes', linesToScreenshotIndexes)
   // Just keep the lines which actually have screenshots
   const screenshotIndexes = linesToScreenshotIndexes.filter(index => !!index)
   console.log('Screenshot indexes', screenshots.length, screenshotIndexes)
@@ -41,15 +41,18 @@ const _buildMappingBetweenLinesAndScreenshots = (sourceLines, screenshots) => {
    */
   const linesToAllScreenshots = []
   for (let i = 0; i < screenshotIndexes.length; i++) {
-    if (screenshotIndexes[i + 1] !== undefined && screenshotIndexes[i].idx !== screenshotIndexes[i + 1].idx)   {
-      const sl = screenshots.slice(screenshotIndexes[i + 1].idx + 1, screenshotIndexes[i].idx + 1)
+    if (screenshotIndexes[i + 1] !== undefined)   {
+      // Get all screenshots occurring between ...
+      const currentLine = screenshotIndexes[i].idx + 1 // the current (including)
+      const nextLine = screenshotIndexes[i + 1].idx + 1 // and the next line (not including)
+      const sl = screenshots.slice(nextLine, currentLine)
 
-      linesToAllScreenshots.push(Object.assign(screenshotIndexes[i], {
+      linesToAllScreenshots.push(Object.assign({}, screenshotIndexes[i], {
         screenshots: sl,
       }))
     } else {
       const sl = screenshots.slice(0, screenshotIndexes[i].idx + 1)
-      linesToAllScreenshots.push(Object.assign(screenshotIndexes[i], {
+      linesToAllScreenshots.push(Object.assign({}, screenshotIndexes[i], {
         screenshots: sl,
       }))
     }
@@ -83,7 +86,7 @@ const annotateSource = (source, screenshots, screenshotsDiff) => {
     })
   })
 
-  console.log('Annotated', annotatedSourceLines)
+  // console.log('Annotated', annotatedSourceLines)
 
   return annotatedSourceLines
 }
