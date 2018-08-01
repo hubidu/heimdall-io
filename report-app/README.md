@@ -46,26 +46,26 @@
 - Test Details: Browser back triggers /report-categories ajax call
 - FIX Html source view (I think I need to prevent script execution on the page)
 - Source Code: Show last git commit message
+- BUG: Confusing (and probably incorrect) stacktraces (check success and failure)
+- BUG: Show code snippets only if location is other than test file
+- BUG: Stacktraces: Dont drill down into the test source itself
 
 ## In Progress
 
-- BUG: Confusing (and probably incorrect) stacktraces (check success and failure)
-- BUG: Show code snippets only if location is other than test file
 - BUG: Diffing: Show only one screenshot if there is only one on a line
-- BUG: Stacktraces: Dont drill down into the test source itself
 - Error View: Provide link to last error of same type on same device
 - IDEA Add forward/backward buttons to quickly navigate between screenshots
+- Test with ava-codeceptjs project
 
 ## Backlog Release V 2.0
 
-- Test with ava-codeceptjs project
+
+## Backlog V 2.0
+
 - Report list: Filter by device
 - Report list: Filter by prefix
 - Testrun history: Navigate quicker through the test history
 - Testrun history: See better where in the history I am
-
-## Backlog V 2.0
-
 - Last source commit: Actually would like to see last change of the test file
 - Test details: Should have an indication about the test status on other devices
 - IDEA Use prefix title as filter for tests/navigation

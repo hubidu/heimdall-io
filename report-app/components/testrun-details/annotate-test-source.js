@@ -53,7 +53,7 @@ const _buildMappingBetweenLinesAndScreenshots = (sourceLines, screenshots) => {
           screenshots: sl,
         }))
       } else {
-        // Strange situation: the currentLineScreenshotIndex is smaller than the nextLineScreenshotIndex
+        // SHOULD NOT HAPPEN, BUT DOES: the currentLineScreenshotIndex is smaller than the nextLineScreenshotIndex
         // Just use the screenshot directly on the current line
         const sl = [screenshots[screenshotIndexes[i].idx]]
 
