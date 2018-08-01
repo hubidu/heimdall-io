@@ -42,14 +42,25 @@ const _buildMappingBetweenLinesAndScreenshots = (sourceLines, screenshots) => {
   const linesToAllScreenshots = []
   for (let i = 0; i < screenshotIndexes.length; i++) {
     if (screenshotIndexes[i + 1] !== undefined)   {
-      // Get all screenshots occurring between ...
-      const currentLine = screenshotIndexes[i].idx + 1 // the current (including)
-      const nextLine = screenshotIndexes[i + 1].idx + 1 // and the next line (not including)
-      const sl = screenshots.slice(nextLine, currentLine)
+      const currentLineScreenshotIndex = screenshotIndexes[i].idx + 1 // the current (including)
+      const nextLineScreenshotIndex = screenshotIndexes[i + 1].idx + 1 // and the next line (not including)
 
-      linesToAllScreenshots.push(Object.assign({}, screenshotIndexes[i], {
-        screenshots: sl,
-      }))
+      if (currentLineScreenshotIndex >= nextLineScreenshotIndex) {
+        // Get all screenshots occurring between ...
+        const sl = screenshots.slice(nextLineScreenshotIndex, currentLineScreenshotIndex)
+
+        linesToAllScreenshots.push(Object.assign({}, screenshotIndexes[i], {
+          screenshots: sl,
+        }))
+      } else {
+        // Strange situation: the currentLineScreenshotIndex is smaller than the nextLineScreenshotIndex
+        // Just use the screenshot directly on the current line
+        const sl = [screenshots[screenshotIndexes[i].idx]]
+
+        linesToAllScreenshots.push(Object.assign({}, screenshotIndexes[i], {
+          screenshots: sl,
+        }))
+      }
     } else {
       const sl = screenshots.slice(0, screenshotIndexes[i].idx + 1)
       linesToAllScreenshots.push(Object.assign({}, screenshotIndexes[i], {
