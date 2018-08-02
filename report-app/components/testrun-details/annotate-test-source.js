@@ -50,7 +50,7 @@ const _buildMappingBetweenLinesAndScreenshots = (sourceLines, screenshots) => {
         const sl = screenshots.slice(nextLineScreenshotIndex, currentLineScreenshotIndex)
 
         linesToAllScreenshots.push(Object.assign({}, screenshotIndexes[i], {
-          screenshots: sl,
+          screenshots: sl.reverse(), // reverse the screenshots to get chronological order
         }))
       } else {
         // SHOULD NOT HAPPEN, BUT DOES: the currentLineScreenshotIndex is smaller than the nextLineScreenshotIndex
@@ -58,13 +58,13 @@ const _buildMappingBetweenLinesAndScreenshots = (sourceLines, screenshots) => {
         const sl = [screenshots[screenshotIndexes[i].idx]]
 
         linesToAllScreenshots.push(Object.assign({}, screenshotIndexes[i], {
-          screenshots: sl,
+          screenshots: sl.reverse(),
         }))
       }
     } else {
       const sl = screenshots.slice(0, screenshotIndexes[i].idx + 1)
       linesToAllScreenshots.push(Object.assign({}, screenshotIndexes[i], {
-        screenshots: sl,
+        screenshots: sl.reverse(),
       }))
     }
   }

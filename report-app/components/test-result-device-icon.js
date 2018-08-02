@@ -21,7 +21,7 @@ export default ({result, deviceSettings}) => {
       </div>
     <div>
       {
-        deviceSettings && (deviceSettings.Browser === 'chrome' || deviceSettings.Browser === '') ? <ChromeIcon /> : null
+        deviceSettings && (deviceSettings.Browser === 'chrome' || deviceSettings.Browser === 'chrome headless' || deviceSettings.Browser === '') ? <ChromeIcon /> : null
       }
       {
         deviceSettings && deviceSettings.Browser === 'firefox' ? <FirefoxIcon /> : null
