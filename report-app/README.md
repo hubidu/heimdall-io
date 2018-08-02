@@ -49,10 +49,10 @@
 - BUG: Confusing (and probably incorrect) stacktraces (check success and failure)
 - BUG: Show code snippets only if location is other than test file
 - BUG: Stacktraces: Dont drill down into the test source itself
+- BUG No error message on bu http://localhost:4000/details?ownerkey=sIzM3ZEHRb&project=bu-desktop-tests-staging&id=5b62f6300021f164f1a39501&hashcategory=3027453662
 
 ## In Progress
 
-- BUG No error message on bu http://localhost:4000/details?ownerkey=sIzM3ZEHRb&project=bu-desktop-tests-staging&id=5b62f6300021f164f1a39501&hashcategory=3027453662
 - ava-codeceptjs: Try long stacktraces
 - Test and release ava-codeceptjs project
 
