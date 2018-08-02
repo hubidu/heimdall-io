@@ -52,10 +52,9 @@
 
 ## In Progress
 
-- BUG: No error message on bu: http://localhost:4000/details?ownerkey=sIzM3ZEHRb&project=&id=5b61c5ff0021f164f1a30b05&hashcategory=3027453662
-- BUG: Diffing: Show only one screenshot if there is only one on a line
+- BUG No error message on bu http://localhost:4000/details?ownerkey=sIzM3ZEHRb&project=bu-desktop-tests-staging&id=5b62f6300021f164f1a39501&hashcategory=3027453662
 - ava-codeceptjs: Try long stacktraces
-- Test with ava-codeceptjs project
+- Test and release ava-codeceptjs project
 
 ## Backlog Release V 2.0
 

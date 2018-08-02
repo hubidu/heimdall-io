@@ -125,7 +125,6 @@ const TestSourceLine = ({ reportId, startedAt, testFilePath, selected = false, i
     {
       selected &&
       hasMetaInfo(line) &&
-      hasScreenshotsWithNotOnlyTeststackframe(line, testFilePath) &&
       getMetaInfo(line).map((screenshot, i) =>
         <div key={i}>
           { isError(screenshot) &&
@@ -136,17 +135,20 @@ const TestSourceLine = ({ reportId, startedAt, testFilePath, selected = false, i
             </div>
           }
 
-          <TestSourceStacktrace
-            stack={screenshot.CodeStack}
-            cmd={screenshot.Cmd}
-            selected={i === selectedScreenshotIndex}
-            onClick={(e) => {
-              e.stopPropagation()
-              return onClickStacktrace &&
-                hasMetaInfo(line) &&
-                onClickStacktrace({ lineNo, line, screenshot, screenshotIndex: i })}
-            }
-          />
+          {
+            hasScreenshotsWithNotOnlyTeststackframe(line, testFilePath) &&
+              <TestSourceStacktrace
+                stack={screenshot.CodeStack}
+                cmd={screenshot.Cmd}
+                selected={i === selectedScreenshotIndex}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  return onClickStacktrace &&
+                    hasMetaInfo(line) &&
+                    onClickStacktrace({ lineNo, line, screenshot, screenshotIndex: i })}
+                }
+              />
+          }
         </div>
       )
     }

@@ -43,11 +43,8 @@ export default ({screenshot}) =>
   screenshot &&
   <div className="TestError">
     <div className="TestError-title has-text-danger">
-      '
-      {
-        trunc(screenshot.Message, 120)
-      }
-      '
+      {screenshot.Message}
+
       &nbsp;
       {
         screenshot.Expected &&
@@ -83,6 +80,8 @@ export default ({screenshot}) =>
       margin-top: 5px;
       padding: 0 5px;
       border-left: 2px solid red;
+      font-family: roboto, noto;
+      word-wrap: break-word;
     }
 
     .TestError-title {
