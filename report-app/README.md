@@ -50,19 +50,18 @@
 - BUG: Show code snippets only if location is other than test file
 - BUG: Stacktraces: Dont drill down into the test source itself
 - BUG No error message on bu http://localhost:4000/details?ownerkey=sIzM3ZEHRb&project=bu-desktop-tests-staging&id=5b62f6300021f164f1a39501&hashcategory=3027453662
+- Test and release ava-codeceptjs project
 
 ## In Progress
 
-- ava-codeceptjs: Try long stacktraces
-- Test and release ava-codeceptjs project
 
-## Backlog Release V 2.0
-
-- Error View: Provide link to last error of same type on same device
-- IDEA Add forward/backward buttons to quickly navigate between screenshots
 
 ## Backlog V 2.0
 
+- TestError: Show failed line of test
+- ava-codeceptjs: Try long stacktraces
+- Error View: Provide link to last error of same type on same device
+- IDEA Add forward/backward buttons to quickly navigate between screenshots
 - Report list: Filter by device
 - Report list: Filter by prefix
 - Testrun history: Navigate quicker through the test history
