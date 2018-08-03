@@ -1,63 +1,11 @@
 ## DONE
-- Filter by project and ownerKey in url
-- Show browser name in reports
-- Be able to use the reporter for local test runs (i. e. use a personalized key when running the tests, tag the test results with the key, transfer the test results to the server)
-- report-service: go panic
-  runtime error: index out of range
-  report-service_1      | C:/Go/src/runtime/panic.go:489 (0x42877f)
-  report-service_1      | C:/Go/src/runtime/panic.go:28 (0x4273fe)
-  report-service_1      | C:/Users/stefan.huber/go/src/github.com/hubidu/e2e-backend/report-service/routes/projects.go:62 (0x981c90)
-  report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/context.go:107 (0x8f2bba)
-  report-service_1      | C:/Users/stefan.huber/go/src/github.com/hubidu/e2e-backend/report-lib/middlewares/middlewares.go:23 (0x97ffef)
-  report-service_1      | C:/Users/stefan.huber/go/src/github.com/gin-gonic/gin/context.go:107 (0x8f2bba)
-- report list: Show error message even if there are no steps
-- report list: Show tags
-- Show label for environment
-- Mark corresponding part of the test in the code
-- Link Page url and title
-- Need a magnifying glass or open screenshot in separate tab
-- Make a nice progress bar
-- Format filepath as <filename> - <path>
-- source code file name is incorrect
-- Show user name
-- Show success/failure bars per device
-- Show text when source code is not available anymore
-- Make success/failure bars smaller/narrower
-- Make sure that stackframe is really in test when annotating source
-- Crop test code
-- Show the actual command parameters when source line is selected
-- Redesign project page with bulma
-- Show all line groups which are fully contained in the line Range
-- projects: Add environments
-- Source Code view: Show all stackframes except that of test
-- FEATURE Delete a test project: Implement the delete routes
-- FEATURE report list view: Link from bar to test details
-- FEATURE Diff a failed test with the last successful one
-- report details: Show browser log entries also for puppeteer (map puppeteer logs to webdriverio format)
-- Implement a loading spinner
-- Loading spinner for the report list page
-- BUG: Diff LEDs are shown incorrectly on page load
-- Check performance logs from puppeteer
-- Make labels smaller
-- report list: Hide expected/actual section by default
-- Open screenshots in new tab on click
-- Fix: List view: Fix result bar
-- Fix screenshot diff view
-- Test Details: Browser back triggers /report-categories ajax call
-- FIX Html source view (I think I need to prevent script execution on the page)
-- Source Code: Show last git commit message
-- BUG: Confusing (and probably incorrect) stacktraces (check success and failure)
-- BUG: Show code snippets only if location is other than test file
-- BUG: Stacktraces: Dont drill down into the test source itself
-- BUG No error message on bu http://localhost:4000/details?ownerkey=sIzM3ZEHRb&project=bu-desktop-tests-staging&id=5b62f6300021f164f1a39501&hashcategory=3027453662
-- Test and release ava-codeceptjs project
 
 ## In Progress
 
+## Backlog
 
-
-## Backlog V 2.0
-
+- Performance logs: Mark cached resources and more (see https://nicj.net/resourcetiming-in-practice/)
+- Extend build to build frontend for different backend hosts
 - TestError: Show failed line of test
 - ava-codeceptjs: Try long stacktraces
 - Error View: Provide link to last error of same type on same device
@@ -76,8 +24,6 @@
 - details: when test failed: Provide a link to the last successful run
 - IDEA Group data driven tests: Actually it's always the same test just with variations
 - IDEA Add a mini-thumbnail bar (filmstrip) to quickly navigate between screenshots
-
-## Backlog
 - Improve Source Code View: COllapse areas without annotations
 - Should see the step outline from the list view
 - PRB There might be a stacktrace without a test stackframe (see "When I login with city missing Then I see my data in best sso view")
