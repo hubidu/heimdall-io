@@ -15,4 +15,4 @@ RUN npm run build
 
 EXPOSE 4000
 
-CMD ["npm", "start", "/opt/app/reports"]
+CMD ["npm", "start"]

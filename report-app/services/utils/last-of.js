@@ -1,1 +1,1 @@
-export default arr => arr && arr.length > 0 ? arr[arr.length - 1] : undefined
+export default (arr, idx = 1) => arr && arr.length >= idx ? arr[arr.length - idx] : undefined

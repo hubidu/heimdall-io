@@ -20,7 +20,6 @@ export default class HtmlSourcePage extends React.Component {
 
   render () {
     const attrs = {title: `Html Source View`}
-    console.log(typeof this.props.docUrl)
     return (
       <Layout {...attrs}>
         <iframe sandbox src={this.props.docUrl} style={{position: 'absolute', height: '100%', width: '100%', border: 'none'}}>

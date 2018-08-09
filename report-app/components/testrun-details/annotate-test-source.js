@@ -2,10 +2,19 @@ import lastOf from '../../services/utils/last-of'
 
 const _hasMeta = l => (l.meta !== undefined || l.metaDiff !== undefined)
 
-const _getPathToTestSourceFile = screenshots => lastOf(lastOf(screenshots).CodeStack).Location.File
+const _getPathToTestSourceFile = screenshots => {
+  let lastScreenshot = lastOf(screenshots)
+  if (lastScreenshot.CodeStack.length === 0) {
+    // HACK Take before last screenshot
+    const nextToLast = lastOf(screenshots, 2)
+    return lastOf(nextToLast.CodeStack).Location.File
+  }
+  return lastOf(lastScreenshot.CodeStack).Location.File
+}
 
 const _buildMappingBetweenLinesAndScreenshots = (sourceLines, screenshots) => {
   if (!screenshots) return []
+  if (screenshots.length === 0) return []
 
   const PathToTestSourceFile = _getPathToTestSourceFile(screenshots)
 

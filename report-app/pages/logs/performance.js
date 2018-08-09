@@ -33,8 +33,6 @@ export default class IndexPage extends React.Component {
       await getPerformanceLogs(report.ReportDir),
     ])
 
-    console.log(logs)
-
     return {
       report,
       logs: mapLogData(logs),
