@@ -1,14 +1,22 @@
-const webpack = require('webpack');
-require('dotenv').config();
+require('dotenv').config()
+
+const path = require('path')
+const Dotenv = require('dotenv-webpack')
 
 module.exports = {
-  webpack: config => {
-    config.plugins.push(
-      new webpack.DefinePlugin({
-        'process.env.REPORT_SERVICE_HOST': JSON.stringify(process.env.REPORT_SERVICE_HOST),
-        'process.env.DEPLOYMENT_SERVICE_HOST': JSON.stringify(process.env.DEPLOYMENT_SERVICE_HOST),
+  webpack: (config) => {
+    config.plugins = config.plugins || []
+
+    config.plugins = [
+      ...config.plugins,
+
+      // Read the .env file
+      new Dotenv({
+        path: path.join(__dirname, '.env'),
+        systemvars: true
       })
-    );
-    return config;
+    ]
+
+    return config
   }
-};
+}
