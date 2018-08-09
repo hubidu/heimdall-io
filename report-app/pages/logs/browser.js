@@ -50,7 +50,7 @@ export default class IndexPage extends React.Component {
                 <tr key={i}>
                   <td>
                   { l.timestamp ?
-                    moment(l.timestamp).format('ddd, H:mm')
+                    moment(l.timestamp).format('ddd, H:mm:ss')
                     :
                     '-'
                   }

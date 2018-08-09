@@ -1,16 +1,16 @@
 ## DONE
+- FIX: Error when trying to view test details of "The test will fail and should still get a report When I throw an assertion" (firefox) - "Cannot read property location of undefined"
+- Browserlogs: Higher resolution of timestamps
 
 ## In Progress
 
 ## Backlog V 2.1
 
-- FIX: Error when trying to view test details of "The test will fail and should still get a report When I throw an assertion" (firefox) - "Cannot read property location of undefined"
 - Performance logs: Mark cached requests
 - BUG: Screenshot diff: Screenshot compare must also drill down into stack
 - Make report API_URL configurable
 - Fix source code view (scrolling)
 - Alert Service: Filter alertable tests using a specific tag (e. g. could send alerts only for smoke tests)
-- Browserlogs: Higher resolution of timestamps
 - Test Details: Bring back the screenshot gallery view
 - Test Details: Show full date in history popovers
 - Test Error: Show breadcrumb path of error (test -> page obj -> action)
