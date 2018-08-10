@@ -1,6 +1,8 @@
 import moment from 'moment'
 import Link from 'next/link'
 
+import TestTags from './test-tags'
+
 import trunc from '../services/utils/trunc'
 import round from '../services/utils/round'
 
@@ -55,15 +57,7 @@ export default ({ownerkey, project, hashcategory, report, isListView = true}) =>
     }
     </div>
 
-    <div className="TestTitle-tags">
-      {
-          report.Tags && report.Tags.length > 0 && report.Tags.map((tag, i) =>
-          <small key={i} className="tag is-light has-text-link">
-            {tag}
-          </small>
-        )
-      }
-    </div>
+    <TestTags tags={report.Tags} />
 
     {
       hasData(report.Title) &&

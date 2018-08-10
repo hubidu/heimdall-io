@@ -4,6 +4,8 @@
 
 ## In Progress
 
+- Well known Tags: When test is tagged as @failing don't show it in "failed recently"
+
 ## Backlog V 2.1
 
 - Performance logs: Mark cached requests
@@ -14,7 +16,6 @@
 - Test Details: Bring back the screenshot gallery view
 - Test Details: Show full date in history popovers
 - Test Error: Show breadcrumb path of error (test -> page obj -> action)
-- Well known Tags: When test is tagged as @failing don't show it in "failed recently"
 - Well known Tags: @ATDD:<storyid>:<lineno>: Hide ATDD tests from "failed recently" as long as the test fails on the specified line in the test
 - Test Details: Show all errors in annotated source view
 
