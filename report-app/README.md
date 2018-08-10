@@ -4,6 +4,7 @@
 
 ## In Progress
 
+- Label tests with a final result after processing tags
 - Well known Tags: When test is tagged as @failing don't show it in "failed recently"
 
 ## Backlog V 2.1
