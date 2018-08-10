@@ -2,6 +2,7 @@ import config from './config'
 import lastOf from './utils/last-of'
 
 export const TagFailing = { name: '@failing', color: 'red' }
+export const TagShouldFailButSucceeded = { name: '@should_fail_but_succeeded', color: 'yellow' }
 export const TagFlaky = { name: '@flaky', color: 'blue' }
 export const TagSmoke = { name: '@smoke', color: 'grey' }
 export const TagATDD = { name: '@ATDD', color: 'link' }
@@ -64,7 +65,10 @@ const processTags = testCategories => {
         testCategory.LastReport.Tags.splice(idx, 1) // remove ATDD tag
       }
 
-      if (isFailedTest(testCategory) && hasTag(tags, TagFailing)) {
+      if (isSuccessfulTest(testCategory) && hasTag(tags, TagFailing)) {
+        testCategory.LastReport.Tags.push(TagShouldFailButSucceeded.name)
+        testCategory.LastReport.Result = 'error'
+      } else if (isFailedTest(testCategory) && hasTag(tags, TagFailing)) {
         testCategory.LastReport.Result = 'success'
       }
       return testCategory

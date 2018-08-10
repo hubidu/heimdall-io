@@ -40,7 +40,7 @@ class SeeMore extends React.Component {
 
 
 export default ({screenshot}) =>
-  screenshot &&
+  screenshot && screenshot.Message &&
   <div className="TestError">
     <div className="TestError-title has-text-danger">
       {screenshot.Message}

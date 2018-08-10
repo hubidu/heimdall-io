@@ -1,6 +1,6 @@
-import {matches, TagFailing, TagFlaky, TagATDD, TagATDDUnmet, TagStory, TagSmoke} from '../services/tag-processor'
+import {matches, TagFailing, TagFlaky, TagATDD, TagATDDUnmet, TagStory, TagSmoke, TagShouldFailButSucceeded} from '../services/tag-processor'
 
-const KnownTags = [TagFailing, TagFlaky, TagATDD, TagATDDUnmet, TagStory, TagSmoke]
+const KnownTags = [TagFailing, TagFlaky, TagATDD, TagATDDUnmet, TagStory, TagSmoke, TagShouldFailButSucceeded]
 
 const tagStyles = color => {
   switch (color) {
