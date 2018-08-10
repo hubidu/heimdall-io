@@ -1,11 +1,13 @@
 ## DONE
 - FIX: Error when trying to view test details of "The test will fail and should still get a report When I throw an assertion" (firefox) - "Cannot read property location of undefined"
 - Browserlogs: Higher resolution of timestamps
+- Label tests with a final result after processing tags
+- Well known Tags: When test is tagged as @failing don't show it in "failed recently"
 
 ## In Progress
 
-- Label tests with a final result after processing tags
-- Well known Tags: When test is tagged as @failing don't show it in "failed recently"
+- Test Error: Show breadcrumb path of error (test -> page obj -> action)
+
 
 ## Backlog V 2.1
 
@@ -16,7 +18,6 @@
 - Alert Service: Filter alertable tests using a specific tag (e. g. could send alerts only for smoke tests)
 - Test Details: Bring back the screenshot gallery view
 - Test Details: Show full date in history popovers
-- Test Error: Show breadcrumb path of error (test -> page obj -> action)
 - Well known Tags: @ATDD:<storyid>:<lineno>: Hide ATDD tests from "failed recently" as long as the test fails on the specified line in the test
 - Test Details: Show all errors in annotated source view
 

@@ -1,11 +1,12 @@
-import {matches, TagFailing, TagFlaky, TagATDD, TagATDDUnmet, TagStory} from '../services/tag-processor'
+import {matches, TagFailing, TagFlaky, TagATDD, TagATDDUnmet, TagStory, TagSmoke} from '../services/tag-processor'
 
-const KnownTags = [TagFailing, TagFlaky, TagATDD, TagATDDUnmet, TagStory]
+const KnownTags = [TagFailing, TagFlaky, TagATDD, TagATDDUnmet, TagStory, TagSmoke]
 
 const tagStyles = color => {
   switch (color) {
     case 'red': return 'tag is-danger has-text-white'
     case 'yellow': return 'tag is-warning'
+    case 'grey': return 'tag is-dark'
     case 'blue': return 'tag is-info has-text-white'
     case 'link': return 'tag is-light has-text-link'
     default: return 'tag is-light'

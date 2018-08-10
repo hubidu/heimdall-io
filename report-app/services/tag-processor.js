@@ -3,6 +3,7 @@ import lastOf from './utils/last-of'
 
 export const TagFailing = { name: '@failing', color: 'red' }
 export const TagFlaky = { name: '@flaky', color: 'blue' }
+export const TagSmoke = { name: '@smoke', color: 'grey' }
 export const TagATDD = { name: '@ATDD', color: 'link' }
 export const TagATDDUnmet = { name: '@ATDDIsUnmet', color: 'yellow' }
 export const TagATDDMet = { name: '@ATDDIsUnmet', color: 'yellow' }
