@@ -41,6 +41,7 @@ const parseATDDTag = (tag) => {
 }
 const isATDDUnmetExpectation = (tag, report) => {
   const atdd = parseATDDTag(tag)
+  // console.log(atdd, failedLineInTest(report), report)
   return report.Result === 'error' && atdd.lineNo === failedLineInTest(report)
 }
 
