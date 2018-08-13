@@ -6,11 +6,13 @@
 
 ## In Progress
 
+- BUG: ATDD does not work on http://veve-dev-test-01.intern.v.check24.de:4000/details?ownerkey=13pDFPwGG79KiBjvvrDOGi27fQk&project=%23All&id=5b71724da2fe0f8acbf34c11&hashcategory=3757672417
 - Test Error: Show breadcrumb path of error (test -> page obj -> action)
 
 
 ## Backlog V 2.1
 
+- Average test duration would be a nice metric
 - Performance logs: Mark cached requests
 - BUG: Screenshot diff: Screenshot compare must also drill down into stack
 - Make report API_URL configurable

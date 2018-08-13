@@ -1,5 +1,5 @@
 import config from './config'
-import lastOf from './utils/last-of'
+import {getPathToTestSourceFile} from './stacktrace'
 
 export const TagFailing = { name: '@failing', color: 'red' }
 export const TagShouldFailButSucceeded = { name: '@should_fail_but_succeeded', color: 'yellow' }
@@ -22,10 +22,21 @@ const isSuccessfulTest = testCategory => testCategory.LastReport.Result === 'suc
 const failedLineInTest = report => {
   if (!report.Screenshots) return undefined
   if (!report.Screenshots[0]) return undefined
-  const testStackframe = lastOf(report.Screenshots[0].CodeStack)
-  if (!testStackframe) return undefined
 
-  return Number(testStackframe.Location.Line)
+  // Actually find "last" test stackframe
+  const PathToTestSourceFile = getPathToTestSourceFile(report.Screenshots)
+
+  let lastTestStackframe = undefined
+  for (let cs of report.Screenshots[0].CodeStack) {
+    if (cs.Location.File === PathToTestSourceFile) {
+      lastTestStackframe = cs
+      break
+    }
+  }
+
+  if (!lastTestStackframe) return undefined
+
+  return Number(lastTestStackframe.Location.Line)
 }
 
 const hasTag = (tags, t) => tags.findIndex(tag => tag.indexOf(t.name) === 0) >= 0
@@ -41,6 +52,7 @@ const parseATDDTag = (tag) => {
 }
 const isATDDUnmetExpectation = (tag, report) => {
   const atdd = parseATDDTag(tag)
+
   // console.log(atdd, failedLineInTest(report), report)
   return report.Result === 'error' && atdd.lineNo === failedLineInTest(report)
 }
