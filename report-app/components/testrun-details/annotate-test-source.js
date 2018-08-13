@@ -166,7 +166,7 @@ export const getEditorState = (annotatedSource, screenshots) => {
   const getMinLine = lines => lines.findIndex(l => _hasMeta(l))
   const maxLine = getMaxLine(annotatedSource)
   const minLine = getMinLine(annotatedSource)
-  const filepath = _getPathToTestSourceFile(screenshots)
+  const filepath = getPathToTestSourceFile(screenshots)
 
   return {
     lineRange: [minLine, maxLine],
