@@ -3,24 +3,24 @@
 - Browserlogs: Higher resolution of timestamps
 - Label tests with a final result after processing tags
 - Well known Tags: When test is tagged as @failing don't show it in "failed recently"
+- BUG: ATDD does not work on http://veve-dev-test-01.intern.v.check24.de:4000/details?ownerkey=13pDFPwGG79KiBjvvrDOGi27fQk&project=%23All&id=5b71724da2fe0f8acbf34c11&hashcategory=3757672417
+- Well known Tags: @ATDD:<storyid>:<lineno>: Hide ATDD tests from "failed recently" as long as the test fails on the specified line in the test
+- Make report API_URL configurable
 
 ## In Progress
 
-- BUG: ATDD does not work on http://veve-dev-test-01.intern.v.check24.de:4000/details?ownerkey=13pDFPwGG79KiBjvvrDOGi27fQk&project=%23All&id=5b71724da2fe0f8acbf34c11&hashcategory=3757672417
+- Should hava a @fixit wellknown tag
 - Test Error: Show breadcrumb path of error (test -> page obj -> action)
-
 
 ## Backlog V 2.1
 
 - Average test duration would be a nice metric
 - Performance logs: Mark cached requests
 - BUG: Screenshot diff: Screenshot compare must also drill down into stack
-- Make report API_URL configurable
 - Fix source code view (scrolling)
 - Alert Service: Filter alertable tests using a specific tag (e. g. could send alerts only for smoke tests)
 - Test Details: Bring back the screenshot gallery view
 - Test Details: Show full date in history popovers
-- Well known Tags: @ATDD:<storyid>:<lineno>: Hide ATDD tests from "failed recently" as long as the test fails on the specified line in the test
 - Test Details: Show all errors in annotated source view
 
 ## Backlog
