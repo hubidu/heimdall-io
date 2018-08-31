@@ -56,15 +56,14 @@ export default ({ownerkey, project, hashcategory, report, isListView = true}) =>
         <strong>{extractTitle(report.Title)}</strong>
     }
     </div>
-
-    <TestTags tags={report.Tags} />
-
     {
       hasData(report.Title) &&
       <div className="is-size-7 has-text-primary is-hidden-mobile">
         {trunc(extractTitleData(report.Title), 120)}
       </div>
     }
+    <TestTags tags={report.Tags} />
+
     <style jsx>{`
     .TestTitle {
     }

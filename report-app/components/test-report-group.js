@@ -33,7 +33,7 @@ export default({ownerkey, project, reportGroup = [], showErrors = false}) =>
       {
         showErrors && reportGroup.LastReport.Screenshots[0] &&
           <div className="is-size-7">
-            <TestError screenshot={reportGroup.LastReport.Screenshots[0]} />
+            <TestError showBreadcrumbs={true} screenshot={reportGroup.LastReport.Screenshots[0]} />
           </div>
       }
     </div>

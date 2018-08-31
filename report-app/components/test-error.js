@@ -1,5 +1,3 @@
-import trunc from '../services/utils/trunc'
-
 class SeeMore extends React.Component {
   constructor(props) {
       super(props)
@@ -38,10 +36,35 @@ class SeeMore extends React.Component {
   }
 }
 
+const getBreadcrumbPathToError = screenshot => {
+  const clearSourceLine = srcline => srcline.replace('await', '').replace(/\/\/.*/, '')
+  const codeStack = Object.assign(screenshot.CodeStack)
 
-export default ({screenshot}) =>
+  return codeStack.map(cs => {
+    let lineAsStr = cs.Source.find(source => source.Line === cs.Location.Line).Value
+    lineAsStr = clearSourceLine(lineAsStr)
+    return lineAsStr
+  })
+  .reverse()
+}
+
+export default ({screenshot, showBreadcrumbs = false}) =>
   screenshot && screenshot.Message &&
   <div className="TestError">
+    {
+      showBreadcrumbs &&
+      <div className="TestError-breadcrumbs">
+        at
+        {
+          getBreadcrumbPathToError(screenshot).map((breadcrumb, i) =>
+            <span>
+              { i > 0 ? <strong className="has-text-info">&nbsp;&gt;&nbsp;</strong> : undefined }
+              <span className="has-text-grey-light">{breadcrumb}</span>
+            </span>
+          )
+        }
+      </div>
+    }
     <div className="TestError-title has-text-danger">
       {screenshot.Message}
 

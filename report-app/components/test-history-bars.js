@@ -2,7 +2,7 @@ import moment from 'moment'
 
 const capValue = val => val >= 1.0 ? 1.0 : val
 
-const defaultLabelFormatFn = d => moment(d.t).fromNow() + ', ' + d.value + ' s'
+const defaultLabelFormatFn = d => moment(d.t).format("ddd, H:mm") + ' in ' + d.value + ' s'
 
 const BarWidth = 5
 const BarGap = 1

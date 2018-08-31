@@ -6,26 +6,30 @@
 - BUG: ATDD does not work on http://veve-dev-test-01.intern.v.check24.de:4000/details?ownerkey=13pDFPwGG79KiBjvvrDOGi27fQk&project=%23All&id=5b71724da2fe0f8acbf34c11&hashcategory=3757672417
 - Well known Tags: @ATDD:<storyid>:<lineno>: Hide ATDD tests from "failed recently" as long as the test fails on the specified line in the test
 - Make report API_URL configurable
+- Should hava a @fixit wellknown tag
+- Test Details: Show full date in history popovers
+- Test Error: Show breadcrumb path of error (test -> page obj -> action)
 
 ## In Progress
 
-- Should hava a @fixit wellknown tag
-- Test Error: Show breadcrumb path of error (test -> page obj -> action)
+- Fix full height two column view
 
 ## Backlog V 2.1
 
-- Could have a @recovered tag for tests which are now successful again after a previous failure
-- Average test duration would be a nice metric
-- Performance logs: Mark cached requests
+- Bring back the step outline view
+- Could try react-json-view for data annotations
+- Link to test details using hash category to always get latest test result when refreshing the page
+- Average test duration (across all tests in a project) would be a nice metric
 - BUG: Screenshot diff: Screenshot compare must also drill down into stack
-- Fix source code view (scrolling)
 - Alert Service: Filter alertable tests using a specific tag (e. g. could send alerts only for smoke tests)
-- Test Details: Bring back the screenshot gallery view
-- Test Details: Show full date in history popovers
-- Test Details: Show all errors in annotated source view
 
 ## Backlog
 
+- Test Details: Bring back the screenshot gallery view
+- Performance logs: Mark cached requests
+- IDEA: Error analysis view which shows all errors and which tests are affected
+- Could have a @recovered tag for tests which are now successful again after a previous failure
+- Test Details: Show all errors in annotated source view
 - Performance logs: Mark cached resources and more (see https://nicj.net/resourcetiming-in-practice/)
 - Extend build to build frontend for different backend hosts
 - TestError: Show failed line of test
