@@ -57,8 +57,8 @@ export default ({screenshot, showBreadcrumbs = false}) =>
         at
         {
           getBreadcrumbPathToError(screenshot).map((breadcrumb, i) =>
-            <span>
-              { i > 0 ? <strong className="has-text-info">&nbsp;&gt;&nbsp;</strong> : undefined }
+            <span key={i}>
+              { i > 0 ? <strong className="has-text-info">&nbsp;|&gt;&nbsp;</strong> : undefined }
               <span className="has-text-grey-light">{breadcrumb}</span>
             </span>
           )

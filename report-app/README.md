@@ -16,6 +16,7 @@
 
 ## Backlog V 2.1
 
+- For screenshots use their actual width as max-width
 - Bring back the step outline view
 - Could try react-json-view for data annotations
 - Link to test details using hash category to always get latest test result when refreshing the page
