@@ -4,12 +4,15 @@ import {getPathToTestSourceFile} from './stacktrace'
 export const TagFailing = { name: '@failing', color: 'red' }
 export const TagShouldFailButSucceeded = { name: '@should_fail_but_succeeded', color: 'yellow' }
 export const TagFlaky = { name: '@flaky', color: 'blue' }
+export const TagFixit = { name: '@fixit', color: 'yellow' }
 export const TagSmoke = { name: '@smoke', color: 'grey' }
 export const TagATDD = { name: '@ATDD', color: 'link' }
+export const TagATDDSuccess = { name: '@ATDDSuccess', color: 'green' }
 export const TagATDDUnmet = { name: '@ATDDIsUnmet', color: 'yellow' }
 export const TagATDDMet = { name: '@ATDDIsUnmet', color: 'yellow' }
 export const TagStory = { name: '@story', color: 'link',
-  link: (tag) => {const params = parseTag(tag); return params[1] ? `${config.JiraBaseUrl}/${params[1]}` : undefined }
+  link: tag => {const params = parseTag(tag); return params[1] ? `${config.JiraBaseUrl}/${params[1]}` : undefined },
+  text: tag => {const params = parseTag(tag); return params[1] ? params[1] : tag }
 }
 
 export const matches = (tag, tagAsStr) => {
@@ -76,6 +79,7 @@ const processTags = testCategories => {
       if (isSuccessfulTest(testCategory) && hasTag(tags, TagATDD)) {
         const idx = getTagIndex(tags, TagATDD)
         testCategory.LastReport.Tags.splice(idx, 1) // remove ATDD tag
+        testCategory.LastReport.Tags.push(TagATDDSuccess.name)
       }
 
       if (isSuccessfulTest(testCategory) && hasTag(tags, TagFailing)) {

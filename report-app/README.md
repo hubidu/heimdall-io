@@ -14,6 +14,7 @@
 
 ## Backlog V 2.1
 
+- Could have a @recovered tag for tests which are now successful again after a previous failure
 - Average test duration would be a nice metric
 - Performance logs: Mark cached requests
 - BUG: Screenshot diff: Screenshot compare must also drill down into stack

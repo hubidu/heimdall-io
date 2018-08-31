@@ -1,15 +1,19 @@
-import {matches, TagFailing, TagFlaky, TagATDD, TagATDDUnmet, TagStory, TagSmoke, TagShouldFailButSucceeded} from '../services/tag-processor'
+import {
+  matches, TagFailing, TagFlaky, TagATDD, TagATDDUnmet, TagATDDSuccess, TagStory, TagSmoke, TagShouldFailButSucceeded, TagFixit
+} from '../services/tag-processor'
 
-const KnownTags = [TagFailing, TagFlaky, TagATDD, TagATDDUnmet, TagStory, TagSmoke, TagShouldFailButSucceeded]
+const KnownTags = [
+  TagFailing, TagFlaky, TagATDD, TagATDDSuccess, TagATDDUnmet, TagStory, TagSmoke, TagShouldFailButSucceeded, TagFixit
+]
 
 const tagStyles = color => {
   switch (color) {
-    case 'red': return 'tag is-danger has-text-white'
-    case 'yellow': return 'tag is-warning'
-    case 'grey': return 'tag is-dark'
-    case 'blue': return 'tag is-info has-text-white'
-    case 'link': return 'tag is-light has-text-link'
-    default: return 'tag is-light'
+    case 'red': return 'TestTitle-tag tag is-danger has-text-white'
+    case 'yellow': return 'TestTitle-tag tag is-warning'
+    case 'grey': return 'TestTitle-tag tag is-dark'
+    case 'blue': return 'TestTitle-tag tag is-info has-text-white'
+    case 'link': return 'TestTitle-tag tag is-light has-text-link'
+    default: return 'TestTitle-tag tag is-light'
   }
 }
 
@@ -23,7 +27,7 @@ const createTag = (tag, i) => {
           foundTag.link ?
             <a href={foundTag.link(tag)} target="blank">
               <strong>
-                {tag}
+                {foundTag.text ? foundTag.text(tag) : tag}
               </strong>
             </a>
             :
@@ -47,8 +51,5 @@ export default ({tags}) =>
       tags && tags.length > 0 && tags.map((tag, i) => createTag(tag, i))
   }
   <style jsx global>{`
-    .tag {
-      height: 1.5em;
-    }
   `}</style>
   </div>

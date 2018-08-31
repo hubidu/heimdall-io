@@ -75,11 +75,7 @@ export default ({ownerkey, project, hashcategory, report, isListView = true}) =>
       border-radius: 3px;
     }
     .TestTitle-title {
-      font-size: .85em;
-    }
-    .TestTitle-tags .tag {
-      height: 1.5em;
-      font-size: 0.7em;
+      font-size: .85rem;
     }
     `}</style>
   </div>
