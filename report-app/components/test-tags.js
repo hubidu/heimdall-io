@@ -9,6 +9,7 @@ const KnownTags = [
 const tagStyles = color => {
   switch (color) {
     case 'red': return 'TestTitle-tag tag is-danger has-text-white'
+    case 'green': return 'TestTitle-tag tag is-success'
     case 'yellow': return 'TestTitle-tag tag is-warning'
     case 'grey': return 'TestTitle-tag tag is-dark'
     case 'blue': return 'TestTitle-tag tag is-info has-text-white'
@@ -51,5 +52,11 @@ export default ({tags}) =>
       tags && tags.length > 0 && tags.map((tag, i) => createTag(tag, i))
   }
   <style jsx global>{`
+  .TestTitle-tags .tag {
+    margin-left: 2px;
+    font-size: 0.6rem;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+  }
   `}</style>
   </div>
