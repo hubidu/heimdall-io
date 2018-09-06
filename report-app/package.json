@@ -1,5 +1,5 @@
 {
-  "name": "ava-codeceptjs-reporter",
+  "name": "heimdal-frontend",
   "version": "1.0.0",
   "description": "Frontend for heimdal.io (the End-to-End Test Reporter)",
   "main": "server.js",

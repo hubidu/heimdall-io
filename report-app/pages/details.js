@@ -11,6 +11,7 @@ import PerformanceLogsCount from '../components/testrun-details/performance-logs
 import SideBySideView from '../components/testrun-details/side-by-side-view'
 
 import getReportById from '../services/get-report-by-id'
+import getLatestReportByHashcategory from '../services/get-latest-report-by-hashcategory'
 import getTestSource from '../services/get-test-source'
 import getBrowserlogs from '../services/get-browserlogs'
 import getPerformanceLogs from '../services/get-performance-logs'
@@ -28,10 +29,13 @@ const mapToSuccessAndFailure = (historicReports, ownerkey, project) => historicR
 })) : undefined
 
 export default class extends React.Component {
-  static async getInitialProps ({ query: { ownerkey, project, id } }) {
+  static async getInitialProps ({ query: { ownerkey, project, id, hashcategory } }) {
     if (!ownerkey) throw new Error('Please provide your owner key in the query parameters')
 
-    const report = await getReportById(id)
+    let report = hashcategory !== undefined ?
+      await getLatestReportByHashcategory(hashcategory)
+      : await getReportById(id)
+
     const [source, browserlogs, performanceLogs] = await Promise.all([
       await getTestSource(report.ReportDir),
       await getBrowserlogs(report.ReportDir),

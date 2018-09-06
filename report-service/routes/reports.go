@@ -81,17 +81,28 @@ func GetReportsByCategory(c *gin.Context) {
 
 	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "200"))
 	since, _ := strconv.Atoi(c.DefaultQuery("since", "0"))
+	latest, _ := strconv.ParseBool(c.DefaultQuery("latest", "false"))
 
 	var reports []model.Report
 	query := buildQuery(c)
 	query["hashcategory"] = hashcategory
-	query["startedat"] = bson.M{
-		"$lt": since,
+	if since > 0 {
+		query["startedat"] = bson.M{
+			"$lt": since,
+		}
 	}
+	sortLatestFirst := "-_id"
 
-	err := db.C(ReportsCollection).Find(query).Sort("-_id").Limit(limit).All(&reports)
-	if err != nil {
-		c.Error(err)
+	if latest {
+		err := db.C(ReportsCollection).Find(query).Sort(sortLatestFirst).Limit(1).All(&reports)
+		if err != nil {
+			c.Error(err)
+		}
+	} else {
+		err := db.C(ReportsCollection).Find(query).Sort(sortLatestFirst).Limit(limit).All(&reports)
+		if err != nil {
+			c.Error(err)
+		}
 	}
 
 	c.JSON(http.StatusOK, reports)

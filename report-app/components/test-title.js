@@ -9,7 +9,7 @@ import round from '../services/utils/round'
 const linkToReportDetails = (ownerkey, project, id, hashcategory) => {
   return {
     pathname: '/details',
-    query: { ownerkey, project, id, hashcategory }
+    query: { ownerkey, project, hashcategory }
   }
 }
 const hasData = title => title.indexOf('|') > -1
