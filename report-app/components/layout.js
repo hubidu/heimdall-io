@@ -18,7 +18,7 @@ const linkToProjects = ownerkey => {
 }
 
 export default ({ children, title = '', ownerkey, showNav = true }) => (
-  <div style={{'fontFamily': 'roboto, noto'}} >
+  <div className="_layout" style={{'fontFamily': 'roboto, noto'}} >
     <Head>
         {<title>{ title }</title>}
         <meta charSet='utf-8' />
@@ -47,7 +47,7 @@ export default ({ children, title = '', ownerkey, showNav = true }) => (
         </div>
       </div>
 
-      <div id="navbarExampleTransparentExample" className="navbar-menu">
+      <div className="navbar-menu">
         <div className="navbar-start">
           <span  className="navbar-item">
             <Link href={linkToProjects(ownerkey)}>
@@ -69,9 +69,68 @@ export default ({ children, title = '', ownerkey, showNav = true }) => (
       </div>
     </nav>
     }
-    <div className="mh5">
-      { children }
-    </div>
 
+    { children }
+
+    <style jsx global>{`
+    html,
+    body,
+    #__next,
+    ._layout {
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    .Resizer {
+      background: #000;
+      opacity: .2;
+      z-index: 1;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      -moz-background-clip: padding;
+      -webkit-background-clip: padding;
+      background-clip: padding-box;
+  }
+
+   .Resizer:hover {
+      -webkit-transition: all 2s ease;
+      transition: all 2s ease;
+  }
+
+   .Resizer.horizontal {
+      height: 11px;
+      margin: -5px 0;
+      border-top: 5px solid rgba(255, 255, 255, 0);
+      border-bottom: 5px solid rgba(255, 255, 255, 0);
+      cursor: row-resize;
+      width: 100%;
+  }
+
+  .Resizer.horizontal:hover {
+      border-top: 5px solid rgba(0, 0, 0, 0.5);
+      border-bottom: 5px solid rgba(0, 0, 0, 0.5);
+  }
+
+  .Resizer.vertical {
+      width: 11px;
+      margin: 0 -5px;
+      border-left: 5px solid rgba(255, 255, 255, 0);
+      border-right: 5px solid rgba(255, 255, 255, 0);
+      cursor: col-resize;
+  }
+
+  .Resizer.vertical:hover {
+      border-left: 5px solid rgba(0, 0, 0, 0.5);
+      border-right: 5px solid rgba(0, 0, 0, 0.5);
+  }
+  .Resizer.disabled {
+    cursor: not-allowed;
+  }
+  .Resizer.disabled:hover {
+    border-color: transparent;
+  }
+    `}</style>
   </div>
 )

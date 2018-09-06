@@ -1,6 +1,5 @@
 import React from 'react'
 import Layout from '../components/layout'
-import SplitPane from 'react-split-pane'
 
 import TestTitle from '../components/test-title'
 import TestResultDeviceIcon from '../components/test-result-device-icon'
@@ -102,100 +101,86 @@ export default class extends React.Component {
   }
 
   render () {
-    const attrs = {title: `${this.props.report.Title}`, ownerkey: this.props.ownerkey, showNav: false}
+    const attrs = {title: `${this.props.report.Title}`, ownerkey: this.props.ownerkey}
 
     return (
       <Layout {...attrs}>
-        <div className="TestDetails">
-          <div className="TestDetails-header">
-            <div className="TestDetails-title columns">
+        <div className="container is-fluid">
+          <div className="TestDetails-title columns">
 
-              <div className="column is-narrow">
-                <TestResultDeviceIcon
-                  result={this.props.report.Result}
-                  deviceSettings={this.props.report.DeviceSettings} />
-              </div>
-
-              <div className="column">
-                <TestTitle report={this.props.report} isListView={false}/>
-              </div>
-
+            <div className="column is-narrow">
+              <TestResultDeviceIcon
+                result={this.props.report.Result}
+                deviceSettings={this.props.report.DeviceSettings} />
             </div>
 
-            {
-              this.state.loaded === true ?
-                <div className="level has-background-light">
-                  <div className="level-item has-text-centered">
-                    <div>
-                      <p className="heading">
-                        History
-                      </p>
-                      <div className="title">
-                          <TestHistoryBars
-                          data={this.state.history}
-                          maxBars={20}
-                          />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="level-item has-text-centered">
-                    <div>
-                      <p className="heading">Performance Logs</p>
-                      <p className="title">
-                        <PerformanceLogsCount reportId={this.props.report._id} logs={this.props.performanceLogs} />
-                      </p>
-                    </div>
-                  </div>
-                  <div className="level-item has-text-centered">
-                    <div>
-                      <p className="heading">Console Logs</p>
-                      <p className="title">
-                        <ConsoleMessagesCount reportId={this.props.report._id} messages={this.state.consoleErrors} />
-                      </p>
-                    </div>
-                  </div>
-                  <div className="level-item has-text-centered">
-                    <div>
-                      <p className="heading">Stability</p>
-                      <p className="title">{this.state.stability} %</p>
+            <div className="column">
+              <TestTitle report={this.props.report} isListView={false}/>
+            </div>
+
+          </div>
+
+          {
+            this.state.loaded === true ?
+            <div className="TestDetails-body">
+              <div className="level has-background-light">
+                <div className="level-item has-text-centered">
+                  <div>
+                    <p className="heading">
+                      History
+                    </p>
+                    <div className="title">
+                        <TestHistoryBars
+                        data={this.state.history}
+                        maxBars={20}
+                        />
                     </div>
                   </div>
                 </div>
-                :
-                <Spinner />
-              }
-          </div>
+                <div className="level-item has-text-centered">
+                  <div>
+                    <p className="heading">Performance Logs</p>
+                    <p className="title">
+                      <PerformanceLogsCount reportId={this.props.report._id} logs={this.props.performanceLogs} />
+                    </p>
+                  </div>
+                </div>
+                <div className="level-item has-text-centered">
+                  <div>
+                    <p className="heading">Console Logs</p>
+                    <p className="title">
+                      <ConsoleMessagesCount reportId={this.props.report._id} messages={this.state.consoleErrors} />
+                    </p>
+                  </div>
+                </div>
+                <div className="level-item has-text-centered">
+                  <div>
+                    <p className="heading">Stability</p>
+                    <p className="title">{this.state.stability} %</p>
+                  </div>
+                </div>
+              </div>
 
-          <div className="TestDetails-body">
-          {
-            this.state.loaded === true ?
-            <SideBySideView
-              lastSourceCommit={this.props.report.LastSourceCommit}
-              reportId={this.props.report._id}
-              reportDir={this.props.report.ReportDir}
-              reportDirDiff={this.state.lastSuccessfulReport && this.state.lastSuccessfulReport.ReportDir}
-              startedAt={this.props.report.StartedAt}
-              source={this.props.source}
-              screenshotWidth={this.props.report.DeviceSettings.Width}
-              screenshotHeight={this.props.report.DeviceSettings.Height}
-              reportScreenshots={this.props.report.Screenshots}
-              reportScreenshotsDiff={this.state.lastSuccessfulReport && this.state.lastSuccessfulReport.Screenshots}
-            />
+              <SideBySideView
+                lastSourceCommit={this.props.report.LastSourceCommit}
+                reportId={this.props.report._id}
+                reportDir={this.props.report.ReportDir}
+                reportDirDiff={this.state.lastSuccessfulReport && this.state.lastSuccessfulReport.ReportDir}
+                startedAt={this.props.report.StartedAt}
+                source={this.props.source}
+                screenshotWidth={this.props.report.DeviceSettings.Width}
+                screenshotHeight={this.props.report.DeviceSettings.Height}
+                reportScreenshots={this.props.report.Screenshots}
+                reportScreenshotsDiff={this.state.lastSuccessfulReport && this.state.lastSuccessfulReport.Screenshots}
+              />
+            </div>
             :
             <Spinner />
           }
 
-          </div>
-
 
         </div>
-
-
-        <style jsx global>{`
-          .TestDetails {
-            height: 100%;
-          }
-
+        <style jsx>{`
           .TestDetails-title {
             margin-bottom: 0;
           }
@@ -204,22 +189,6 @@ export default class extends React.Component {
           .TestDetails-screenshotViewContainer {
             position: relative;
           }
-
-          .TestDetails-header {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            padding: 1em 1em 0 1em;
-          }
-
-          .TestDetails-body {
-            padding: 10em 1em 0 1em;
-            height: 100vh;
-          }
-
-
-
         `}</style>
 
       </Layout>

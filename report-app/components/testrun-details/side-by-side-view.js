@@ -39,6 +39,11 @@ class SideBySideView extends React.Component {
       selectedScreenshotDiff: defaultSelectScreenshot(this.props.reportScreenshotsDiff),
       selectedLine: editorState.selectedLine,
     })
+
+    setTimeout(() => {
+      var objDiv = document.getElementById("SideBySideView-sourceCode");
+      objDiv.scrollBy(0, 500)
+    }, 100)
   }
 
   componentDidMount() {
@@ -108,9 +113,9 @@ class SideBySideView extends React.Component {
 
   render() {
     return (
-      <div className="SideBySideView columns">
+      <div className="SideBySideView">
 
-        <div className="SideBySideView-firstColumn column is-6">
+        <div id="SideBySideView-sourceCode" className="SideBySideView-sourceCode">
 
           <div className="field has-addons">
             { this.hasADiff() &&
@@ -162,7 +167,7 @@ class SideBySideView extends React.Component {
           }
         </div>
 
-        <div className="column is-6 TestDetails-screenshotViewContainer">
+        <div className="SideBySideView-screenshot">
           <ScreenshotView
             reportDir={this.props.reportDir}
             reportDirDiff={this.props.reportDirDiff}
@@ -173,11 +178,41 @@ class SideBySideView extends React.Component {
           />
         </div>
 
-        <style jsx>{`
-          .SideBySideView-firstColumn {
-            height: 100vh;
-            overflow: auto;
-          }
+        <style jsx global>{`
+        ::-webkit-scrollbar {
+          width: 2px;
+        }
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #eee;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #ccc;
+        }
+
+        .SideBySideView {
+          display: -webkit-flex;
+          display: -ms-flexbox;
+          display: flex;
+          height: 100%;
+        }
+
+        .SideBySideView-sourceCode {
+          flex: 4;
+          height: 100%;
+          overflow-y: scroll;
+          overflow-x: hidden;
+        }
+
+        .SideBySideView-screenshot {
+          flex: 6;
+          padding: 1em;
+          height: 100%;
+          overflow-y: scroll;
+          overflow-x: hidden;
+        }
         `}</style>
 
       </div>
