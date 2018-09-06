@@ -1,6 +1,9 @@
 import config from './config'
 import {getPathToTestSourceFile} from './stacktrace'
 
+const linkToStory = tag => {const params = parseTag(tag); return params[1] ? `${config.JiraBaseUrl}/${params[1]}` : undefined }
+const extractTextFromTag = tag => {const params = parseTag(tag); return params[1] ? params[1] : tag }
+
 export const TagFailing = { name: '@failing', color: 'red' }
 export const TagShouldFailButSucceeded = { name: '@should_fail_but_succeeded', color: 'yellow' }
 export const TagFlaky = { name: '@flaky', color: 'blue' }
@@ -11,8 +14,14 @@ export const TagATDDSuccess = { name: '@ATDDSuccess', color: 'green' }
 export const TagATDDUnmet = { name: '@ATDDIsUnmet', color: 'yellow' }
 export const TagATDDMet = { name: '@ATDDIsUnmet', color: 'yellow' }
 export const TagStory = { name: '@story', color: 'link',
-  link: tag => {const params = parseTag(tag); return params[1] ? `${config.JiraBaseUrl}/${params[1]}` : undefined },
-  text: tag => {const params = parseTag(tag); return params[1] ? params[1] : tag }
+  link: linkToStory,
+  text: extractTextFromTag
+}
+export const TagBug = {
+  name: '@bug',
+  color: 'red',
+  link: linkToStory,
+  text: extractTextFromTag
 }
 
 export const matches = (tag, tagAsStr) => {

@@ -9,17 +9,18 @@
 - Should hava a @fixit wellknown tag
 - Test Details: Show full date in history popovers
 - Test Error: Show breadcrumb path of error (test -> page obj -> action)
+- Add @bug tag support
 
 ## In Progress
 
 - Fix full height two column view
+- Link to test details using hash category to always get latest test result when refreshing the page
 
 ## Backlog V 2.1
 
 - For screenshots use their actual width as max-width
 - Bring back the step outline view
 - Could try react-json-view for data annotations
-- Link to test details using hash category to always get latest test result when refreshing the page
 - Average test duration (across all tests in a project) would be a nice metric
 - BUG: Screenshot diff: Screenshot compare must also drill down into stack
 - Alert Service: Filter alertable tests using a specific tag (e. g. could send alerts only for smoke tests)

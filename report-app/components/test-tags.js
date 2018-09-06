@@ -1,9 +1,9 @@
 import {
-  matches, TagFailing, TagFlaky, TagATDD, TagATDDUnmet, TagATDDSuccess, TagStory, TagSmoke, TagShouldFailButSucceeded, TagFixit
+  matches, TagFailing, TagFlaky, TagATDD, TagATDDUnmet, TagATDDSuccess, TagStory, TagBug, TagSmoke, TagShouldFailButSucceeded, TagFixit
 } from '../services/tag-processor'
 
 const KnownTags = [
-  TagFailing, TagFlaky, TagATDD, TagATDDSuccess, TagATDDUnmet, TagStory, TagSmoke, TagShouldFailButSucceeded, TagFixit
+  TagFailing, TagFlaky, TagATDD, TagATDDSuccess, TagATDDUnmet, TagStory, TagBug, TagSmoke, TagShouldFailButSucceeded, TagFixit
 ]
 
 const tagStyles = color => {
