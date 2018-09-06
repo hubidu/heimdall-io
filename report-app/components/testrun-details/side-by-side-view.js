@@ -131,16 +131,6 @@ class SideBySideView extends React.Component {
                 </a>
               </p>
             }
-            { /*
-              <p className="control">
-                <a className="button is-outlined is-small is-danger">
-                  <small>
-                    Show Errors
-                  </small>
-                </a>
-              </p>
-              */
-            }
           </div>
           {
             this.props.lastSourceCommit && this.props.lastSourceCommit.Subject &&
@@ -176,6 +166,8 @@ class SideBySideView extends React.Component {
           <ScreenshotView
             reportDir={this.props.reportDir}
             reportDirDiff={this.props.reportDirDiff}
+            width={this.props.screenshotWidth}
+            height={this.props.screenshotHeight}
             selectedScreenshot={this.state.selectedScreenshot}
             selectedScreenshotDiff={this.state.showDiff === true && this.state.selectedScreenshotDiff}
           />

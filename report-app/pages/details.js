@@ -31,10 +31,11 @@ const mapToSuccessAndFailure = (historicReports, ownerkey, project) => historicR
 export default class extends React.Component {
   static async getInitialProps ({ query: { ownerkey, project, id, hashcategory } }) {
     if (!ownerkey) throw new Error('Please provide your owner key in the query parameters')
+    if (!(id || hashcategory)) throw new Error('Please provide either id or hashcategory')
 
-    let report = hashcategory !== undefined ?
-      await getLatestReportByHashcategory(hashcategory)
-      : await getReportById(id)
+    let report = id !== undefined ?
+      await getReportById(id)
+      : await getLatestReportByHashcategory(hashcategory)
 
     const [source, browserlogs, performanceLogs] = await Promise.all([
       await getTestSource(report.ReportDir),
@@ -167,6 +168,8 @@ export default class extends React.Component {
                 reportDirDiff={this.state.lastSuccessfulReport && this.state.lastSuccessfulReport.ReportDir}
                 startedAt={this.props.report.StartedAt}
                 source={this.props.source}
+                screenshotWidth={this.props.report.DeviceSettings.Width}
+                screenshotHeight={this.props.report.DeviceSettings.Height}
                 reportScreenshots={this.props.report.Screenshots}
                 reportScreenshotsDiff={this.state.lastSuccessfulReport && this.state.lastSuccessfulReport.Screenshots}
               />

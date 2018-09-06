@@ -7,7 +7,7 @@ const handleImageClick = (reportDir, imageFile) => {
   window.location = getScreenshotUrl(reportDir, imageFile)
 }
 
-const Screenshot = ({title, pageTitle, pageUrl, reportDir, imageFile}) =>
+const Screenshot = ({title, pageTitle, pageUrl, reportDir, imageFile, width}) =>
   <div className="Screenshot">
     {
       title &&
@@ -27,14 +27,17 @@ const Screenshot = ({title, pageTitle, pageUrl, reportDir, imageFile}) =>
       <a href={pageUrl} target="_blank">{pageUrl}</a>
     </h6>
 
-    <Magnifier
-      onClick={() => handleImageClick(reportDir, imageFile)}
-      zoomFactor={2}
-      mgWidth={300}
-      mgHeight={200}
-      mgShape='square'
-      src={getScreenshotUrl(reportDir, imageFile)}
-      width='100%' />
+    <div className="Screenshot-imageContainer" style={{maxWidth: width}}>
+      <Magnifier
+        onClick={() => handleImageClick(reportDir, imageFile)}
+        zoomFactor={2}
+        mgWidth={300}
+        mgHeight={200}
+        mgShape='square'
+        src={getScreenshotUrl(reportDir, imageFile)}
+        width='100%'
+      />
+    </div>
 
     <style jsx>{`
     .Screenshot-title {
@@ -43,15 +46,20 @@ const Screenshot = ({title, pageTitle, pageUrl, reportDir, imageFile}) =>
     .Screenshot-url {
       margin-bottom: 1em;
     }
+    .Screenshot-imageContainer {
+      width: 100%
+    }
     `}</style>
   </div>
 
 
-export default ({ reportDir, selectedScreenshot, reportDirDiff, selectedScreenshotDiff }) =>
+export default ({ reportDir, selectedScreenshot, reportDirDiff, selectedScreenshotDiff, width, height }) =>
   <div className="ScreenshotContainer">
     {
       selectedScreenshot &&
       <Screenshot
+        width={width}
+        height={height}
         title={selectedScreenshotDiff && 'This test run'}
         pageTitle={selectedScreenshot.Page.Title}
         pageUrl={selectedScreenshot.Page.Url}
@@ -66,7 +74,9 @@ export default ({ reportDir, selectedScreenshot, reportDirDiff, selectedScreensh
     {
       selectedScreenshotDiff &&
       <Screenshot
-       title={'Other test run'}
+        width={width}
+        height={height}
+        title={'Other test run'}
         pageTitle={selectedScreenshotDiff.Page.Title}
         pageUrl={selectedScreenshotDiff.Page.Url}
         reportDir={reportDirDiff}
