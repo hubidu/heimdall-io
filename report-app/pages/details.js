@@ -213,7 +213,7 @@ export default class extends React.Component {
           }
 
           .TestDetails-body {
-            padding: 10em 1em 0 1em;
+            padding: 11em 1em 0 1em;
             height: 100vh;
           }
         `}</style>

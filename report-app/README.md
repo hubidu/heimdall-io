@@ -16,13 +16,13 @@
 - AlertService: Grep for tests
 - Fix ATDD wireframe test
 - Fix scrollTo bottom of source view
+- ReportImporter: Run database cleanup every day
 
 ## In Progress
 
 
 ## Backlog V 2.1
 
-- ReportImporter: Run database cleanup every day
 - AlertService: Group by device
 - AlertService: Trigger hipchat notifications
 - Bring back the step outline view
