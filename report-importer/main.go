@@ -66,7 +66,7 @@ func main() {
 	}
 
 	gocron.Every(intervalInSeconds).Seconds().Do(importJobTask)
-	gocron.Every(1).Sunday().At("05:00").Do(deleteOldReports)
+	gocron.Every(1).Day().At("05:00").Do(deleteOldReports)
 
 	<-gocron.Start()
 }

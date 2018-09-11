@@ -13,6 +13,7 @@
 - Link to test details using hash category to always get latest test result when refreshing the page
 - For screenshots use their actual width as max-width
 - Fix full height two column view
+- AlertService: Grep for tests
 
 ## In Progress
 
@@ -22,8 +23,8 @@
 ## Backlog V 2.1
 
 - ReportImporter: Run database cleanup every day
-- AlertService: Grep for tests
 - AlertService: Group by device
+- AlertService: Trigger hipchat notifications
 - Bring back the step outline view
 - Create codeceptjs error parser in order to create better error messages (e.g including detailed help texts what went wrong and how to fix)
 - Could try react-json-view for data annotations
