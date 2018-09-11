@@ -14,11 +14,11 @@
 - For screenshots use their actual width as max-width
 - Fix full height two column view
 - AlertService: Grep for tests
+- Fix ATDD wireframe test
+- Fix scrollTo bottom of source view
 
 ## In Progress
 
-- Fix scrollTo bottom of source view
-- Fix ATDD wireframe test
 
 ## Backlog V 2.1
 

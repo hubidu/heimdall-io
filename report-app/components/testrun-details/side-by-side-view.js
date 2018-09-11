@@ -22,6 +22,13 @@ class SideBySideView extends React.Component {
     this.handleStacktraceClick = this.handleStacktraceClick.bind(this)
   }
 
+  _scrollSourceToBottom() {
+    setTimeout(() => {
+      var objDiv = document.getElementById("SideBySideView-sourceCode")
+      objDiv.scrollBy(0, 2000)
+    }, 100)
+  }
+
   init() {
     const {lines, lineGroups} = annotateTestSource(
       this.props.source,
@@ -40,10 +47,7 @@ class SideBySideView extends React.Component {
       selectedLine: editorState.selectedLine,
     })
 
-    setTimeout(() => {
-      var objDiv = document.getElementById("SideBySideView-sourceCode");
-      objDiv.scrollBy(0, 500)
-    }, 100)
+    this._scrollSourceToBottom()
   }
 
   componentDidMount() {
