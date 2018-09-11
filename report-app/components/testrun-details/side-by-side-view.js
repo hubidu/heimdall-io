@@ -24,8 +24,10 @@ class SideBySideView extends React.Component {
 
   _scrollSourceToBottom() {
     setTimeout(() => {
-      var objDiv = document.getElementById("SideBySideView-sourceCode")
-      objDiv.scrollBy(0, 2000)
+      const objDiv = document.getElementById("SideBySideView-sourceCode")
+      if (objDiv) {
+        objDiv.scrollBy(0, 2000)
+      }
     }, 100)
   }
 
