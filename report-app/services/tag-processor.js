@@ -35,13 +35,17 @@ const failedLineInTest = report => {
   if (!report.Screenshots) return undefined
   if (!report.Screenshots[0]) return undefined
 
-  // Actually find "last" test stackframe
   const PathToTestSourceFile = getPathToTestSourceFile(report.Screenshots)
 
   let lastTestStackframe = undefined
-  for (let cs of report.Screenshots[0].CodeStack) {
-    if (cs.Location.File === PathToTestSourceFile) {
-      lastTestStackframe = cs
+  for (let i = 0; i < report.Screenshots.length - 1; i++) { // try all screenshots until we find a test source line
+    for (let cs of report.Screenshots[i].CodeStack) {
+      if (cs.Location.File === PathToTestSourceFile) {
+        lastTestStackframe = cs
+        break
+      }
+    }
+    if (lastTestStackframe) {
       break
     }
   }
