@@ -11,6 +11,15 @@ import (
 	"github.com/hubidu/e2e-backend/report-lib/model"
 )
 
+func containsStr(arr []string, str string) bool {
+	for _, item := range arr {
+		if str == item {
+			return true
+		}
+	}
+	return false
+}
+
 func hasConsecutiveFailures(reportGroup model.ReportGroup, numberOfFailures int) bool {
 	if len(reportGroup.Items) >= numberOfFailures {
 		failedReports := []model.ReportSlim{}
@@ -48,6 +57,16 @@ func getSuccessfulReports(reportGroups []model.ReportGroup) []model.Report {
 	return successfulReports
 }
 
+func grepTag(reports []model.Report, tag string) []model.Report {
+	filteredReports := []model.Report{}
+	for _, report := range reports {
+		if containsStr(report.Tags, tag) {
+			filteredReports = append(filteredReports, report)
+		}
+	}
+	return filteredReports
+}
+
 func getScreenshots(reports []model.Report) []service.DownloadedScreenshot {
 	downloadedScreenshots := []service.DownloadedScreenshot{}
 	for _, report := range reports {
@@ -55,33 +74,6 @@ func getScreenshots(reports []model.Report) []service.DownloadedScreenshot {
 		downloadedScreenshots = append(downloadedScreenshots, downloadedScreenshot)
 	}
 	return downloadedScreenshots
-}
-
-// func sendToDeployerIfRecentDeployment(newAlerts []model.Report, fixedAlerts []model.Report, newAlertScreenshots []service.DownloadedScreenshot) {
-// 	recentDeployments := deployments.GetRecentBambooDeployments()
-// 	if len(recentDeployments) == 0 {
-// 		return
-// 	}
-
-// 	for _, deployment := range recentDeployments {
-// 		duration := time.Since(deployment.Finished)
-// 		if duration.Hours() < 1 {
-// 			recipients := []string{deployment.Description}
-
-// 			fmt.Println("There has been a deployment recently. Sending alert also to ", recipients)
-
-// 			email.SendAlert(recipients, newAlerts, fixedAlerts, newAlertScreenshots)
-// 		}
-// 	}
-// }
-
-func containsStr(arr []string, str string) bool {
-	for _, item := range arr {
-		if str == item {
-			return true
-		}
-	}
-	return false
 }
 
 func selectConfiguredOwnerkeys(ownerkeys []string, alertableReports []model.Report) []model.Report {
@@ -113,8 +105,8 @@ func AlertTask() {
 		reportGroups = append(reportGroups, *v)
 	}
 
-	failedReports := getFailedReports(reportGroups)
-	successfulReports := getSuccessfulReports(reportGroups)
+	failedReports := grepTag(getFailedReports(reportGroups), alertConfig.GrepTag)
+	successfulReports := grepTag(getSuccessfulReports(reportGroups), alertConfig.GrepTag)
 
 	newAlerts, fixedAlerts := UpdateAlertedReports(failedReports, successfulReports)
 

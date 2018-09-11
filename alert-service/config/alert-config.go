@@ -9,6 +9,7 @@ type AlertConfig struct {
 	Ownerkeys  []string
 	From       string
 	Recipients []string
+	GrepTag    string
 }
 
 func NewAlertConfig() *AlertConfig {
@@ -16,6 +17,7 @@ func NewAlertConfig() *AlertConfig {
 		Ownerkeys:  strings.Split(os.Getenv("ALERT_OWNERKEYS"), ","),
 		From:       os.Getenv("ALERT_FROM"),
 		Recipients: strings.Split(os.Getenv("ALERT_RECIPIENTS"), ","),
+		GrepTag:    os.Getenv("ALERT_GREPTAG"),
 	}
 
 	return &cfg

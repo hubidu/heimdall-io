@@ -1,6 +1,5 @@
 import React from 'react'
 import Layout from '../components/layout'
-import SplitPane from 'react-split-pane'
 
 import TestTitle from '../components/test-title'
 import TestResultDeviceIcon from '../components/test-result-device-icon'
@@ -217,9 +216,6 @@ export default class extends React.Component {
             padding: 10em 1em 0 1em;
             height: 100vh;
           }
-
-
-
         `}</style>
 
       </Layout>

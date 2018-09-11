@@ -12,23 +12,28 @@
 - Add @bug tag support
 - Link to test details using hash category to always get latest test result when refreshing the page
 - For screenshots use their actual width as max-width
+- Fix full height two column view
 
 ## In Progress
 
-- Fix full height two column view
+- Fix scrollTo bottom of source view
+- Fix ATDD wireframe test
 
 ## Backlog V 2.1
 
+- ReportImporter: Run database cleanup every day
+- AlertService: Grep for tests
+- AlertService: Group by device
 - Bring back the step outline view
 - Create codeceptjs error parser in order to create better error messages (e.g including detailed help texts what went wrong and how to fix)
 - Could try react-json-view for data annotations
 - Average test duration (across all tests in a project) would be a nice metric
 - BUG: Screenshot diff: Screenshot compare must also drill down into stack
-- Alert Service: Filter alertable tests using a specific tag (e. g. could send alerts only for smoke tests)
-- Collapse multiple story tags into one dropdown
 
 ## Backlog
 
+- Source View: Better syntax highlighting (mute awaits and comments, highlight codecept methods)
+- Collapse multiple story tags into one dropdown
 - Test Details: Bring back the screenshot gallery view
 - Performance logs: Mark cached requests
 - IDEA: Error analysis view which shows all errors and which tests are affected
