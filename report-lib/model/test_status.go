@@ -46,7 +46,7 @@ func (ts *TestStatus) AddReport(report *Report) {
 		Environment:    report.Environment,
 	}
 
-	ForDevice := report.DeviceSettings.Type + "_" + report.DeviceSettings.Browser
+	ForDevice := report.Environment + "_" + report.DeviceSettings.Type + "_" + report.DeviceSettings.Browser
 
 	reportsForDevice := ts.Reports[ForDevice]
 

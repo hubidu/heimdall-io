@@ -33,20 +33,22 @@ func removeReportFiles(baseDir string, reports []model.Report) {
 func importReportsTask(baseDir string, doRemoveReportFiles bool) {
 	reports := model.GetReportFiles(baseDir)
 
-	if len(reports) > 0 {
-		fmt.Println("Importing reports from directory " + baseDir + " ...")
+	reportCount := len(reports)
+	if reportCount > 0 {
+		fmt.Println("Starting report import: " + strconv.Itoa(reportCount) + " reports from directory " + baseDir + " ...")
 
 		// TODO Should not insert duplicate reports
 		InsertReportsIntoDB(reports)
-		fmt.Println("Inserted " + strconv.Itoa(len(reports)) + " report files into database ...")
+		fmt.Println("Inserted " + strconv.Itoa(reportCount) + " report files into database ...")
 
 		fmt.Println("Updating test status view")
 		UpdateTestStatusView(reports)
-		fmt.Println("Updated test status view")
 
 		if doRemoveReportFiles {
 			removeReportFiles(baseDir, reports)
 		}
+
+		fmt.Println("Report import finished")
 	}
 }
 

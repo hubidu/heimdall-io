@@ -47,8 +47,8 @@ func UpdateTestStatusView(reports []model.Report) {
 
 		if err != nil {
 			testStatus = model.TestStatus{
-				CreatedAt:    int64(time.Now().Unix()),
-				ModifiedAt:   int64(time.Now().Unix()),
+				CreatedAt:    int64(time.Now().Unix() * 1000),
+				ModifiedAt:   int64(time.Now().Unix() * 1000),
 				OwnerKey:     report.OwnerKey,
 				Project:      report.Project,
 				HashCategory: report.HashCategory,
@@ -66,6 +66,7 @@ func UpdateTestStatusView(reports []model.Report) {
 	}
 
 	for _, testStatus := range insertTestStati {
+		testStatus.ModifiedAt = int64(time.Now().Unix() * 1000)
 		err := testStatiCollection.Insert(&testStatus)
 		if err != nil {
 			log.Fatal(err)
