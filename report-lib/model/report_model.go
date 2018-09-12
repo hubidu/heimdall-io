@@ -14,6 +14,9 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+const DBName = "e2e"
+const ReportCollection = "reports"
+
 type ReportGroup struct {
 	HashCategory uint32
 	Prefix       string

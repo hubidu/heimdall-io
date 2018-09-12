@@ -1,6 +1,6 @@
 import lastOf from './utils/last-of'
 
-
+// TODO Make that more robust
 const lastResortGetPathToTestSourceFile = screenshots => {
   let lastScreenshot = lastOf(screenshots)
   if (lastScreenshot.CodeStack.length === 0) {

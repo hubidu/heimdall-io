@@ -19,10 +19,61 @@ func InsertReportsIntoDB(reports []model.Report) {
 	// Optional. Switch the session to a monotonic behavior.
 	s.SetMode(mgo.Monotonic, true)
 
-	coll := s.DB("e2e").C("reports")
+	coll := s.DB("e2e").C(model.ReportCollection)
 
 	for _, report := range reports {
 		err := coll.Insert(&report)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+}
+
+func UpdateTestStatusView(reports []model.Report) {
+	s := db.Session.Clone()
+	defer s.Close()
+	testStatiCollection := s.DB("e2e").C(model.TestStatusCollection)
+
+	insertTestStati := []model.TestStatus{}
+	updateTestStati := []model.TestStatus{}
+
+	for _, report := range reports {
+		testStatus := model.TestStatus{}
+
+		err := testStatiCollection.Find(bson.M{
+			"ownerkey":     report.OwnerKey,
+			"project":      report.Project,
+			"hashcategory": report.HashCategory}).One(&testStatus)
+
+		if err != nil {
+			testStatus = model.TestStatus{
+				CreatedAt:    int64(time.Now().Unix()),
+				ModifiedAt:   int64(time.Now().Unix()),
+				OwnerKey:     report.OwnerKey,
+				Project:      report.Project,
+				HashCategory: report.HashCategory,
+				Prefix:       report.Prefix,
+				Title:        report.Title,
+				Tags:         report.Tags,
+				Reports:      []model.TestStatusReport{},
+			}
+			testStatus.AddReport(&report)
+			insertTestStati = append(insertTestStati, testStatus)
+		} else {
+			testStatus.AddReport(&report)
+			updateTestStati = append(updateTestStati, testStatus)
+		}
+	}
+
+	for _, testStatus := range insertTestStati {
+		err := testStatiCollection.Insert(&testStatus)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	for _, testStatus := range updateTestStati {
+		err := testStatiCollection.Update(bson.M{"_id": testStatus.Id}, &testStatus)
 		if err != nil {
 			log.Fatal(err)
 		}

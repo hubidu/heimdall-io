@@ -14,13 +14,23 @@ import (
 
 func init() {
 	db.Connect()
+
+	model.EnsureTestStatusIndexes()
 }
 
 func deleteOldReports() {
 	CleanupOldReports(7)
 }
 
-func importJob(baseDir string, removeReportFiles bool) {
+func removeReportFiles(baseDir string, reports []model.Report) {
+	// fmt.Println("Renaming report files ...")
+	for _, report := range reports {
+		reportFileName := path.Join(baseDir, report.ReportDir, report.ReportFileName)
+		os.Rename(reportFileName, path.Join(baseDir, report.ReportDir, "report_imported.json"))
+	}
+}
+
+func importReportsTask(baseDir string, doRemoveReportFiles bool) {
 	reports := model.GetReportFiles(baseDir)
 
 	if len(reports) > 0 {
@@ -28,15 +38,14 @@ func importJob(baseDir string, removeReportFiles bool) {
 
 		// TODO Should not insert duplicate reports
 		InsertReportsIntoDB(reports)
-
 		fmt.Println("Inserted " + strconv.Itoa(len(reports)) + " report files into database ...")
 
-		if removeReportFiles {
-			// fmt.Println("Renaming report files ...")
-			for _, report := range reports {
-				reportFileName := path.Join(baseDir, report.ReportDir, report.ReportFileName)
-				os.Rename(reportFileName, path.Join(baseDir, report.ReportDir, "report_imported.json"))
-			}
+		fmt.Println("Updating test status view")
+		UpdateTestStatusView(reports)
+		fmt.Println("Updated test status view")
+
+		if doRemoveReportFiles {
+			removeReportFiles(baseDir, reports)
 		}
 	}
 }
@@ -54,10 +63,6 @@ func main() {
 		baseDir = "./fixtures"
 	}
 
-	importJobTask := func() {
-		importJob(baseDir, *removeReportFiles)
-	}
-
 	var intervalInSeconds uint64
 	intervalInSeconds = 3
 	if len(os.Getenv("JOB_INTERVAL")) != 0 {
@@ -65,7 +70,9 @@ func main() {
 		intervalInSeconds = uint64(interval)
 	}
 
-	gocron.Every(intervalInSeconds).Seconds().Do(importJobTask)
+	gocron.Every(intervalInSeconds).Seconds().Do(func() {
+		importReportsTask(baseDir, *removeReportFiles)
+	})
 	gocron.Every(1).Day().At("05:00").Do(deleteOldReports)
 
 	<-gocron.Start()
