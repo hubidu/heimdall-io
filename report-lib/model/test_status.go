@@ -12,7 +12,7 @@ const TestStatusCollection = "test-status"
 const KeepLastNReports = 500
 
 type TestStatusReport struct {
-	reportId       bson.ObjectId  `json:"_id,omitempty" bson:"_id,omitempty"`
+	reportID       bson.ObjectId  `json:"_id,omitempty" bson:"_id,omitempty"`
 	Runid          string         `json:"runid" bson:"runid"`
 	StartedAt      int64          `json:"startedAt" bson:"startedAt"`
 	Result         string         `json:"result" bson:"result"`
@@ -24,21 +24,21 @@ type TestStatusReport struct {
 // TODO Extract data part from title
 // TODO Could also calculate stability, average duration, unique devices etc.
 type TestStatus struct {
-	Id           bson.ObjectId      `json:"_id,omitempty" bson:"_id,omitempty"`
-	CreatedAt    int64              `json:"createdAt" bson:"createdAt"`
-	ModifiedAt   int64              `json:"modifiedAt" bson:"modifiedAt"`
-	OwnerKey     string             `json:"ownerkey" bson:"ownerkey"`
-	Project      string             `json:"project" bson:"project"`
-	HashCategory uint32             `json:"hashcategory" bson:"hashcategory"`
-	Prefix       string             `json:"prefix" bson:"prefix"`
-	Title        string             `json:"title" bson:"title"`
-	Tags         []string           `json:"tags" bson:"tags"`
-	Reports      []TestStatusReport `json:"reports" bson:"reports"`
+	ID           bson.ObjectId                 `json:"_id,omitempty" bson:"_id,omitempty"`
+	CreatedAt    int64                         `json:"createdAt" bson:"createdAt"`
+	ModifiedAt   int64                         `json:"modifiedAt" bson:"modifiedAt"`
+	OwnerKey     string                        `json:"ownerkey" bson:"ownerkey"`
+	Project      string                        `json:"project" bson:"project"`
+	HashCategory uint32                        `json:"hashcategory" bson:"hashcategory"`
+	Prefix       string                        `json:"prefix" bson:"prefix"`
+	Title        string                        `json:"title" bson:"title"`
+	Tags         []string                      `json:"tags" bson:"tags"`
+	Reports      map[string][]TestStatusReport `json:"reports" bson:"reports"`
 }
 
 func (ts *TestStatus) AddReport(report *Report) {
 	testStatusReport := TestStatusReport{
-		reportId:       report.Id,
+		reportID:       report.Id,
 		StartedAt:      report.StartedAt,
 		Result:         report.Result,
 		Duration:       report.Duration,
@@ -46,13 +46,19 @@ func (ts *TestStatus) AddReport(report *Report) {
 		Environment:    report.Environment,
 	}
 
-	i := 0
-	ts.Reports = append(ts.Reports[:i], append([]TestStatusReport{testStatusReport}, ts.Reports[i:]...)...)
+	ForDevice := report.DeviceSettings.Type + "_" + report.DeviceSettings.Browser
 
-	if len(ts.Reports) > KeepLastNReports {
+	reportsForDevice := ts.Reports[ForDevice]
+
+	i := 0
+	reportsForDevice = append(reportsForDevice[:i], append([]TestStatusReport{testStatusReport}, reportsForDevice[i:]...)...)
+
+	if len(reportsForDevice) > KeepLastNReports {
 		// Pop the last element
-		_, ts.Reports = ts.Reports[len(ts.Reports)-1], ts.Reports[:len(ts.Reports)-1]
+		_, reportsForDevice = reportsForDevice[len(reportsForDevice)-1], reportsForDevice[:len(reportsForDevice)-1]
 	}
+
+	ts.Reports[ForDevice] = reportsForDevice
 }
 
 func EnsureTestStatusIndexes() {

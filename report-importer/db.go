@@ -55,7 +55,7 @@ func UpdateTestStatusView(reports []model.Report) {
 				Prefix:       report.Prefix,
 				Title:        report.Title,
 				Tags:         report.Tags,
-				Reports:      []model.TestStatusReport{},
+				Reports:      map[string][]model.TestStatusReport{},
 			}
 			testStatus.AddReport(&report)
 			insertTestStati = append(insertTestStati, testStatus)
@@ -73,7 +73,7 @@ func UpdateTestStatusView(reports []model.Report) {
 	}
 
 	for _, testStatus := range updateTestStati {
-		err := testStatiCollection.Update(bson.M{"_id": testStatus.Id}, &testStatus)
+		err := testStatiCollection.Update(bson.M{"_id": testStatus.ID}, &testStatus)
 		if err != nil {
 			log.Fatal(err)
 		}
