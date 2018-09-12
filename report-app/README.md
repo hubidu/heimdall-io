@@ -27,12 +27,12 @@
 - AlertService: Trigger hipchat notifications
 - Bring back the step outline view
 - Create codeceptjs error parser in order to create better error messages (e.g including detailed help texts what went wrong and how to fix)
-- Could try react-json-view for data annotations
 - Average test duration (across all tests in a project) would be a nice metric
 - BUG: Screenshot diff: Screenshot compare must also drill down into stack
 
 ## Backlog
 
+- Could try react-json-view for data annotations
 - Source View: Better syntax highlighting (mute awaits and comments, highlight codecept methods)
 - Collapse multiple story tags into one dropdown
 - Test Details: Bring back the screenshot gallery view
