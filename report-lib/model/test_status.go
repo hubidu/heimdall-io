@@ -19,6 +19,7 @@ type TestStatusReport struct {
 	Duration       float32        `json:"duration" bson:"duration"`
 	DeviceSettings DeviceSettings `json:"deviceSettings" bson:"deviceSettings"`
 	Environment    string         `json:"environment" bson:"environment"`
+	EProject       string         `json:"project" bson:"project"`
 }
 
 // TODO Extract data part from title
@@ -44,6 +45,7 @@ func (ts *TestStatus) AddReport(report *Report) {
 		Duration:       report.Duration,
 		DeviceSettings: report.DeviceSettings,
 		Environment:    report.Environment,
+		Project: report.Project
 	}
 
 	ForDevice := report.Environment + "_" + report.DeviceSettings.Type + "_" + report.DeviceSettings.Browser

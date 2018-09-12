@@ -41,8 +41,8 @@ func UpdateTestStatusView(reports []model.Report) {
 		testStatus := model.TestStatus{}
 
 		err := testStatiCollection.Find(bson.M{
-			"ownerkey":     report.OwnerKey,
-			"project":      report.Project,
+			"ownerkey": report.OwnerKey,
+			// "project":      report.Project, // projects are more like "views" on tests, aka the same test can appear in multiple projects
 			"hashcategory": report.HashCategory}).One(&testStatus)
 
 		if err != nil {
