@@ -16,6 +16,12 @@ const linkToProjects = ownerkey => {
     query: { ownerkey }
   }
 }
+const linkToTestStatus = ownerkey => {
+  return {
+    pathname: '/test-status',
+    query: { ownerkey }
+  }
+}
 
 export default ({ children, title = '', ownerkey, showNav = true }) => (
   <div className="_layout" style={{'fontFamily': 'roboto, noto'}} >
@@ -53,6 +59,13 @@ export default ({ children, title = '', ownerkey, showNav = true }) => (
             <Link href={linkToProjects(ownerkey)}>
             <a>
               Projects
+            </a>
+            </Link>
+          </span>
+          <span  className="navbar-item">
+            <Link href={linkToTestStatus(ownerkey)}>
+            <a>
+              Status
             </a>
             </Link>
           </span>

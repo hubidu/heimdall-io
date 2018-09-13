@@ -1,7 +1,20 @@
-mkdir -p ./bin
+set -e
 
 IMAGE_NAME=report-app
 
-docker build -t  $DOCKER_ID_USER/$IMAGE_NAME . || exit 1
+mkdir -p ./bin
+EXECUTABLE=./bin/main
 
-docker push $DOCKER_ID_USER/$IMAGE_NAME
+TAG=`git log -1 --pretty=%h`
+
+NAME=$DOCKER_ID_USER/$IMAGE_NAME
+IMG=${NAME}:${TAG}
+LATEST=${NAME}:${TAG}
+
+CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o $EXECUTABLE .
+
+docker build -t $IMG .
+docker tag $IMG $LATEST
+
+docker push $NAME
+

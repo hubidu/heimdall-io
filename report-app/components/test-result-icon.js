@@ -2,5 +2,5 @@ import {FaCheckCircle as SuccessIcon, FaTimesCircle as FailureIcon} from 'react-
 
 export default ({result}) =>
   <span className="TestResultIcon">
-    {result === 'error' ? <span><FailureIcon/></span> : <span><SuccessIcon/></span>}
+    {result === 'error' ? <span className="has-text-danger"><FailureIcon/></span> : <span className="has-text-success"><SuccessIcon/></span>}
   </span>

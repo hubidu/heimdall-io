@@ -23,6 +23,8 @@
 
 ## Backlog V 2.1
 
+- TestStatus: Remove last prefix element (since it is the file name (more like scenario name))
+- TestStatus: First prefix element should be removed since it is the project name
 - Detect links in error messages
 - AlertService: Group by device
 - AlertService: Trigger hipchat notifications
