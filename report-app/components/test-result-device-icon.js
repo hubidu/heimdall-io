@@ -1,7 +1,12 @@
-import FirefoxIcon from 'react-icons/lib/fa/firefox'
-import ChromeIcon from 'react-icons/lib/fa/chrome'
-import InternetExplorerIcon from 'react-icons/lib/fa/internet-explorer'
-import SafariIcon from 'react-icons/lib/fa/safari'
+
+import {
+  FaFirefox as FirefoxIcon,
+  FaChrome as ChromeIcon,
+  FaInternetExplorer as InternetExplorerIcon,
+  FaSafari as SafariIcon,
+} from 'react-icons/fa'
+
+
 import TestDeviceIcon from './test-device-icon';
 
 const formatDeviceSettings = ds => ds ? `
@@ -15,8 +20,8 @@ ${ds.Os || ''}
 export default ({result, deviceSettings}) => {
   const color = (result === 'error' || result === false) ? 'has-text-danger' : 'has-text-success'
   return (
-    <div className="has-text-grey">
-      <div className={`f4 mr1 ${color}`} title={formatDeviceSettings(deviceSettings)} >
+    <div className="TestResultDeviceIcon has-text-grey">
+      <div className={`${color}`} title={formatDeviceSettings(deviceSettings)} >
         <TestDeviceIcon deviceSettings={deviceSettings} />
       </div>
     <div>

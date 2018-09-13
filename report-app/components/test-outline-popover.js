@@ -1,5 +1,8 @@
-import SuccessIcon from 'react-icons/lib/fa/check-circle'
-import FailureIcon from 'react-icons/lib/fa/times-circle'
+import {
+  FaCheckCircle as SuccessIcon,
+  FaTimesCircle as FailureIcon
+} from 'react-icons/fa'
+// import FailureIcon from 'react-icons/lib/fa/times-circle'
 
 import Popover from './popover'
 

@@ -1,4 +1,4 @@
-import ImageIcon from 'react-icons/lib/fa/image'
+import {FaImage as ImageIcon} from 'react-icons/fa'
 import Magnifier from 'react-magnifier';
 
 import getScreenshotUrl from '../../services/get-screenshot-url'

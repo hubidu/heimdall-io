@@ -1,7 +1,6 @@
-import SuccessIcon from 'react-icons/lib/fa/check-circle'
-import FailureIcon from 'react-icons/lib/fa/times-circle'
+import {FaCheckCircle as SuccessIcon, FaTimesCircle as FailureIcon} from 'react-icons/fa'
 
 export default ({result}) =>
-  <span>
-    {result === 'error' ? <span className={'orange mr1'}><FailureIcon/></span> : <span className={'green mr1'}><SuccessIcon/></span>}
+  <span className="TestResultIcon">
+    {result === 'error' ? <span><FailureIcon/></span> : <span><SuccessIcon/></span>}
   </span>

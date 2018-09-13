@@ -23,6 +23,7 @@
 
 ## Backlog V 2.1
 
+- Detect links in error messages
 - AlertService: Group by device
 - AlertService: Trigger hipchat notifications
 - Bring back the step outline view

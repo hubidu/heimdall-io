@@ -1,4 +1,4 @@
-import HtmlIcon from 'react-icons/lib/fa/html5'
+import {FaCode as HtmlIcon} from 'react-icons/fa'
 
 export default ({ reportId }) =>
   <a
