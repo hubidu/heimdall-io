@@ -20,11 +20,17 @@
 
 ## In Progress
 
+- TestStatus: Link to report
+- TestStatus: Show date
+- TestStatus: First prefix element should be removed since it is the project name
 
 ## Backlog V 2.1
 
+- TestStatus: Filter by environment
+- Test Status: Have a sticky table of contents with the categories and the feature
+- report-service: handle error (return http status code) when report does not exist
+- TestStatus: Simple search for test title and tags
 - TestStatus: Remove last prefix element (since it is the file name (more like scenario name))
-- TestStatus: First prefix element should be removed since it is the project name
 - Detect links in error messages
 - AlertService: Group by device
 - AlertService: Trigger hipchat notifications

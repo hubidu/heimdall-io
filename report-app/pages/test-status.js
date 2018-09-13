@@ -1,10 +1,15 @@
 import React from 'react'
 import Layout from '../components/layout'
+import Link from 'next/link'
 
+import moment from 'moment'
 
 import TestResultIcon from '../components/test-result-icon'
 
 import getTestStatus from '../services/get-test-status'
+
+import round from '../services/utils/round'
+import linkToReportDetails from '../services/utils/link-to-report-details'
 
 const groupByPrefix = testStatus => {
   return testStatus.reduce((agg, ts) => {
@@ -61,21 +66,37 @@ export default class TestStatusPage extends React.Component {
           {
             Object.keys(this.props.groupedByPrefix)
             .sort()
-            .map(prefix =>
-              <div className="box">
-                <h3 className="title is-6">
+            .map((prefix, i) =>
+              <div key={i} className="box">
+                <span className="has-text-grey">
                   {prefix}
-                </h3>
-                <div>
-                  {
-                    this.props.groupedByPrefix[prefix].map(ts =>
-                      <div>
-                        <TestResultIcon result={getLatestReport(ts).result} />
-                        {ts.title}
+                </span>
+                {
+                  this.props.groupedByPrefix[prefix].map((ts, i) => {
+                    const latestReport = getLatestReport(ts)
+
+                    return (
+                      <div key={i} className="columns">
+                        <div className="column is-8">
+                          <TestResultIcon result={latestReport.result} />
+                          &nbsp;
+
+                          <Link href={linkToReportDetails(this.props.ownerkey, latestReport.project, latestReport.reportId, ts.hashcategory)}>
+                            <a>
+                              <b className="has-text-dark">{ts.title}</b>
+                            </a>
+                          </Link>
+                        </div>
+                        <div className="column">
+                          <span>at</span>&nbsp;<strong>{moment(ts.modifiedAt).format('ddd, H:mm')}</strong>
+                          &nbsp;&middot;&nbsp;
+                          <span>in</span>&nbsp;<strong>{round(latestReport.duration)} s</strong>
+                          &nbsp;&middot;&nbsp;
+                        </div>
                       </div>
                     )
-                  }
-                </div>
+                  })
+                }
               </div>
             )
           }

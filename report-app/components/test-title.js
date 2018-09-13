@@ -5,17 +5,12 @@ import TestTags from './test-tags'
 
 import trunc from '../services/utils/trunc'
 import round from '../services/utils/round'
+import linkToReportDetails from '../services/utils/link-to-report-details'
 
-const linkToReportDetails = (ownerkey, project, id, hashcategory) => {
-  return {
-    pathname: '/details',
-    query: { ownerkey, project, hashcategory }
-  }
-}
-const hasData = title => title.indexOf('|') > -1
-const extractTitle = title => title.indexOf('|') >= 0 ? title.split('|')[0] : title
+const hasData = title => title && title.indexOf('|') > -1
+const extractTitle = title => title && (title.indexOf('|') >= 0 ? title.split('|')[0] : title)
 const extractTitleData = title => title.indexOf('|') >= 0 ? title.split('|')[1] : undefined
-const formatPrefix = str => str.replace(/--/gi, '/')
+const formatPrefix = str => str && str.replace(/--/gi, '/')
 
 export default ({ownerkey, project, hashcategory, report, isListView = true}) =>
   <div className="TestTitle">
@@ -47,7 +42,7 @@ export default ({ownerkey, project, hashcategory, report, isListView = true}) =>
     <div className={`TestTitle-title ${isListView ? '' : 'is-size-6'}`}>
     {
       isListView ?
-        <Link href={linkToReportDetails(ownerkey, project, report._id, hashcategory)}>
+        <Link href={linkToReportDetails(ownerkey, project, undefined, hashcategory)}>
           <a>
             <b className="has-text-dark">{extractTitle(report.Title)}</b>
           </a>
