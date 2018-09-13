@@ -38,6 +38,8 @@ func main() {
 		c.Redirect(http.StatusMovedPermanently, "/reports")
 	})
 
+	r.GET("/test-status", testStatus.ListTestStatus)
+
 	r.GET("/reports", reports.List)
 	r.GET("/reports/:_id", reports.Get)
 	r.GET("/report-categories", reports.GetReportCategories)
