@@ -21,8 +21,11 @@ func InsertReportsIntoDB(reports []model.Report) {
 
 	coll := s.DB("e2e").C(model.ReportCollection)
 
-	for _, report := range reports {
+	for i, report := range reports {
+		reports[i].Id = bson.NewObjectId()
+
 		err := coll.Insert(&report)
+
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -47,6 +50,7 @@ func UpdateTestStatusView(reports []model.Report) {
 
 		if err != nil {
 			testStatus = model.TestStatus{
+				ID:           bson.NewObjectId(),
 				CreatedAt:    int64(time.Now().Unix() * 1000),
 				ModifiedAt:   int64(time.Now().Unix() * 1000),
 				OwnerKey:     report.OwnerKey,
@@ -60,6 +64,7 @@ func UpdateTestStatusView(reports []model.Report) {
 			testStatus.AddReport(&report)
 			insertTestStati = append(insertTestStati, testStatus)
 		} else {
+
 			testStatus.AddReport(&report)
 			updateTestStati = append(updateTestStati, testStatus)
 		}
