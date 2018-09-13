@@ -66,7 +66,6 @@ func UpdateTestStatusView(reports []model.Report) {
 	}
 
 	for _, testStatus := range insertTestStati {
-		testStatus.ModifiedAt = int64(time.Now().Unix() * 1000)
 		err := testStatiCollection.Insert(&testStatus)
 		if err != nil {
 			log.Fatal(err)
@@ -74,6 +73,8 @@ func UpdateTestStatusView(reports []model.Report) {
 	}
 
 	for _, testStatus := range updateTestStati {
+		testStatus.ModifiedAt = int64(time.Now().Unix() * 1000)
+
 		err := testStatiCollection.Update(bson.M{"_id": testStatus.ID}, &testStatus)
 		if err != nil {
 			log.Fatal(err)

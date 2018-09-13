@@ -9,17 +9,17 @@ import (
 )
 
 const TestStatusCollection = "test-status"
-const KeepLastNReports = 500
+const KeepLastNReports = 250
 
 type TestStatusReport struct {
-	reportID       bson.ObjectId  `json:"_id,omitempty" bson:"_id,omitempty"`
+	ReportID       bson.ObjectId  `json:"reportId" bson:"reportId"`
 	Runid          string         `json:"runid" bson:"runid"`
 	StartedAt      int64          `json:"startedAt" bson:"startedAt"`
 	Result         string         `json:"result" bson:"result"`
 	Duration       float32        `json:"duration" bson:"duration"`
 	DeviceSettings DeviceSettings `json:"deviceSettings" bson:"deviceSettings"`
 	Environment    string         `json:"environment" bson:"environment"`
-	EProject       string         `json:"project" bson:"project"`
+	Project        string         `json:"project" bson:"project"`
 }
 
 // TODO Extract data part from title
@@ -39,13 +39,14 @@ type TestStatus struct {
 
 func (ts *TestStatus) AddReport(report *Report) {
 	testStatusReport := TestStatusReport{
-		reportID:       report.Id,
+		ReportID:       report.Id,
+		Runid:          report.Runid,
 		StartedAt:      report.StartedAt,
 		Result:         report.Result,
 		Duration:       report.Duration,
 		DeviceSettings: report.DeviceSettings,
 		Environment:    report.Environment,
-		Project: report.Project
+		Project:        report.Project,
 	}
 
 	ForDevice := report.Environment + "_" + report.DeviceSettings.Type + "_" + report.DeviceSettings.Browser
