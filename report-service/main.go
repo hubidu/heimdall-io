@@ -12,6 +12,7 @@ import (
 	projects "github.com/hubidu/e2e-backend/report-service/routes"
 	reports "github.com/hubidu/e2e-backend/report-service/routes"
 	screenshots "github.com/hubidu/e2e-backend/report-service/routes"
+	testStatus "github.com/hubidu/e2e-backend/report-service/routes"
 )
 
 func init() {

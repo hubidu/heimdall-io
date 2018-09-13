@@ -1,7 +1,19 @@
+set -e
+
 IMAGE_NAME=report-service
 
-CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ./bin/main . || exit 1
+mkdir -p ./bin
+EXECUTABLE=./bin/main
 
-docker build -t  $DOCKER_ID_USER/$IMAGE_NAME . || exit 1
+TAG=`git log -1 --pretty=%h`
 
-docker push $DOCKER_ID_USER/$IMAGE_NAME
+NAME=$DOCKER_ID_USER/$IMAGE_NAME
+IMG=${NAME}:${TAG}
+LATEST=${NAME}:${TAG}
+
+CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o $EXECUTABLE .
+
+docker build -t $IMG .
+docker tag $IMG $LATEST
+
+docker push $NAME

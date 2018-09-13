@@ -13,7 +13,7 @@ import (
 func ListTestStatus(c *gin.Context) {
 	db := c.MustGet("db").(*mgo.Database)
 
-	ownerkey := c.Param("ownerkey")
+	ownerkey := c.Query("ownerkey")
 	if ownerkey == "" {
 		c.AbortWithError(400, errors.New("ownerkey must be provided"))
 		return
