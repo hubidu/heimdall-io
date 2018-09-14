@@ -50,18 +50,7 @@ func UpdateTestStatusView(reports []model.Report) {
 			"hashcategory": report.HashCategory}).One(&testStatus)
 
 		if err != nil {
-			testStatus = model.TestStatus{
-				ID:           bson.NewObjectId(),
-				CreatedAt:    int64(time.Now().Unix() * 1000),
-				ModifiedAt:   int64(time.Now().Unix() * 1000),
-				OwnerKey:     report.OwnerKey,
-				Project:      report.Project,
-				HashCategory: report.HashCategory,
-				Prefix:       report.Prefix,
-				Title:        report.Title,
-				Tags:         report.Tags,
-				Reports:      map[string][]model.TestStatusReport{},
-			}
+			testStatus = model.NewTestStatus(&report)
 			testStatus.AddReport(&report)
 			insertTestStati = append(insertTestStati, testStatus)
 		} else {

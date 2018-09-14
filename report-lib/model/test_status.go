@@ -2,6 +2,8 @@ package model
 
 import (
 	"log"
+	"strings"
+	"time"
 
 	"github.com/hubidu/e2e-backend/report-lib/db"
 	mgo "gopkg.in/mgo.v2"
@@ -33,8 +35,37 @@ type TestStatus struct {
 	HashCategory uint32                        `json:"hashcategory" bson:"hashcategory"`
 	Prefix       string                        `json:"prefix" bson:"prefix"`
 	Title        string                        `json:"title" bson:"title"`
+	Data         string                        `json:"data" bson:"data"`
 	Tags         []string                      `json:"tags" bson:"tags"`
 	Reports      map[string][]TestStatusReport `json:"reports" bson:"reports"`
+}
+
+func separateTitleAndData(title string) (string, string) {
+	i := strings.Index(title, "|")
+	if i < 0 {
+		return title, ""
+	}
+	return title[:i], title[i+1:]
+}
+
+func NewTestStatus(report *Report) TestStatus {
+	reportTitle, reportData := separateTitleAndData(report.Title)
+
+	testStatus := TestStatus{
+		ID:           bson.NewObjectId(),
+		CreatedAt:    int64(time.Now().Unix() * 1000),
+		ModifiedAt:   int64(time.Now().Unix() * 1000),
+		OwnerKey:     report.OwnerKey,
+		Project:      report.Project,
+		HashCategory: report.HashCategory,
+		Prefix:       report.Prefix,
+		Title:        reportTitle,
+		Data:         reportData,
+		Tags:         report.Tags,
+		Reports:      map[string][]TestStatusReport{},
+	}
+
+	return testStatus
 }
 
 func (ts *TestStatus) AddReport(report *Report) {
