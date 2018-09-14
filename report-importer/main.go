@@ -75,7 +75,7 @@ func main() {
 	gocron.Every(intervalInSeconds).Seconds().Do(func() {
 		importReportsTask(baseDir, *removeReportFiles)
 	})
-	gocron.Every(1).Day().At("05:00").Do(deleteOldReports)
+	gocron.Every(1).Day().At("02:00").Do(deleteOldReports)
 
 	<-gocron.Start()
 }

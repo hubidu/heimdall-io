@@ -96,14 +96,23 @@ func CleanupOldReports(daysAgo int) {
 
 	s.SetMode(mgo.Monotonic, true)
 
-	coll := s.DB("e2e").C("reports")
+	coll := s.DB("e2e").C(model.ReportCollection)
 
 	_, err := coll.RemoveAll(bson.M{
 		"startedat": bson.M{
 			"$lt": time.Now().AddDate(0, 0, -daysAgo).Unix() * 1000,
 		},
 	})
+	if err != nil {
+		log.Fatal("Failed to cleanup old report records", err)
+	}
 
+	err = s.Run(bson.D{{"compact", model.ReportCollection}}, bson.D{})
+	if err != nil {
+		log.Fatal("Failed to cleanup old report records", err)
+	}
+
+	err = s.Run(bson.D{{"compact", model.TestStatusCollection}}, bson.D{})
 	if err != nil {
 		log.Fatal("Failed to cleanup old report records", err)
 	}
