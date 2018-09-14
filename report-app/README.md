@@ -21,21 +21,20 @@
 - TestStatus: Show date
 - TestStatus: Show TOC
 - TestStatus: Fix reportId
+- Extract data part from test title
+- TestStatus: Sort
+- TestStatus: Show status for integration and production
+- TestStatus: Show tags
 
 ## In Progress
 
-- Extract data part from test title
-- TestStatus: Sort
-- TestStatus: Show last result for all environments (production/integration)
+- TestStatus: Show feature success/failure status
 - TestStatus: Jump to feature when clicking on it in toc
 - TestStatus: Make TOC scrollable
-- TestStatus: Show status for integration and production
 - TestStatus: First prefix element should be removed since it is the project name
 
 ## Backlog V 2.1
 
-- TestStatus: Show feature success/failure status
-- TestStatus: Show tags
 - Show relative time on source snippets/screenshots
 - Errors: Would be nice to see how often the same error occurred previously in the current test
 - TestStatus: Filter by environment

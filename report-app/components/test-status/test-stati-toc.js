@@ -6,6 +6,12 @@ const Toc = ({children}) =>
       children && children.map((node, i) =>
         <li key={i}>
             {node.name}
+            { node.count > 0 &&
+              <span>
+                &nbsp;
+                ({node.count})
+              </span>
+            }
 
           <Toc children={node.children} />
         </li>

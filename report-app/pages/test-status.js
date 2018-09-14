@@ -18,9 +18,15 @@ const groupByPrefix = testStatus => {
 
 const createNode = pathItem => ({
   name: pathItem,
+  count: 0,
   children: []
 })
 const getChildNode = (node, name) => node.children.find(n => n.name === name)
+const sortByName = (a, b) => {
+  const n1 = a.name
+  const n2 = b.name
+  return n1.localeCompare(n2)
+}
 const buildTOC = paths => paths.reduce((rootNode, p) => {
   const pathItems = p.split('--').map(part => part.trim())
 
@@ -29,6 +35,8 @@ const buildTOC = paths => paths.reduce((rootNode, p) => {
     let node = getChildNode(currentNode, pathItem)
     if (!node) {
       currentNode.children.push(createNode(pathItem))
+      currentNode.children.sort(sortByName)
+      currentNode.count++
     }
 
     currentNode = getChildNode(currentNode, pathItem)
@@ -67,10 +75,10 @@ export default class TestStatusPage extends React.Component {
           </h2>
 
           <div className="columns">
-            <div className="column is-4">
+            <div className="column is-3">
               <TestStatiToc toc={this.props.toc} />
             </div>
-            <div className="column is-8">
+            <div className="column is-9">
               <TestStati ownerkey={this.props.ownerkey} status={this.props.groupedByPrefix} />
             </div>
           </div>
