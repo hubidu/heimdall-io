@@ -17,27 +17,39 @@
 - Fix ATDD wireframe test
 - Fix scrollTo bottom of source view
 - ReportImporter: Run database cleanup every day
+- TestStatus: Link to report
+- TestStatus: Show date
+- TestStatus: Show TOC
 
 ## In Progress
 
-- TestStatus: Link to report
-- TestStatus: Show date
+- TestStatus: Fix reportId
+- TestStatus: Sort
+- TestStatus: Jump to feature when clicking on it in toc
+- TestStatus: Make TOC scrollable
+- TestStatus: Show status for integration and production
 - TestStatus: First prefix element should be removed since it is the project name
 
 ## Backlog V 2.1
 
+- TestStatus: Show feature success/failure status
+- TestStatus: Show tags
+- Show relative time on source snippets/screenshots
+- Errors: Would be nice to see how often the same error occurred previously in the current test
 - TestStatus: Filter by environment
 - Test Status: Have a sticky table of contents with the categories and the feature
 - report-service: handle error (return http status code) when report does not exist
 - TestStatus: Simple search for test title and tags
 - TestStatus: Remove last prefix element (since it is the file name (more like scenario name))
 - Detect links in error messages
+- ATDD Tag: Add ATDDFailed when test fails on other line
 - AlertService: Group by device
 - AlertService: Trigger hipchat notifications
 - Bring back the step outline view
 - Create codeceptjs error parser in order to create better error messages (e.g including detailed help texts what went wrong and how to fix)
 - Average test duration (across all tests in a project) would be a nice metric
 - BUG: Screenshot diff: Screenshot compare must also drill down into stack
+- Cleanup Process: Should keep all the errors (up to some point in time) and any previous success
 
 ## Backlog
 

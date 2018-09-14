@@ -1,15 +1,10 @@
 import React from 'react'
 import Layout from '../components/layout'
-import Link from 'next/link'
 
-import moment from 'moment'
-
-import TestResultIcon from '../components/test-result-icon'
+import TestStati from '../components/test-status/test-stati'
+import TestStatiToc from '../components/test-status/test-stati-toc'
 
 import getTestStatus from '../services/get-test-status'
-
-import round from '../services/utils/round'
-import linkToReportDetails from '../services/utils/link-to-report-details'
 
 const groupByPrefix = testStatus => {
   return testStatus.reduce((agg, ts) => {
@@ -21,19 +16,26 @@ const groupByPrefix = testStatus => {
   }, {})
 }
 
-function byStartedAtDesc(a, b) {
-  return b.startedAt - a.startedAt
-}
+const createNode = pathItem => ({
+  name: pathItem,
+  children: []
+})
+const getChildNode = (node, name) => node.children.find(n => n.name === name)
+const buildTOC = paths => paths.reduce((rootNode, p) => {
+  const pathItems = p.split('--').map(part => part.trim())
 
-const getLatestReport = testStatus => {
-  const keys = Object.keys(testStatus.reports)
-  const allReports = keys.reduce((agg, key) => {
-    agg.push(testStatus.reports[key][0])
-    return agg
-  }, [])
+  let currentNode = rootNode
+  pathItems.forEach(pathItem => {
+    let node = getChildNode(currentNode, pathItem)
+    if (!node) {
+      currentNode.children.push(createNode(pathItem))
+    }
 
-  return allReports.sort(byStartedAtDesc)[0]
-}
+    currentNode = getChildNode(currentNode, pathItem)
+  })
+
+  return rootNode
+}, createNode('root'))
 
 export default class TestStatusPage extends React.Component {
   static async getInitialProps ({ query: { ownerkey } }) {
@@ -41,8 +43,9 @@ export default class TestStatusPage extends React.Component {
 
     const testStatus = await getTestStatus(ownerkey)
     const groupedByPrefix = groupByPrefix(testStatus)
+    const toc = buildTOC(Object.keys(groupedByPrefix))
 
-    return { ownerkey, testStatus, groupedByPrefix }
+    return { ownerkey, testStatus, groupedByPrefix, toc }
   }
 
   constructor(props) {
@@ -63,43 +66,14 @@ export default class TestStatusPage extends React.Component {
             Owner: {this.props.ownerkey}.
           </h2>
 
-          {
-            Object.keys(this.props.groupedByPrefix)
-            .sort()
-            .map((prefix, i) =>
-              <div key={i} className="box">
-                <span className="has-text-grey">
-                  {prefix}
-                </span>
-                {
-                  this.props.groupedByPrefix[prefix].map((ts, i) => {
-                    const latestReport = getLatestReport(ts)
-
-                    return (
-                      <div key={i} className="columns">
-                        <div className="column is-8">
-                          <TestResultIcon result={latestReport.result} />
-                          &nbsp;
-
-                          <Link href={linkToReportDetails(this.props.ownerkey, latestReport.project, latestReport.reportId, ts.hashcategory)}>
-                            <a>
-                              <b className="has-text-dark">{ts.title}</b>
-                            </a>
-                          </Link>
-                        </div>
-                        <div className="column">
-                          <span>at</span>&nbsp;<strong>{moment(ts.modifiedAt).format('ddd, H:mm')}</strong>
-                          &nbsp;&middot;&nbsp;
-                          <span>in</span>&nbsp;<strong>{round(latestReport.duration)} s</strong>
-                          &nbsp;&middot;&nbsp;
-                        </div>
-                      </div>
-                    )
-                  })
-                }
-              </div>
-            )
-          }
+          <div className="columns">
+            <div className="column is-4">
+              <TestStatiToc toc={this.props.toc} />
+            </div>
+            <div className="column is-8">
+              <TestStati ownerkey={this.props.ownerkey} status={this.props.groupedByPrefix} />
+            </div>
+          </div>
         </div>
       </Layout>
     )
