@@ -20,11 +20,13 @@
 - TestStatus: Link to report
 - TestStatus: Show date
 - TestStatus: Show TOC
+- TestStatus: Fix reportId
 
 ## In Progress
 
-- TestStatus: Fix reportId
+- Extract data part from test title
 - TestStatus: Sort
+- TestStatus: Show last result for all environments (production/integration)
 - TestStatus: Jump to feature when clicking on it in toc
 - TestStatus: Make TOC scrollable
 - TestStatus: Show status for integration and production
