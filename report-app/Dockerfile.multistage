@@ -1,14 +1,39 @@
 # Do the npm install or yarn install in the full image
-FROM mhart/alpine-node AS builder
-WORKDIR /app
-COPY package.json .
-RUN yarn install
-COPY . .
-RUN yarn build
+# FROM mhart/alpine-node AS builder
+# WORKDIR /app
+# COPY package.json .
+# RUN yarn install
+# COPY . .
+# RUN yarn build
+
+# And then copy over node_modules, etc from that stage to the smaller base image
+# FROM mhart/alpine-node:base
+# WORKDIR /app
+# COPY --from=builder /app .
+# EXPOSE 3000
+# CMD ["node_modules/.bin/next", "start"]
+
+# Do the npm install or yarn install in the full image
+FROM mhart/alpine-node:8 AS builder
+
+# use changes to package.json to force Docker not to use the cache
+# when we change our application's nodejs dependencies:
+ADD package.json /tmp/package.json
+RUN cd /tmp && npm install
+RUN mkdir -p /opt/app && cp -a /tmp/node_modules /opt/app/ && rm -rf /tmp/node_modules
+
+# From here we load our application's code in, therefore the previous docker
+# "layer" thats been cached will be used if possible
+WORKDIR /opt/app
+ADD . /opt/app
+
+RUN npm run build
 
 # And then copy over node_modules, etc from that stage to the smaller base image
 FROM mhart/alpine-node:base
 WORKDIR /app
-COPY --from=builder /app .
-EXPOSE 3000
-CMD ["node_modules/.bin/next", "start"]
+COPY --from=builder /opt/app .
+
+EXPOSE 4000
+
+CMD ["npm", "start"]
