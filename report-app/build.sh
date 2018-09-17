@@ -11,7 +11,7 @@ NAME=$DOCKER_ID_USER/$IMAGE_NAME
 IMG=${NAME}:${TAG}
 LATEST=${NAME}:${TAG}
 
-docker build -f ./Dockerfile.multistage -t $IMG .
+docker build -f ./Dockerfile.multistage --compress -t $IMG .
 
 # TODO Fix this: Must also tag as latest
 docker tag $IMG $LATEST
