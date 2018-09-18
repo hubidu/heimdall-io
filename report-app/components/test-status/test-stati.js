@@ -1,14 +1,11 @@
 import React from 'react'
-import Link from 'next/link'
 
-import moment from 'moment'
+import TestResultsByEnv from './test-results-by-env'
 
 import TestTags from '../test-tags'
 
 import splitAndCapitalize from '../../services/utils/split-and-capitalize'
 import trunc from '../../services/utils/trunc'
-import round from '../../services/utils/round'
-import linkToReportDetails from '../../services/utils/link-to-report-details'
 
 
 const getLatestReport = (reports, env) => {
@@ -30,22 +27,6 @@ const extractFeatureName = prefix => {
   return parts[parts.length - 1]
 }
 
-const color = result => result === 'error' ? 'tag is-danger' : 'tag is-success'
-
-const TestResultForEnv = ({startedAt, duration, reports, env}) => {
-  const latestReport = getLatestReport(reports, env)
-  if (!latestReport) return <div/>
-  return (
-    <div className={`TestResultForEnv`}>
-      <div className={`${color(latestReport.result)} is-small`}>
-        <small>
-          {env}
-        </small>
-      </div>
-    </div>
-  )
-}
-
 export default ({ ownerkey, status }) =>
   <div>
   {
@@ -59,25 +40,10 @@ export default ({ ownerkey, status }) =>
         <hr/>
         {
           status[prefix].map((ts, i) => {
-            const latestReport = getLatestReport(ts.reports)
-
             return (
               <div key={i} className="columns">
-                <div className="column is-1">
-                  <TestResultForEnv startedAt={latestReport.startedAt} duration={latestReport.duration} reports={ts.reports} env={'production'} />
-                  <TestResultForEnv startedAt={latestReport.startedAt} duration={latestReport.duration} reports={ts.reports} env={'staging'} />
-                  <TestResultForEnv startedAt={latestReport.startedAt} duration={latestReport.duration} reports={ts.reports} env={'integration'} />
-                  <TestResultForEnv startedAt={latestReport.startedAt} duration={latestReport.duration} reports={ts.reports} env={'test'} />
-                  <TestResultForEnv startedAt={latestReport.startedAt} duration={latestReport.duration} reports={ts.reports} env={'development'} />
-                </div>
                 <div className="column is-8">
-                    <Link href={linkToReportDetails(ownerkey, latestReport.project, latestReport.reportId, ts.hashcategory)}>
-                    <a>
-                      <b className="has-text-dark is-size-6">
-                        {ts.title}
-                      </b>
-                    </a>
-                  </Link>
+                  {ts.title}
                   {
                     ts.data &&
                       <div className="is-size-7 has-text-primary is-hidden-mobile">
@@ -88,9 +54,7 @@ export default ({ ownerkey, status }) =>
 
                 </div>
                 <div className="column">
-                  <span>at</span>&nbsp;<strong>{moment(ts.modifiedAt).format('ddd, H:mm')}</strong>
-                  &nbsp;&middot;&nbsp;
-                  <span>in</span>&nbsp;<strong>{round(latestReport.duration)} s</strong>
+                  <TestResultsByEnv ownerkey={ownerkey} reports={ts.reports} />
                 </div>
               </div>
             )

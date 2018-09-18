@@ -26,16 +26,20 @@
 - TestStatus: Show status for integration and production
 - TestStatus: Show tags
 - TestStatus: Jump to feature when clicking on it in toc
+- TestStatus: Capitalize feature names
 
 ## In Progress
 
-- TestStatus: Capitalize feature names
+- TestStatus: Probably should not group by env/device type/device
+- TestStatus: Project name must be removed from path
 - TestStatus: Show feature success/failure status in toc
 - TestStatus: Make TOC scrollable
 - TestStatus: First prefix element should be removed since it is the project name
+- TestStatus: BUG test status for certain tests is not updated anymore (5ba0151982d05e0001147787)
 
 ## Backlog V 2.1
 
+- TestStatus: Show path prefix on feature boxes
 - Show relative time on source snippets/screenshots
 - Errors: Would be nice to see how often the same error occurred previously in the current test
 - TestStatus: Filter by environment
