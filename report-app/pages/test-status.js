@@ -16,8 +16,9 @@ const groupByPrefix = testStatus => {
   }, {})
 }
 
-const createNode = pathItem => ({
-  name: pathItem,
+const createNode = (pathToItem, itemName) => ({
+  path: pathToItem,
+  name: itemName,
   count: 0,
   children: []
 })
@@ -27,14 +28,16 @@ const sortByName = (a, b) => {
   const n2 = b.name
   return n1.localeCompare(n2)
 }
-const buildTOC = paths => paths.reduce((rootNode, p) => {
+const buildTOC = prefixes => prefixes.reduce((rootNode, p) => {
   const pathItems = p.split('--').map(part => part.trim())
 
+  let currentPath
   let currentNode = rootNode
-  pathItems.forEach(pathItem => {
+  pathItems.forEach((pathItem, i) => {
+    currentPath = pathItems.slice(0, i + 1).join(' -- ')
     let node = getChildNode(currentNode, pathItem)
     if (!node) {
-      currentNode.children.push(createNode(pathItem))
+      currentNode.children.push(createNode(currentPath, pathItem))
       currentNode.children.sort(sortByName)
       currentNode.count++
     }

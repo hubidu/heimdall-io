@@ -60,6 +60,7 @@ func UpdateTestStatusView(reports []model.Report) {
 		}
 	}
 
+	// TODO Better use upsert
 	for _, testStatus := range insertTestStati {
 		err := testStatiCollection.Insert(&testStatus)
 		if err != nil {

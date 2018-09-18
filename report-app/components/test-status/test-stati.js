@@ -52,7 +52,7 @@ export default ({ ownerkey, status }) =>
     Object.keys(status)
     .sort()
     .map((prefix, i) =>
-      <div key={i} className="box">
+      <div key={i} id={prefix} className="TestStatus box">
         <strong className="is-size-5">
           {extractFeatureName(prefix)}
         </strong>

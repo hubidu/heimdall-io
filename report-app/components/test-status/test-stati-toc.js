@@ -5,13 +5,16 @@ const Toc = ({children}) =>
     {
       children && children.map((node, i) =>
         <li key={i}>
+          <a href={`#${node.path}`}>
             {node.name}
+
             { node.count > 0 &&
               <span>
                 &nbsp;
                 ({node.count})
               </span>
             }
+          </a>
 
           <Toc children={node.children} />
         </li>
