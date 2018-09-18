@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "express": "^4.16.3",
-    "next": "^6.1.2"
+    "next": "^6.1.2",
+    "react-stickynode": "^2.0.1"
   }
 }

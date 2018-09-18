@@ -1,6 +1,8 @@
 import React from 'react'
 import Layout from '../components/layout'
 
+import TestResultMeter from '../components/test-result-meter'
+
 import TestStati from '../components/test-status/test-stati'
 import TestStatiToc from '../components/test-status/test-stati-toc'
 
@@ -77,9 +79,15 @@ export default class TestStatusPage extends React.Component {
             Owner: {this.props.ownerkey}.
           </h2>
 
+          <TestResultMeter
+            errorPct={5 * 100.0 / 100}
+          />
+
           <div className="columns">
             <div className="column is-3">
-              <TestStatiToc toc={this.props.toc} />
+              <div className="box">
+                <TestStatiToc toc={this.props.toc} />
+              </div>
             </div>
             <div className="column is-9">
               <TestStati ownerkey={this.props.ownerkey} status={this.props.groupedByPrefix} />

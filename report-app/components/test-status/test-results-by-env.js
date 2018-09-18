@@ -44,14 +44,14 @@ const TestResultForEnv = ({ownerkey, reports, env}) => {
       </div>
       <style jsx>{`
       .TestResultForEnv--error {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         padding: 2px 4px;
         color: hsl(348, 100%, 61%);
         border: 1px solid hsl(348, 100%, 61%);
         border-radius: 3px;
       }
       .TestResultForEnv--success {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         padding: 2px 4px;
         color: hsl(141, 71%, 48%);
         border: 1px solid hsl(141, 71%, 48%);
@@ -73,7 +73,7 @@ export default ({ownerkey, reports}) => {
           <td>
           {
             productionReports &&
-              <div className="column">
+              <div>
                 <TestResultForEnv
                   ownerkey={ownerkey}
                   reports={productionReports}
@@ -85,7 +85,7 @@ export default ({ownerkey, reports}) => {
           <td>
             {
               stagingReports &&
-                <div className="column">
+                <div>
                   <TestResultForEnv
                     ownerkey={ownerkey}
                     reports={stagingReports}
@@ -97,7 +97,7 @@ export default ({ownerkey, reports}) => {
           <td>
             {
               integrationReports &&
-                <div className="column">
+                <div>
                   <TestResultForEnv
                     ownerkey={ownerkey}
                     reports={integrationReports}
@@ -109,7 +109,7 @@ export default ({ownerkey, reports}) => {
           <td>
             {
               developmentReports &&
-                <div className="column">
+                <div>
                   <TestResultForEnv
                     ownerkey={ownerkey}
                     reports={developmentReports}

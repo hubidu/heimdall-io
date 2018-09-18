@@ -30,7 +30,7 @@
 
 ## In Progress
 
-- TestStatus: Probably should not group by env/device type/device
+- TestStatus: Show status per device
 - TestStatus: Project name must be removed from path
 - TestStatus: Show feature success/failure status in toc
 - TestStatus: Make TOC scrollable
@@ -39,6 +39,8 @@
 
 ## Backlog V 2.1
 
+- TestStatus: Wenn going to page with browser back, scroll to previous position on page
+- TestStatus: Show when the last test was run/when was the status report updated (could also link to the last "Test Run")
 - Browser console logs: Should highlight errors "with a status of 5xx"
 - TestStatus: Show path prefix on feature boxes
 - Show relative time on source snippets/screenshots

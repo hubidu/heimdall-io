@@ -1,4 +1,5 @@
 import React from 'react'
+import { FaCheck as TestIcon, FaFileAlt as FeatureIcon } from 'react-icons/fa';
 
 import TestResultsByEnv from './test-results-by-env'
 
@@ -33,17 +34,17 @@ export default ({ ownerkey, status }) =>
     Object.keys(status)
     .sort()
     .map((prefix, i) =>
-      <div key={i} id={prefix} className="TestStatus box">
-        <strong className="is-size-5">
-          {splitAndCapitalize(extractFeatureName(prefix))}
-        </strong>
+      <div key={i} id={prefix} className="TestStatus">
+        <h4 className="TestStatus-title">
+          <FeatureIcon/> {splitAndCapitalize(extractFeatureName(prefix))}
+        </h4>
         <hr/>
         {
           status[prefix].map((ts, i) => {
             return (
               <div key={i} className="columns">
-                <div className="column is-8">
-                  {ts.title}
+                <div className="column is-8 is-narrow">
+                  <TestIcon /> {ts.title}
                   {
                     ts.data &&
                       <div className="is-size-7 has-text-primary is-hidden-mobile">
@@ -53,13 +54,25 @@ export default ({ ownerkey, status }) =>
                   <TestTags tags={ts.tags} />
 
                 </div>
-                <div className="column">
+                <div className="column is-narrow">
                   <TestResultsByEnv ownerkey={ownerkey} reports={ts.reports} />
                 </div>
               </div>
             )
           })
         }
+        <style jsx>{`
+          .TestStatus hr {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+          }
+
+          .TestStatus-title {
+            margin-top: 2rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+          }
+        `}</style>
       </div>
     )
   }
