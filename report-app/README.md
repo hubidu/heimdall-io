@@ -39,6 +39,7 @@
 
 ## Backlog V 2.1
 
+- Browser console logs: Should highlight errors "with a status of 5xx"
 - TestStatus: Show path prefix on feature boxes
 - Show relative time on source snippets/screenshots
 - Errors: Would be nice to see how often the same error occurred previously in the current test
