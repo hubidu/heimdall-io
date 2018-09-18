@@ -25,11 +25,12 @@
 - TestStatus: Sort
 - TestStatus: Show status for integration and production
 - TestStatus: Show tags
+- TestStatus: Jump to feature when clicking on it in toc
 
 ## In Progress
 
+- TestStatus: Capitalize feature names
 - TestStatus: Show feature success/failure status in toc
-- TestStatus: Jump to feature when clicking on it in toc
 - TestStatus: Make TOC scrollable
 - TestStatus: First prefix element should be removed since it is the project name
 

@@ -4,8 +4,8 @@ import Link from 'next/link'
 import moment from 'moment'
 
 import TestTags from '../test-tags'
-import TestResultIcon from '../test-result-icon'
 
+import splitAndCapitalize from '../../services/utils/split-and-capitalize'
 import trunc from '../../services/utils/trunc'
 import round from '../../services/utils/round'
 import linkToReportDetails from '../../services/utils/link-to-report-details'
@@ -54,7 +54,7 @@ export default ({ ownerkey, status }) =>
     .map((prefix, i) =>
       <div key={i} id={prefix} className="TestStatus box">
         <strong className="is-size-5">
-          {extractFeatureName(prefix)}
+          {splitAndCapitalize(extractFeatureName(prefix))}
         </strong>
         <hr/>
         {
@@ -73,7 +73,9 @@ export default ({ ownerkey, status }) =>
                 <div className="column is-8">
                     <Link href={linkToReportDetails(ownerkey, latestReport.project, latestReport.reportId, ts.hashcategory)}>
                     <a>
-                      <b className="has-text-dark is-size-6">{ts.title}</b>
+                      <b className="has-text-dark is-size-6">
+                        {ts.title}
+                      </b>
                     </a>
                   </Link>
                   {
