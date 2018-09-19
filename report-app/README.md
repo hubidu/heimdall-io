@@ -28,11 +28,11 @@
 - TestStatus: Jump to feature when clicking on it in toc
 - TestStatus: Capitalize feature names
 - TestStatus: Fix sidebar to page
+- Console Log: Make normal errors orange, detect 5xx errors and make them red
 
 ## In Progress
 
 - ReportImporter: Add last result to test status
-- Console Log: Make normal errors orange, detect 5xx errors and make them red
 - TestStatus: Show failing features in TOC
 - TestStatus: Show status per device
 - TestStatus: Project name must be removed from path

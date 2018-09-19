@@ -32,6 +32,7 @@ type TestStatus struct {
 	ModifiedAt   int64                         `json:"modifiedAt" bson:"modifiedAt"`
 	OwnerKey     string                        `json:"ownerkey" bson:"ownerkey"`
 	Project      string                        `json:"project" bson:"project"`
+	LastResult   string                        `json:"lastresult" bson:"lastresult"`
 	HashCategory uint32                        `json:"hashcategory" bson:"hashcategory"`
 	Prefix       string                        `json:"prefix" bson:"prefix"`
 	Title        string                        `json:"title" bson:"title"`
@@ -51,14 +52,21 @@ func separateTitleAndData(title string) (string, string) {
 func NewTestStatus(report *Report) TestStatus {
 	reportTitle, reportData := separateTitleAndData(report.Title)
 
+	// HACK Remove project name from prefix
+	fixedPrefix := report.Prefix
+	if report.Project != "" {
+		fixedPrefix = strings.Replace(fixedPrefix, report.Project+" -- ", "", 1)
+	}
+
 	testStatus := TestStatus{
 		ID:           bson.NewObjectId(),
 		CreatedAt:    int64(time.Now().Unix() * 1000),
 		ModifiedAt:   int64(time.Now().Unix() * 1000),
 		OwnerKey:     report.OwnerKey,
 		Project:      report.Project,
+		LastResult:   report.Result,
 		HashCategory: report.HashCategory,
-		Prefix:       report.Prefix,
+		Prefix:       fixedPrefix,
 		Title:        reportTitle,
 		Data:         reportData,
 		Tags:         report.Tags,

@@ -171,6 +171,11 @@ func hash(s string) uint32 {
 	return h.Sum32()
 }
 
+// ComputeHashCategory computes a hash to uniquely identify a test
+func (r *Report) ComputeHashCategory() {
+	r.HashCategory = hash(fmt.Sprintf("%s_%s", r.Prefix, r.Title))
+}
+
 // GetReportFiles finds all report files in a given base directory and reads them in
 func GetReportFiles(baseDir string) []Report {
 	fileList := []Report{}
@@ -198,7 +203,7 @@ func GetReportFiles(baseDir string) []Report {
 		r.ReportFileName = filepath.Base(path)
 		r.ReportDir = strings.Replace(filepath.Dir(path), baseDir, "", -1)
 		// Compute a hash so same test on different envs and projects can be grouped together
-		r.HashCategory = hash(fmt.Sprintf("%s_%s", r.Prefix, r.Title))
+		r.ComputeHashCategory()
 		r.Started = time.Unix(r.StartedAt/1000, 0)
 
 		// Add hashid to all screenshots to find them faster
