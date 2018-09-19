@@ -173,6 +173,12 @@ func hash(s string) uint32 {
 
 // ComputeHashCategory computes a hash to uniquely identify a test
 func (r *Report) ComputeHashCategory() {
+	// HACK fix prefix - remove project
+	fixedPrefix := r.Prefix
+	if r.Project != "" {
+		r.Prefix = strings.Replace(fixedPrefix, r.Project+" -- ", "", 1)
+	}
+
 	r.HashCategory = hash(fmt.Sprintf("%s_%s", r.Prefix, r.Title))
 }
 
@@ -202,6 +208,7 @@ func GetReportFiles(baseDir string) []Report {
 
 		r.ReportFileName = filepath.Base(path)
 		r.ReportDir = strings.Replace(filepath.Dir(path), baseDir, "", -1)
+
 		// Compute a hash so same test on different envs and projects can be grouped together
 		r.ComputeHashCategory()
 		r.Started = time.Unix(r.StartedAt/1000, 0)
