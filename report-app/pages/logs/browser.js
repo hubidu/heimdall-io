@@ -6,9 +6,12 @@ import getReportById from '../../services/get-report-by-id'
 import getBrowserlogs from '../../services/get-browserlogs'
 import mapToUnifiedLogFormat from '../../services/utils/map-to-unified-log-format';
 
-const tagColor = l => {
+const tagColor = (l, msg) => {
+  if (msg.match(/status of 5\d\d/)) {
+    return 'is-danger'
+  }
   switch (l.level) {
-    case 'SEVERE': return 'is-danger';
+    case 'SEVERE': return 'is-warning';
     case 'INFO': return 'is-info';
     case 'WARNING': return 'is-warning';
     default: return 'is-light';
@@ -56,7 +59,7 @@ export default class IndexPage extends React.Component {
                   }
                   </td>
                   <td>
-                    <span className={`tag ${tagColor(l)}`}>
+                    <span className={`tag ${tagColor(l, l.message)}`}>
                     {l.level}
                     </span>
                   </td>

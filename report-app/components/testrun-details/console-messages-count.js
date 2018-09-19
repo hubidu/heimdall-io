@@ -1,10 +1,12 @@
 const createBrowserlogsDetailLink = (id) => `/logs/browser?id=${id}`
 
+const countErrors = (messages) => messages.filter(m => m.level === 'SEVERE' && m.message.match(/status of 5\d\d/)).length
+const countWarnings = (messages) => messages.filter(m => ['SEVERE', 'WARNING'].indexOf(m.level) >= 0 && !m.message.match(/status of 5\d\d/)).length
 const count = (messages, level) => messages.filter(m => m.level === level).length
 
 export default ({reportId, messages}) => {
-  const errorCount = count(messages, 'SEVERE')
-  const warningCount = count(messages, 'WARNING');
+  const errorCount = countErrors(messages)
+  const warningCount = countWarnings(messages);
   const infoCount = count(messages, 'INFO');
 
   return (

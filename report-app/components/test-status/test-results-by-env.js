@@ -35,14 +35,15 @@ const TestResultForEnv = ({ownerkey, reports, env}) => {
         </LinkToTest>
       </div>
       <div>
-        <div>
+        <div className="TestResultForEnv-startedAt">
           {moment(latestReport.startedAt).fromNow()}
-        </div>
-        <div>
-          {round(latestReport.duration)}s
         </div>
       </div>
       <style jsx>{`
+      .TestResultForEnv-startedAt {
+        font-size: 0.6rem;
+      }
+
       .TestResultForEnv--error {
         font-size: 0.65rem;
         padding: 2px 4px;

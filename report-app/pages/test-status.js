@@ -83,16 +83,46 @@ export default class TestStatusPage extends React.Component {
             errorPct={5 * 100.0 / 100}
           />
 
-          <div className="columns">
-            <div className="column is-3">
+          <div className="TestStatus">
+            <div className="TestStatiToc-container">
               <div className="box">
                 <TestStatiToc toc={this.props.toc} />
               </div>
             </div>
-            <div className="column is-9">
+            <div className="TestStati-container">
               <TestStati ownerkey={this.props.ownerkey} status={this.props.groupedByPrefix} />
             </div>
           </div>
+
+          <style jsx>{`
+          .TestStatiToc-container {
+            position: fixed;
+            width: 400px;
+            top: 200px;
+            bottom: 1px;
+            // height: 400px;
+            overflow-y: scroll;
+          }
+
+          ::-webkit-scrollbar {
+            width: 2px;
+          }
+          /* Track */
+          ::-webkit-scrollbar-track {
+              background: #eee;
+          }
+
+          /* Handle */
+          ::-webkit-scrollbar-thumb {
+              background: #aaa;
+          }
+
+          .TestStati-container {
+            margin-left: 400px;
+            padding: 1em;
+          }
+        `}</style>
+
         </div>
       </Layout>
     )

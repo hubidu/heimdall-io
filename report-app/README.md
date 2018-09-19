@@ -27,9 +27,13 @@
 - TestStatus: Show tags
 - TestStatus: Jump to feature when clicking on it in toc
 - TestStatus: Capitalize feature names
+- TestStatus: Fix sidebar to page
 
 ## In Progress
 
+- ReportImporter: Add last result to test status
+- Console Log: Make normal errors orange, detect 5xx errors and make them red
+- TestStatus: Show failing features in TOC
 - TestStatus: Show status per device
 - TestStatus: Project name must be removed from path
 - TestStatus: Show feature success/failure status in toc
@@ -39,6 +43,7 @@
 
 ## Backlog V 2.1
 
+- Tags: Add support for link tag
 - TestStatus: Wenn going to page with browser back, scroll to previous position on page
 - TestStatus: Show when the last test was run/when was the status report updated (could also link to the last "Test Run")
 - Browser console logs: Should highlight errors "with a status of 5xx"
