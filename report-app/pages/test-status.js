@@ -18,10 +18,11 @@ const groupByPrefix = testStatus => {
   }, {})
 }
 
-const createNode = (pathToItem, itemName) => ({
+const createNode = (pathToItem, itemName, tests) => ({
   path: pathToItem,
   name: itemName,
   count: 0,
+  tests,
   children: []
 })
 const getChildNode = (node, name) => node.children.find(n => n.name === name)
@@ -30,7 +31,7 @@ const sortByName = (a, b) => {
   const n2 = b.name
   return n1.localeCompare(n2)
 }
-const buildTOC = prefixes => prefixes.reduce((rootNode, p) => {
+const buildTOC = (prefixes, groupedByPrefix) => prefixes.reduce((rootNode, p) => {
   const pathItems = p.split('--').map(part => part.trim())
 
   let currentPath
@@ -39,7 +40,7 @@ const buildTOC = prefixes => prefixes.reduce((rootNode, p) => {
     currentPath = pathItems.slice(0, i + 1).join(' -- ')
     let node = getChildNode(currentNode, pathItem)
     if (!node) {
-      currentNode.children.push(createNode(currentPath, pathItem))
+      currentNode.children.push(createNode(currentPath, pathItem, groupedByPrefix[currentPath]))
       currentNode.children.sort(sortByName)
       currentNode.count++
     }
@@ -56,7 +57,7 @@ export default class TestStatusPage extends React.Component {
 
     const testStatus = await getTestStatus(ownerkey)
     const groupedByPrefix = groupByPrefix(testStatus)
-    const toc = buildTOC(Object.keys(groupedByPrefix))
+    const toc = buildTOC(Object.keys(groupedByPrefix), groupedByPrefix)
 
     return { ownerkey, testStatus, groupedByPrefix, toc }
   }
